@@ -1,0 +1,28 @@
+server:
+  port : 8900
+
+zuul:
+  routes:
+#    info:
+#      sensitiveHeaders: Access-Control-Allow-Origin,Access-Control-Allow-Methods
+#      ignored-headers: Access-Control-Allow-Credentials,Access-Control-Allow-Origin,Vary,X-Frame-Options
+    boss-service:
+      stripPrefix: false
+      path: /order/**
+      serviceId: order-service
+
+    sys-service:
+      stripPrefix: false
+      path: /sys/**
+      serviceId: sys-service
+
+  sslHostnameValidationEnabledL: false
+  host:
+    socket-timeout-millis: 60000
+    connect-timeout-millis: 10000
+
+mybatis:
+  mapper-locations: classpath:/mybatis/*.xml
+
+
+

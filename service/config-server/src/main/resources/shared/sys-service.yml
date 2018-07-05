@@ -1,0 +1,7 @@
+spring:
+  application :
+    name : sys-service
+
+server:
+  port : 8082
+

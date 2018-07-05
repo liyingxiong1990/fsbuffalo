@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: gateway-order
+  cloud:
+    config:
+      uri: http://192.168.16.126:7070
+      fail-fast: true
+      password: user
+      username: user

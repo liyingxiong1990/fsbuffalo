@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.gateway.authentication.mapper.MenuMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+    <!-- id必须与mapper接口方法名一致，不能出现重载 -->
+    <select id="getById" parameterType="String" resultType="com.buffalo.gateway.authentication.model.Menu">
+        select 	
+        	menu_id,
+			name,
+			route,
+			type,
+			parent_id,
+			icon,
+			menu_order,
+			remarks,
+			creator_id,
+			created_time,
+			modifier_id,
+			modified_time
+			from 
+			sys_menu  
+			where menu_id = #{menu_id}
+			and sys_status = 1
+    </select>
+
+    <select id="list" resultType="com.buffalo.gateway.authentication.model.Menu">
+        select 	
+            menu_id,
+			name,
+			route,
+			type,
+			parent_id,
+			icon,
+			menu_order,
+			remarks,
+			creator_id,
+			created_time,
+			modifier_id,
+			modified_time
+			from 
+			sys_menu 
+			where sys_status = 1
+			order by if(isnull(modified_time),0,modified_time) desc,created_time desc
+    </select>
+
+
+	<select id="rootMenuList" resultType="com.buffalo.gateway.authentication.model.Menu">
+		select
+		*
+		from
+		sys_menu
+		where sys_status = 1 and type = 'ROOT'
+	</select>
+</mapper>

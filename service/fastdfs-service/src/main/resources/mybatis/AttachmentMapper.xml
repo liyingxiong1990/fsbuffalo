@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.fastdfs.mapper.AttachmentMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+    <!-- id必须与mapper接口方法名一致，不能出现重载 -->
+    <select id="getAttachment" parameterType="com.buffalo.fastdfs.model.Attachment" resultType="com.buffalo.fastdfs.model.Attachment">
+        select 	
+		*
+		from 
+		order_attachment
+		where order_id = #{order_id}
+		and order_type = #{order_type}
+		and sys_status = 1
+    </select>
+
+
+
+    <insert id="add" parameterType="com.buffalo.fastdfs.model.Attachment" >
+    	insert into order_attachment
+			(
+			id,
+			order_id,
+			order_type,
+			key_array,
+			remarks,
+			creator_id,
+			created_time,
+			modified_time
+			)
+			select
+            uuid(),
+			#{order_id},
+			#{order_type},
+			#{key_array},
+			#{remarks},
+			#{creator_id},
+			now(),
+			now()
+    </insert>
+
+	<update id="update" parameterType="com.buffalo.fastdfs.model.Attachment" >
+		update order_attachment set
+		key_array = #{key_array},
+		remarks = #{remarks},
+		modifier_id = #{modifier_id},
+		modified_time = now()
+		where order_id = #{order_id} and order_type = #{order_type}
+	</update>
+
+    <delete id="deleteAttachment" parameterType="com.buffalo.fastdfs.model.Attachment">
+        update order_attachment
+			set
+			sys_status = 0 ,
+			modified_time = now()
+		where 
+			order_id = #{order_id}
+			and order_type = #{order_type}
+    </delete>
+
+</mapper>

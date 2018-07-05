@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.sys.mapper.SqlLogMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+    
+	<!-- 根据id获取 -->
+    <select id="getById" parameterType="String" resultType="com.buffalo.sys.model.SqlLog">
+        select
+			* 
+			from 
+			sys_sql_log 
+			where sql_log_id=#{sql_log_id}
+			and sys_status = 1
+    </select>
+
+	<!-- 列表获取 -->
+    <select id="list" resultType="com.buffalo.sys.model.SqlLog">
+        select 
+			*
+			from 
+			sys_sql_log 
+			where sys_status = 1
+			order by if(isnull(modified_time),0,modified_time) desc,created_time desc 
+    </select>
+
+	<!-- 新增 -->
+    <insert id="add" parameterType="com.buffalo.sys.model.SqlLog">
+    	insert into sys_sql_log 
+			(
+			sql_log_id,
+			bound_sql,
+			raw_sql,
+			parameters,
+			result,
+			creator_id, 
+			created_time,
+			modified_time
+			)
+			select
+			 uuid(),
+			#{bound_sql},
+			#{raw_sql},
+			#{parameters},
+			#{result},
+			#{creator_id},
+			now(),
+			now()
+    </insert>
+	
+    
+ 
+</mapper>

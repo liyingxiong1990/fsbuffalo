@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.sys.mapper.OperateLogMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+
+	<!-- SDC操作记录列表 -->
+    <select id="getSdcLogList" resultType="com.buffalo.sys.model.OperateLog">
+        select
+        log.*,
+        user.nickname operator_user_name
+        from sys_sdc_operate_log log left join sys_user user on log.operator_user_id = user.user_id
+        where log.sys_status = 1
+        order by if(isnull(log.modified_time),0,log.modified_time) desc,log.created_time desc
+    </select>
+
+	<!-- BOSS操作记录列表 -->
+	<select id="getBossLogList" resultType="com.buffalo.sys.model.OperateLog">
+		select
+		log.*,
+		user.nickname operator_user_name
+		from sys_order_operate_log log left join sys_user user on log.operator_user_id = user.user_id
+		where log.sys_status = 1
+		order by if(isnull(log.modified_time),0,log.modified_time) desc,log.created_time desc
+	</select>
+
+	<!-- 新增SDC操作记录 -->
+    <insert id="addSDCLog" parameterType="com.buffalo.sys.model.OperateLog" >
+		insert into sys_sdc_operate_log
+		  (
+			operate_log_id,
+			operate_type,
+			operator_user_id,
+			operate_content,
+			creator_id,
+			created_time,
+			modified_time
+			)
+		values
+			(
+			uuid(),
+			#{operate_type},
+			#{operator_user_id},
+			#{operate_content},
+			#{creator_id},
+			now(),
+			now()
+			)
+    </insert>
+
+	<!-- 新增BOSS操作记录 -->
+	<insert id="addBOSSLog" parameterType="com.buffalo.sys.model.OperateLog" >
+		insert into sys_order_operate_log
+		(
+		operate_log_id,
+		operate_type,
+		operator_user_id,
+		operate_content,
+		creator_id,
+		created_time,
+		modified_time
+		)
+		values
+		(
+		uuid(),
+		#{operate_type},
+		#{operator_user_id},
+		#{operate_content},
+		#{creator_id},
+		now(),
+		now()
+		)
+	</insert>
+
+</mapper>

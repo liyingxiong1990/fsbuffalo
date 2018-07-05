@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.sys.mapper.MenuMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+    <!-- id必须与mapper接口方法名一致，不能出现重载 -->
+    <select id="getById" parameterType="String" resultType="com.buffalo.sys.model.Menu">
+        select 	
+        	menu_id,
+			name,
+			route,
+			type,
+			parent_id,
+			icon,
+			menu_order,
+			remarks,
+			creator_id,
+			created_time,
+			modifier_id,
+			modified_time
+			from 
+			sys_menu  
+			where menu_id = #{menu_id}
+			and sys_status = 1
+    </select>
+
+    <select id="list" resultType="com.buffalo.sys.model.Menu">
+        select 	
+            menu_id,
+			name,
+			route,
+			type,
+			parent_id,
+			icon,
+			menu_order,
+			remarks,
+			creator_id,
+			created_time,
+			modifier_id,
+			modified_time
+			from 
+			sys_menu 
+			where sys_status = 1
+			order by if(isnull(modified_time),0,modified_time) desc,created_time desc
+    </select>
+
+    <insert id="add" parameterType="com.buffalo.sys.model.Menu" >
+    	insert into sys_menu
+			(
+			menu_id,
+			name,
+			route,
+			type,
+			parent_id,
+			icon,
+			menu_order,
+			remarks,
+			creator_id,
+			created_time,
+			modified_time
+			)
+			select
+            uuid(),
+			#{name},
+			#{route},
+			#{type},
+			#{parent_id},
+			#{icon},
+			#{menu_order},
+			#{remarks},
+			#{creator_id},
+			now(),
+			now()
+
+    </insert>
+
+    <update id="update" parameterType="com.buffalo.sys.model.Menu">
+       update sys_menu
+			set
+			name = #{name} , 
+			route = #{route} , 
+			type = #{type} , 
+			parent_id = #{parent_id} , 
+			icon = #{icon} , 
+			menu_order = #{menu_order} , 
+			remarks = #{remarks} , 
+			modifier_id = #{modifier_id} , 
+			modified_time = now()
+		  where
+		  menu_id = #{menu_id}
+    </update>
+    
+    <delete id="delete" parameterType="String">
+        update sys_menu
+			set
+			sys_status = 0 ,
+			modifier_id = #{modifier_id} ,
+			modified_time = now()
+		  where
+		  menu_id = #{menu_id}
+    </delete>
+
+	<select id="rootMenuList" resultType="com.buffalo.sys.model.Menu">
+		select
+		*
+		from
+		sys_menu
+		where sys_status = 1 and type = 'ROOT'
+	</select>
+</mapper>

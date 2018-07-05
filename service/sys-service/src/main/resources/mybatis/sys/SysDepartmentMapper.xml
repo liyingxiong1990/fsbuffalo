@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.sys.mapper.DepartmentMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+    <!-- id必须与mapper接口方法名一致，不能出现重载 -->
+    <select id="get" parameterType="int" resultType="com.buffalo.sys.model.Department">
+        
+			select
+				dept_id, 
+				dept_name, 
+				pid, 
+				dept_status, 
+				sys_status, 
+				remarks, 
+				creator_id, 
+				created_time, 
+				modifier_id, 
+				modified_time
+				from 
+				sys_department 
+        	where dept_id=#{dept_id}
+			and sys_status = 1
+    </select>
+    <select id="list" resultType="com.buffalo.sys.model.Department">
+        select
+				dept_id, 
+				dept_name, 
+				pid, 
+				dept_status, 
+				sys_status, 
+				remarks, 
+				creator_id, 
+				created_time, 
+				modifier_id, 
+				modified_time
+				from 
+				sys_department 
+			where sys_status = 1
+			order by if(isnull(modified_time),0,modified_time) desc,created_time desc 
+    </select>
+    <insert id="add" parameterType="com.buffalo.sys.model.Department">
+        insert into sys_department 
+			(
+			dept_id, 
+			dept_name, 
+			pid, 
+			dept_status, 
+			remarks, 
+			creator_id, 
+			created_time,
+			modified_time
+			)
+			select
+      		IF(max(dept_id),max(dept_id)+1,10000),
+			#{dept_name}, 
+			#{pid}, 
+			#{dept_status}, 
+			#{remarks}, 
+			#{creator_id}, 
+			  now(),
+			  now()
+		      from 
+	      sys_department
+    </insert>
+    <update id="update" parameterType="com.buffalo.sys.model.Department">
+        update sys_department 
+			set
+			dept_name = #{dept_name} , 
+			pid = #{pid} , 
+			dept_status = #{dept_status} , 
+			remarks = #{remarks} , 
+			modifier_id = #{modifier_id} , 
+			modified_time = now()
+			where
+			dept_id = #{dept_id} 
+
+    </update>
+    <delete id="delete" parameterType="int">
+	    update sys_department
+				set
+				sys_status = 0 ,
+				modifier_id = #{modifier_id} ,
+				modified_time = now()
+			  where
+			  dept_id = #{dept_id}
+    </delete>
+</mapper>

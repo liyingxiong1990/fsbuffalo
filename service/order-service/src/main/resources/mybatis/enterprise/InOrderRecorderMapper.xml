@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.enterprise.mapper.InOrderRecorderMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+
+
+	<!-- 列表 -->
+	<select id="list" parameterType="com.buffalo.enterprise.model.InOrderRecorder" resultType="com.buffalo.enterprise.model.InOrderRecorder">
+		select
+		in_order_recorder.*
+		from ent_in_order_recorder in_order_recorder
+		where in_order_recorder.sys_status = 1
+		<if test="keyword != ''">
+			and in_order_recorder.name like "%${keyword}%"
+		</if>
+		order by if(isnull(in_order_recorder.modified_time),0,in_order_recorder.modified_time) desc,in_order_recorder.created_time desc
+	</select>
+	
+	
+	<!-- 新增 -->
+    <insert id="add" parameterType="com.buffalo.enterprise.model.InOrderRecorder" >
+		insert into ent_in_order_recorder 
+			(
+			id,
+			name,
+			remarks,
+			creator_id,
+			created_time,
+			modified_time
+			)
+		values
+			(
+			uuid(),
+			#{name},
+			#{remarks},
+			#{creator_id}, 
+			now(),
+			now()
+			)
+    </insert>
+
+	<!-- 修改 -->
+    <update id="update" parameterType="com.buffalo.enterprise.model.InOrderRecorder">
+		update ent_in_order_recorder 
+		set
+			name = #{name},
+			remarks = #{remarks} ,
+			modifier_id = #{modifier_id} , 
+			modified_time = now()
+		where id = #{id}
+    </update>
+
+	<delete id="delete" parameterType="com.buffalo.enterprise.model.InOrderRecorder">
+		update ent_in_order_recorder
+			set sys_status = 0,
+			modifier_id = #{modifier_id},
+			modified_time = now()
+			where id=#{id}
+	</delete>
+
+	
+
+
+</mapper>

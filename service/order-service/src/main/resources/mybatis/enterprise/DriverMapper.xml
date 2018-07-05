@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.enterprise.mapper.DriverMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+
+
+	<!-- 列表 -->
+	<select id="list" parameterType="com.buffalo.enterprise.model.Driver" resultType="com.buffalo.enterprise.model.Driver">
+		select
+		driver.*
+		from ent_driver driver
+		where driver.sys_status = 1
+		<if test="keyword != ''">
+			and concat(driver.driver_name,driver.delivery_line,driver.phone) like "%${keyword}%"
+		</if>
+		order by if(isnull(driver.modified_time),0,driver.modified_time) desc,driver.created_time desc
+	</select>
+	
+	
+	<!-- 新增 -->
+    <insert id="add" parameterType="com.buffalo.enterprise.model.Driver" >
+		insert into ent_driver 
+			(
+			id,
+			driver_name,
+			delivery_line,
+			phone,
+			remarks,
+			creator_id,
+			created_time,
+			modified_time
+			)
+		values
+			(
+			uuid(),
+			#{driver_name},
+			#{delivery_line},
+			#{phone},
+			#{remarks},
+			#{creator_id}, 
+			now(),
+			now()
+			)
+    </insert>
+
+	<!-- 修改 -->
+    <update id="update" parameterType="com.buffalo.enterprise.model.Driver">
+		update ent_driver 
+		set
+			driver_name = #{driver_name},
+			delivery_line = #{delivery_line},
+			phone = #{phone},
+			remarks = #{remarks} ,
+			modifier_id = #{modifier_id} , 
+			modified_time = now()
+		where id = #{id}
+    </update>
+
+	<delete id="delete" parameterType="com.buffalo.enterprise.model.Driver">
+		update ent_driver
+			set sys_status = 0,
+			modifier_id = #{modifier_id},
+			modified_time = now()
+			where id=#{id}
+	</delete>
+
+	
+
+
+</mapper>

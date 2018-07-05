@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.enterprise.statistic.mapper.StatisticMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+
+
+	<!-- 企业总数 -->
+	<select id="companyNum"  resultType="String">
+		select count(*) from ent_info_company where sys_status = 1
+	</select>
+
+	<!-- 会员总数 -->
+	<select id="memberNum"  resultType="String">
+		select count(*) from ent_info_member where sys_status = 1
+	</select>
+
+	<!-- 企业类型分析 -->
+	<select id="companyTypeAnalysis"  resultType="java.util.Map">
+		select count(1) count, company_type from ent_info_company where sys_status = 1
+		group by company_type
+	</select>
+
+	<!-- 挂牌板块分析 -->
+	<select id="quotedTypeAnalysis"  resultType="java.util.Map">
+		select count(1) count, quoted_type from ent_info_company where sys_status = 1
+		group by quoted_type
+	</select>
+
+	<!-- 企业省份分析 -->
+	<select id="provinceAnalysis"  resultType="java.util.Map">
+		select count(1) count, province from ent_info_base where sys_status = 1 and province is not null
+		group by province
+	</select>
+
+	<!-- 企业城市分析 -->
+	<select id="cityAnalysis"  resultType="java.util.Map">
+		select * from
+		(
+			select count(1) count, SUBSTR(belong_org FROM 1 FOR 3) place  from ent_info_base where sys_status = 1
+			and SUBSTR(belong_org FROM 3 FOR 1)  = '市'
+			group by SUBSTR(belong_org FROM 1 FOR 3)
+		)tt order by count desc
+	</select>
+
+	<!-- 运营中心分析 -->
+	<select id="operatingCenterAnalysis"  resultType="java.util.Map">
+		select count(1) count, operating_center from ent_info_operating_center where sys_status = 1
+		group by operating_center
+	</select>
+
+	<!-- 企业行业分析 -->
+	<select id="industryAnalysis"  resultType="java.util.Map">
+		select * from
+		(
+		select count(1) count, industry from ent_info_base where sys_status = 1 and industry is not null
+		group by industry
+		)tt order by count desc
+	</select>
+
+	<!-- 企业规模前十 -->
+	<select id="companyScaleTop10"  resultType="java.util.Map">
+		select full_name name, regist_capi capital from ent_info_base entBase, ent_info_company entCompany
+		where entBase.sys_status = 1 and entCompany.sys_status = 1
+		and entBase.cust_id = entCompany.cust_id
+		order by (regist_capi+0) desc limit 10
+	</select>
+
+
+
+
+	<!-- 总股本 -->
+	<select id="totalCapital"  resultType="String">
+		select sum(infoBase.regist_capi)
+		from ent_info_base infoBase, ent_info_company infoCompany
+		where infoBase.sys_status=1  and infoCompany.sys_status=1  and infoCompany.is_active = 1
+		and infoBase.cust_id = infoCompany.cust_id
+		and (infoCompany.company_type='02' or infoCompany.company_type='03')
+	</select>
+
+	<!-- 总资产 -->
+	<select id="totalAssets"  resultType="String">
+		select sum(balanceSheet.total_assets) from ent_finance_balance_sheet balanceSheet where cust_id in
+		(
+		select cust_id from ent_info_company infoCompany where infoCompany.sys_status=1 and infoCompany.is_active = 1 and (infoCompany.company_type='02' or infoCompany.company_type='03')
+		) and balanceSheet.is_active = 1
+	</select>
+
+	<!-- 净资产 -->
+	<select id="netAssets"  resultType="String">
+		select sum(balanceSheet.shareholder_equity) from ent_finance_balance_sheet balanceSheet where cust_id in
+		(
+		select cust_id from ent_info_company infoCompany where infoCompany.sys_status=1 and infoCompany.is_active = 1 and (infoCompany.company_type='02' or infoCompany.company_type='03')
+		) and balanceSheet.is_active = 1
+	</select>
+
+	<!-- 总负债 -->
+	<select id="totalLiabilities"  resultType="String">
+		select sum(balanceSheet.total_liabilities) from ent_finance_balance_sheet balanceSheet where cust_id in
+		(
+		select cust_id from ent_info_company infoCompany where infoCompany.sys_status=1 and infoCompany.is_active = 1 and (infoCompany.company_type='02' or infoCompany.company_type='03')
+		) and balanceSheet.is_active = 1
+	</select>
+
+	<!-- 营业收入 -->
+	<select id="totalIncome"  resultType="String">
+		select sum(income.operating_income) from ent_finance_income income where cust_id in
+		(
+		select cust_id from ent_info_company infoCompany where infoCompany.sys_status=1 and infoCompany.is_active = 1 and (infoCompany.company_type='02' or infoCompany.company_type='03')
+		) and income.is_active = 1
+	</select>
+
+	<!-- 净利润 -->
+	<select id="netProfit"  resultType="String">
+		select sum(income.net_profit) from ent_finance_income income where cust_id in
+		(
+		select cust_id from ent_info_company infoCompany where infoCompany.sys_status=1 and infoCompany.is_active = 1 and (infoCompany.company_type='02' or infoCompany.company_type='03')
+		) and income.is_active = 1
+	</select>
+
+
+
+
+</mapper>

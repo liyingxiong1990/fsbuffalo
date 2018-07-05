@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.enterprise.mapper.DelivererMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+
+
+	<!-- 列表 -->
+	<select id="list" parameterType="com.buffalo.enterprise.model.Deliverer" resultType="com.buffalo.enterprise.model.Deliverer">
+		select
+		deliverer.*
+		from ent_deliverer deliverer
+		where deliverer.sys_status = 1
+		<if test="keyword != ''">
+			and concat(deliverer.name,deliverer.delivery_lines,deliverer.phone) like "%${keyword}%"
+		</if>
+		order by if(isnull(deliverer.modified_time),0,deliverer.modified_time) desc,deliverer.created_time desc
+	</select>
+	
+	
+	<!-- 新增 -->
+    <insert id="add" parameterType="com.buffalo.enterprise.model.Deliverer" >
+		insert into ent_deliverer 
+			(
+			id,
+			name,
+			delivery_lines,
+			phone,
+			remarks,
+			creator_id,
+			created_time,
+			modified_time
+			)
+		values
+			(
+			uuid(),
+			#{name},
+			#{delivery_lines},
+			#{phone},
+			#{remarks},
+			#{creator_id}, 
+			now(),
+			now()
+			)
+    </insert>
+
+	<!-- 修改 -->
+    <update id="update" parameterType="com.buffalo.enterprise.model.Deliverer">
+		update ent_deliverer 
+		set
+			name = #{name},
+			delivery_lines = #{delivery_lines},
+			phone = #{phone},
+			remarks = #{remarks} ,
+			modifier_id = #{modifier_id} , 
+			modified_time = now()
+		where id = #{id}
+    </update>
+
+	<delete id="delete" parameterType="com.buffalo.enterprise.model.Deliverer">
+		update ent_deliverer
+			set sys_status = 0,
+			modifier_id = #{modifier_id},
+			modified_time = now()
+			where id=#{id}
+	</delete>
+
+	
+
+
+</mapper>

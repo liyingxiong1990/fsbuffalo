@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.order.mapper.InventoryMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+
+
+	<!-- 列表 -->
+	<select id="list" parameterType="com.buffalo.order.model.Inventory" resultType="com.buffalo.order.model.Inventory">
+		select
+		inventory.*
+		from ord_inventory inventory
+		where inventory.sys_status = 1
+		<if test="keyword != ''">
+			and inventory.inventory_date like "%${keyword}%"
+		</if>
+		order by if(isnull(inventory.modified_time),0,inventory.modified_time) desc,inventory.created_time desc
+	</select>
+	
+	
+	<!-- 新增 -->
+    <insert id="add" parameterType="com.buffalo.order.model.Inventory" >
+		insert into ord_inventory 
+			(
+			id,
+			inventory_date,
+			last_date,
+			remarks,
+			creator_id,
+			created_time,
+			modified_time
+			)
+		values
+			(
+			#{id},
+			#{inventory_date},
+			#{last_date},
+			#{remarks},
+			#{creator_id}, 
+			now(),
+			now()
+			)
+    </insert>
+
+	<!-- 修改 -->
+    <update id="update" parameterType="com.buffalo.order.model.Inventory">
+		update ord_inventory 
+		set
+			inventory_date = #{inventory_date},
+			last_date = #{last_date},
+			remarks = #{remarks} ,
+			modifier_id = #{modifier_id} , 
+			modified_time = now()
+		where id = #{id}
+    </update>
+
+	<delete id="delete" parameterType="com.buffalo.order.model.Inventory">
+		update ord_inventory
+			set sys_status = 0,
+			modifier_id = #{modifier_id},
+			modified_time = now()
+			where id=#{id}
+	</delete>
+
+	<!-- 新增库存项目 -->
+	<insert id="addInventoryItem" parameterType="com.buffalo.order.model.InventoryItem" >
+		insert into ord_inventory_item
+		(
+		id,
+		inventory_id,
+		product_id,
+		quantity,
+		remarks,
+		creator_id,
+		created_time,
+		modified_time
+		)
+		values
+		(
+		uuid(),
+		#{inventory_id},
+		#{product_id},
+		#{quantity},
+		#{remarks},
+		#{creator_id},
+		now(),
+		now()
+		)
+	</insert>
+
+	<!-- 修改库存项目 -->
+	<update id="updateInventoryItem" parameterType="com.buffalo.order.model.InventoryItem">
+		update ord_inventory_item
+		set
+		quantity = #{quantity},
+		remarks = #{remarks} ,
+		modifier_id = #{modifier_id} ,
+		modified_time = now()
+		where id = #{id}
+	</update>
+	
+
+
+</mapper>

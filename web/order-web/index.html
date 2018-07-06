@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>业务运营支撑系统</title>
+  </head>
+  <body>
+    <div id="ieShow" style="display: none; position: fixed; top: 0; left: 0; z-index: 9999; cursor: pointer;" onclick="document.getElementById('ieShow').style.display = 'none'">
+      推荐使用Chrome！！！点击关闭提示
+    </div>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+  <script>
+    if (!!window['ActiveXObject'] || 'ActiveXObject' in window) {
+      document.getElementById('ieShow').style.display = 'block'
+    }
+  </script>
+</html>

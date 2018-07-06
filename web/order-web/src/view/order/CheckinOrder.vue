@@ -29,13 +29,13 @@ export default {
         },
         handRightBotton: [
           {
-            name: '新增库存记录',
+            name: '新增进仓单',
             icon: 'el-icon-circle-plus-outline',
             fn: this.addAlertOpen,
             entitlement: true
           },
           {
-            name: '新增空白库存记录',
+            name: '新增空白进仓单',
             icon: 'el-icon-circle-plus-outline',
             fn: this.addBlankAlertOpen,
             entitlement: true
@@ -55,13 +55,13 @@ export default {
             entitlement: true
           },
           {
-            name: `新增库存记录`,
+            name: `新增进仓单`,
             icon: `el-icon-circle-plus-outline`,
             fnEvent: this.addAlertOpen,
             entitlement: true
           },
           {
-            name: `新增空白库存记录`,
+            name: `新增空白进仓单`,
             icon: `el-icon-circle-plus-outline`,
             fnEvent: this.addBlankAlertOpen,
             entitlement: true

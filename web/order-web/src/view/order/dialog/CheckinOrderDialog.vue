@@ -2,14 +2,23 @@
   <div class="checkinOrder-dialog">
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible" width="600px" @open="dialogOpen" :before-close="dialogClose">
       <el-form label-width="120px" :model="dialog.data" :class="dialog.type === 'get'?'form-get':''" label-position="right" :rules="dialog.rules" ref="ruleForm">
-        <el-form-item label="库存日期" prop='checkinOrder_date'>
-          <el-date-picker v-model="dialog.data.checkinOrder_date" :disabled="dialog.type === 'get'" clearable size="mini" type="date" placeholder="选择日期"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="上一库存日期" prop='last_date'>
-          <el-date-picker v-model="dialog.data.last_date" :disabled="dialog.type === 'get'" clearable size="mini" type="date" placeholder="选择日期"></el-date-picker>
+        <el-form-item label="进仓日期" prop='checkin_date'>
+          <el-date-picker v-model="dialog.data.checkin_date" :disabled="dialog.type === 'get'" clearable size="mini" type="date" placeholder="选择日期"></el-date-picker>
         </el-form-item>
 
-        <div v-if="this.dialog.type ===  'get' || this.dialog.type ===  'post_blank'" class="dialog-cust-from">
+        <el-form-item label="仓管" prop='in_order_recorder_id'>
+          <el-select v-model="dialog.data.in_order_recorder_id" placeholder="请选择" size="mini" :disabled="dialog.type === 'get'">
+            <el-option v-for="(item, index) in this.inOrderRecorderList" :key="index" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="缴仓" prop='carrier_id'>
+          <el-select v-model="dialog.data.carrier_id" placeholder="请选择" size="mini" :disabled="dialog.type === 'get'">
+            <el-option v-for="(item, index) in this.carrierList" :key="index" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <div v-if="this.dialog.type ===  'get' || this.dialog.type ===  'statistic'" class="dialog-cust-from">
           <div class="dialog-cust-from-row">
             <div class="dialog-cust-from">
               <div class="dialog-cust-from-row-column">
@@ -24,7 +33,7 @@
               </div>
               <div class="dialog-cust-from-row-column">
                 <div classs="dialog-cust-from-row-column-context">
-                  <p>库存量</p>
+                  <p>数量</p>
                 </div>
               </div>
 
@@ -48,7 +57,7 @@
                   <p>{{item.quantity}}</p>
                 </div>
               </div>
-              <div v-if="dialog.type === 'post_blank'" class="dialog-cust-from-row-column">
+              <div v-if="dialog.type === 'post'" class="dialog-cust-from-row-column">
                 <div classs="dialog-cust-from-row-column-context">
                   <el-input type="number" style="width: 100%; resize:none;" v-model="item.quantity"></el-input>
                 </div>
@@ -73,6 +82,8 @@ export default {
   name: 'checkinOrderDialog',
   created () {
     this.getProductList()
+    this.getInOrderRecorderList()
+    this.getCarrierList()
   },
   computed: {
   },
@@ -94,7 +105,9 @@ export default {
   data () {
     return {
       custCurrentData: [],
-      productList: []
+      productList: [],
+      inOrderRecorderList: [],
+      carrierList: []
     }
   },
   mounted () {
@@ -105,6 +118,16 @@ export default {
     getProductList () {
       this.$store.state.http.auto('product', 'getProductList').then((res) => {
         this.productList = res.data
+      })
+    },
+    getInOrderRecorderList () {
+      this.$store.state.http.auto('inOrderRecorder', 'getInOrderRecorderList').then((res) => {
+        this.inOrderRecorderList = res.data
+      })
+    },
+    getCarrierList () {
+      this.$store.state.http.auto('carrier', 'getCarrierList').then((res) => {
+        this.carrierList = res.data
       })
     },
     dialogClose: dialogClose,
@@ -121,7 +144,7 @@ export default {
       switch (this.dialog.type) {
         case 'post':
           this.dialog.data = {}
-          this.dialog.title = '新增库存记录'
+          this.dialog.title = '新增进仓单'
           break
         case 'post_blank':
           this.dialog.data = {}
@@ -134,17 +157,17 @@ export default {
               quantity: 0
             })
           }
-          this.dialog.title = '新增空白库存记录'
+          this.dialog.title = '新增空白进仓单'
           break
         case 'put':
           this.dialog.data = {}
           Object.assign(this.dialog.data, this.dialog.currentRow)
-          this.dialog.title = '修改库存记录'
+          this.dialog.title = '修改进仓单'
           break
         case 'get':
           this.dialog.data = {}
           this.dialog.data = this.dialog.currentRow
-          this.dialog.title = '查看库存记录'
+          this.dialog.title = '查看进仓单'
           break
       }
     },
@@ -155,15 +178,15 @@ export default {
           let successMessage = null
           let requestMethod = null
           if (vm.dialog.type === 'post') {
-            successMessage = '库存记录新增成功！'
+            successMessage = '进仓单新增成功！'
             requestMethod = 'add'
           }
           if (vm.dialog.type === 'post_blank') {
-            successMessage = '空白库存记录新增成功！'
+            successMessage = '空白进仓单新增成功！'
             requestMethod = 'add_blank'
           }
           if (vm.dialog.type === 'put') {
-            successMessage = '库存记录修改成功！'
+            successMessage = '进仓单修改成功！'
             requestMethod = 'update'
           }
           this.$store.state.http.auto('checkinOrder', requestMethod, { data: this.dialog.data }).then((res) => {

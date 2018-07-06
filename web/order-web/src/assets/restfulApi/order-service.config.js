@@ -1,5 +1,9 @@
 export default {
   driver: { // 专卖店司机
+    getDriverList: {
+      url: '/order/enterprise/driver/all',
+      method: 'get'
+    },
     getAll: {
       url: '/order/enterprise/driver',
       method: 'get'
@@ -18,6 +22,10 @@ export default {
     }
   },
   deliverer: { // 外县市司机
+    getDelivererList: {
+      url: '/order/enterprise/deliverer/all',
+      method: 'get'
+    },
     getAll: {
       url: '/order/enterprise/deliverer',
       method: 'get'
@@ -36,6 +44,10 @@ export default {
     }
   },
   outOrderRecorder: { // 开单人
+    getOutOrderRecorderList: {
+      url: '/order/enterprise/outOrderRecorder/all',
+      method: 'get'
+    },
     getAll: {
       url: '/order/enterprise/outOrderRecorder',
       method: 'get'
@@ -54,6 +66,10 @@ export default {
     }
   },
   inOrderRecorder: { // 仓管
+    getInOrderRecorderList: {
+      url: '/order/enterprise/inOrderRecorder/all',
+      method: 'get'
+    },
     getAll: {
       url: '/order/enterprise/inOrderRecorder',
       method: 'get'
@@ -72,6 +88,10 @@ export default {
     }
   },
   carrier: { // 缴仓
+    getCarrierList: {
+      url: '/order/enterprise/carrier/all',
+      method: 'get'
+    },
     getAll: {
       url: '/order/enterprise/carrier',
       method: 'get'
@@ -112,6 +132,10 @@ export default {
     }
   },
   store: { // 专卖店
+    getStoreList: {
+      url: '/order/enterprise/store/all',
+      method: 'get'
+    },
     getAll: {
       url: '/order/enterprise/store',
       method: 'get'

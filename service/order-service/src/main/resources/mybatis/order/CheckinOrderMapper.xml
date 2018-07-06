@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.order.mapper.CheckinOrderMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+
+	<resultMap id="CheckinOrderResultMap" type="com.buffalo.order.model.CheckinOrder" >
+		<id column="id" property="id"  />
+		<collection property="itemList" column="id" javaType="ArrayList" ofType="com.buffalo.order.model.CheckinOrderItem" select="getItemListByCheckinOrderId"></collection>
+	</resultMap>
+	<select id="getItemListByCheckinOrderId" resultType="com.buffalo.order.model.CheckinOrderItem" parameterType="String" >
+		select
+		ii.*,
+		product.name product_name,
+		product.scale product_scale,
+		product.index product_index
+		from ord_checkin_order_item ii, ent_product product
+		where ii.sys_status = 1 and product.sys_status = 1 and ii.product_id = product.id
+		and ii.checkin_order_id = #{id}
+		order by product.index
+	</select>
+	<!-- 列表 -->
+	<select id="list" parameterType="com.buffalo.order.model.CheckinOrder" resultMap="CheckinOrderResultMap">
+		select
+		checkinOrder.*
+		from ord_checkin_order checkinOrder
+		where checkinOrder.sys_status = 1
+		<if test="keyword != ''">
+			and checkinOrder.checkinOrder_date like "%${keyword}%"
+		</if>
+		order by checkinOrder_date desc
+	</select>
+
+	<!-- 新增 -->
+    <insert id="add" parameterType="com.buffalo.order.model.CheckinOrder" >
+		insert into ord_checkin_order
+			(
+			id,
+			checkin_date,
+			in_order_recorder_id,
+			carrier_id,
+			remarks,
+			creator_id,
+			created_time,
+			modified_time
+			)
+		values
+			(
+			#{id},
+			#{checkin_date},
+			#{in_order_recorder_id},
+			#{carrier_id},
+			#{remarks},
+			#{creator_id}, 
+			now(),
+			now()
+			)
+    </insert>
+
+	<!-- 修改 -->
+    <update id="update" parameterType="com.buffalo.order.model.CheckinOrder">
+		update ord_checkin_order
+		set
+			checkin_date = #{checkin_date},
+			in_order_recorder_id = #{in_order_recorder_id},
+			carrier_id = #{carrier_id},
+			remarks = #{remarks} ,
+			modifier_id = #{modifier_id} , 
+			modified_time = now()
+		where id = #{id}
+    </update>
+
+	<delete id="delete" parameterType="com.buffalo.order.model.CheckinOrder">
+		update ord_checkin_order
+			set sys_status = 0,
+			modifier_id = #{modifier_id},
+			modified_time = now()
+			where id=#{id}
+	</delete>
+
+	<!-- 新增库存项目 -->
+	<insert id="addCheckinOrderItem" parameterType="com.buffalo.order.model.CheckinOrderItem" >
+		insert into ord_checkin_order_item
+		(
+		id,
+		checkin_order_id,
+		product_id,
+		quantity,
+		remarks,
+		creator_id,
+		created_time,
+		modified_time
+		)
+		values
+		(
+		uuid(),
+		#{checkin_order_id},
+		#{product_id},
+		#{quantity},
+		#{remarks},
+		#{creator_id},
+		now(),
+		now()
+		)
+	</insert>
+
+	<!-- 修改库存项目 -->
+	<update id="updateCheckinOrderItem" parameterType="com.buffalo.order.model.CheckinOrderItem">
+		update ord_checkin_order_item
+		set
+		quantity = #{quantity},
+		remarks = #{remarks} ,
+		modifier_id = #{modifier_id} ,
+		modified_time = now()
+		where id = #{id}
+	</update>
+
+	<delete id="deleteItemList" parameterType="String">
+		update ord_checkin_order_item
+		set sys_status = 0,
+		modified_time = now()
+		where checkin_order_id=#{checkin_order_id}
+	</delete>
+
+
+</mapper>

@@ -19,7 +19,7 @@
 		order by product.index
 	</select>
 	<!-- 列表 -->
-	<select id="list" parameterType="com.buffalo.order.model.Inventory" resultType="com.buffalo.order.model.Inventory">
+	<select id="list" parameterType="com.buffalo.order.model.Inventory" resultMap="InventoryResultMap">
 		select
 		inventory.*
 		from ord_inventory inventory
@@ -27,7 +27,7 @@
 		<if test="keyword != ''">
 			and inventory.inventory_date like "%${keyword}%"
 		</if>
-		order by if(isnull(inventory.modified_time),0,inventory.modified_time) desc,inventory.created_time desc
+		order by inventory_date desc
 	</select>
 
 	

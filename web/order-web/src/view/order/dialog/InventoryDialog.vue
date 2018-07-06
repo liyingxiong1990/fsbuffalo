@@ -1,15 +1,15 @@
 <template>
   <div class="inventory-dialog">
-    <el-dialog :title="dialog.title" :visible.sync="dialog.visible" width="500px" @open="dialogOpen" :before-close="dialogClose">
+    <el-dialog :title="dialog.title" :visible.sync="dialog.visible" width="600px" @open="dialogOpen" :before-close="dialogClose">
       <el-form label-width="120px" :model="dialog.data" :class="dialog.type === 'get'?'form-get':''" label-position="right" :rules="dialog.rules" ref="ruleForm">
-        <el-form-item label="店名" prop='inventory_name'>
-          <el-input v-model="dialog.data.inventory_name" :disabled="dialog.type === 'get'" clearable size="mini"></el-input>
+        <el-form-item label="库存日期" prop='inventory_date'>
+          <el-date-picker v-model="dialog.data.inventory_date" :disabled="dialog.type === 'get'" clearable size="mini" type="date" placeholder="选择日期"></el-date-picker>
         </el-form-item>
-        <el-form-item label="店主" prop='inventory_holder'>
-          <el-input v-model="dialog.data.inventory_holder" :disabled="dialog.type === 'get'" clearable size="mini"></el-input>
+        <el-form-item label="上一库存日期" prop='last_date'>
+          <el-date-picker v-model="dialog.data.last_date" :disabled="dialog.type === 'get'" clearable size="mini" type="date" placeholder="选择日期"></el-date-picker>
         </el-form-item>
-      
-        <div class="dialog-cust-from">
+
+        <div v-if="this.dialog.type ===  'get' || this.dialog.type ===  'post_blank'" class="dialog-cust-from">
           <div class="dialog-cust-from-row">
             <div class="dialog-cust-from">
               <div class="dialog-cust-from-row-column">
@@ -19,31 +19,40 @@
               </div>
               <div class="dialog-cust-from-row-column">
                 <div classs="dialog-cust-from-row-column-context">
-                  <p>单价</p>
+                  <p>规格</p>
+                </div>
+              </div>
+              <div class="dialog-cust-from-row-column">
+                <div classs="dialog-cust-from-row-column-context">
+                  <p>库存量</p>
                 </div>
               </div>
 
               <div style="clear: both;"></div>
             </div>
           </div>
-          <div v-for="item of this.dialog.data.priceList" :key="item.id" class="dialog-cust-from-row">
+          <div v-for="item of this.dialog.data.itemList" :key="item.id" class="dialog-cust-from-row">
             <div class="dialog-cust-from">
               <div class="dialog-cust-from-row-column">
                 <div classs="dialog-cust-from-row-column-context">
                   <p>{{item.product_name}}</p>
                 </div>
               </div>
-              <div v-if="dialog.type === 'post' || dialog.type === 'put'" class="dialog-cust-from-row-column">
+              <div class="dialog-cust-from-row-column">
                 <div classs="dialog-cust-from-row-column-context">
-                  <el-input type="number" style="width: 100%; resize:none;" v-model="item.unit_price"></el-input>
+                  <p>{{item.product_scale}}</p>
                 </div>
               </div>
               <div v-if="dialog.type === 'get'" class="dialog-cust-from-row-column">
                 <div classs="dialog-cust-from-row-column-context">
-                  <p>{{item.unit_price}}</p>
+                  <p>{{item.quantity}}</p>
                 </div>
               </div>
-
+              <div v-if="dialog.type === 'post_blank'" class="dialog-cust-from-row-column">
+                <div classs="dialog-cust-from-row-column-context">
+                  <el-input type="number" style="width: 100%; resize:none;" v-model="item.quantity"></el-input>
+                </div>
+              </div>
               <div style="clear: both;"></div>
             </div>
           </div>
@@ -52,10 +61,10 @@
       </el-form>
       <div slot="footer">
         <el-button @click="cancelForm('ruleForm')" size="small">取 消</el-button>
-        <el-button v-if="dialog.type === 'post' || dialog.type === 'put'" type="primary" @click="submitForm('ruleForm')" size="small">确 定</el-button>
+        <el-button v-if="dialog.type === 'post' || dialog.type === 'post_blank'" type="primary" @click="submitForm('ruleForm')" size="small">确 定</el-button>
       </div>
     </el-dialog>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -94,7 +103,7 @@ export default {
   },
   methods: {
     getProductList () {
-      this.$inventory.state.http.auto('product', 'getProductList').then((res) => {
+      this.$store.state.http.auto('product', 'getProductList').then((res) => {
         this.productList = res.data
       })
     },
@@ -112,24 +121,30 @@ export default {
       switch (this.dialog.type) {
         case 'post':
           this.dialog.data = {}
-          this.dialog.title = '新增专卖店'
-          this.dialog.data.priceList = []
+          this.dialog.title = '新增库存记录'
+          break
+        case 'post_blank':
+          this.dialog.data = {}
+          this.dialog.data.itemList = []
           for (var i = 0; i < this.productList.length; i++) {
-            this.dialog.data.priceList.push({
+            this.dialog.data.itemList.push({
               product_id: this.productList[i].id,
-              product_name: this.productList[i].name
+              product_scale: this.productList[i].scale,
+              product_name: this.productList[i].name,
+              quantity: 0
             })
           }
+          this.dialog.title = '新增空白库存记录'
           break
         case 'put':
           this.dialog.data = {}
           Object.assign(this.dialog.data, this.dialog.currentRow)
-          this.dialog.title = '修改专卖店'
+          this.dialog.title = '修改库存记录'
           break
         case 'get':
           this.dialog.data = {}
           this.dialog.data = this.dialog.currentRow
-          this.dialog.title = '查看专卖店'
+          this.dialog.title = '查看库存记录'
           break
       }
     },
@@ -138,19 +153,20 @@ export default {
       vm.$refs[form].validate((valid) => {
         if (valid) {
           let successMessage = null
-          let errorMessage = null
           let requestMethod = null
           if (vm.dialog.type === 'post') {
-            successMessage = '专卖店新增成功！'
-            errorMessage = '专卖店新增失败！'
+            successMessage = '库存记录新增成功！'
             requestMethod = 'add'
           }
+          if (vm.dialog.type === 'post_blank') {
+            successMessage = '空白库存记录新增成功！'
+            requestMethod = 'add_blank'
+          }
           if (vm.dialog.type === 'put') {
-            successMessage = '专卖店修改成功！'
-            errorMessage = '专卖店修改失败！'
+            successMessage = '库存记录修改成功！'
             requestMethod = 'update'
           }
-          this.$inventory.state.http.auto('inventory', requestMethod, { data: this.dialog.data }).then((res) => {
+          this.$store.state.http.auto('inventory', requestMethod, { data: this.dialog.data }).then((res) => {
             this.$message.success(successMessage)
             this.$refs[form].resetFields()
             this.dialog.visible = false
@@ -161,8 +177,7 @@ export default {
             }
             this.dialog.data = {}
           }).catch(function (error) {
-            vm.$message.error(errorMessage)
-            console.log(error)
+            vm.$message.error(error.statusText)
           })
         } else {
           console.log('error submit!!')

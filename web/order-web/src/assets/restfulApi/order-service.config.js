@@ -138,6 +138,10 @@ export default {
       url: '/order/order/inventory',
       method: 'post'
     },
+    add_blank: {
+      url: '/order/order/inventory/blank',
+      method: 'post'
+    },
     update: {
       url: '/order/order/inventory',
       method: 'put'

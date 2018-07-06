@@ -1,6 +1,6 @@
 <template>
   <div class="enterprise-inventory">
-    <base-table tableHandLeftPlaceholder="店名\店主\地址\电话\线路" :pageQuery="table.pageQuery" :addTableRowClick="addAlertOpen" :rowContextdblClick="getAlertOpen" :tableCols="table.cols" :contextMenuData="table.contextMenuData"></base-table>
+    <base-table tableHandLeftPlaceholder="库存日期" :pageQuery="table.pageQuery" :handRightBotton="table.handRightBotton" :rowContextdblClick="getAlertOpen" :tableCols="table.cols" :contextMenuData="table.contextMenuData"></base-table>
     <inventory-dialog :dialog="dialog" :submitCallback="submitCallback"></inventory-dialog>
   </div>
 </template>
@@ -16,7 +16,6 @@ export default {
   props: {
   },
   created () {
-    this.getProductList()
   },
   computed: {
   },
@@ -28,6 +27,20 @@ export default {
           apiMethod: 'getAll',
           reload: true
         },
+        handRightBotton: [
+          {
+            name: '新增库存记录',
+            icon: 'el-icon-circle-plus-outline',
+            fn: this.addAlertOpen,
+            entitlement: true
+          },
+          {
+            name: '新增空白库存记录',
+            icon: 'el-icon-circle-plus-outline',
+            fn: this.addBlankAlertOpen,
+            entitlement: true
+          }
+        ],
         cols: [
           { label: '库存日期', prop: 'inventory_date', minwidth: '90px', formatter: this.formatterTime },
           { label: '上一库存日期', prop: 'last_date', minwidth: '90px', formatter: this.formatterTime }
@@ -40,15 +53,15 @@ export default {
             entitlement: true
           },
           {
-            name: `新增`,
+            name: `新增库存记录`,
             icon: `el-icon-circle-plus-outline`,
             fnEvent: this.addAlertOpen,
             entitlement: true
           },
           {
-            name: `修改`,
-            icon: `el-icon-edit`,
-            fnEvent: this.putAlertOpen,
+            name: `新增空白库存记录`,
+            icon: `el-icon-circle-plus-outline`,
+            fnEvent: this.addBlankAlertOpen,
             entitlement: true
           },
           {
@@ -65,16 +78,10 @@ export default {
         type: '',
         data: {},
         loading: false
-      },
-      productList: []
+      }
     }
   },
   methods: {
-    getProductList () {
-      this.$inventory.state.http.auto('product', 'getProductList').then((res) => {
-        this.productList = res.data
-      })
-    },
     formatterTime (row, column, cellValue) {
       return dateFormatterTool(cellValue, 'yyyy-MM-dd')
     },
@@ -83,7 +90,7 @@ export default {
     },
     getAlertOpen (row) {
       if (!row) {
-        row = this.$inventory.state.tableCurrentRow
+        row = this.$store.state.tableCurrentRow
       }
       this.dialog.currentRow = row
       this.dialog.type = 'get'
@@ -93,9 +100,13 @@ export default {
       this.dialog.type = 'post'
       this.dialog.visible = true
     },
+    addBlankAlertOpen (row) {
+      this.dialog.type = 'post_blank'
+      this.dialog.visible = true
+    },
     putAlertOpen (row) {
       if (!row) {
-        row = this.$inventory.state.tableCurrentRow
+        row = this.$store.state.tableCurrentRow
       }
       this.dialog.currentRow = row
       this.dialog.type = 'put'
@@ -103,14 +114,14 @@ export default {
     },
     deleteAlertOpen (row) {
       if (!row) {
-        row = this.$inventory.state.tableCurrentRow
+        row = this.$store.state.tableCurrentRow
       }
       this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$inventory.state.http.auto('inventory', 'delete', { data: row }).then((response) => {
+        this.$store.state.http.auto('inventory', 'delete', { data: row }).then((response) => {
           this.$message.success('删除成功!')
           this.table.pageQuery.reload = true
         })

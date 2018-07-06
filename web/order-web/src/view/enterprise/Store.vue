@@ -16,7 +16,6 @@ export default {
   props: {
   },
   created () {
-    this.getProductList()
   },
   computed: {
   },
@@ -73,11 +72,6 @@ export default {
     }
   },
   methods: {
-    getProductList () {
-      this.$store.state.http.auto('product', 'getProductList').then((res) => {
-        this.productList = res.data
-      })
-    },
     formatterTime (row, column, cellValue) {
       return dateFormatterTool(cellValue, 'yyyy-MM-dd')
     },

@@ -36,6 +36,10 @@ public class InventoryServiceImpl implements InventoryService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public Inventory add(Inventory inventory) throws Exception {
+		Inventory inventoryIfExists = inventoryMapper.getInventoryByInventoryDate(inventory.getInventory_date());
+		if(inventoryIfExists!=null){
+			throw new Exception("该日期库存已存在");
+		}
 		String inventoryId = UUIDUtil.getUUID();
 		inventory.setId(inventoryId);
 		inventoryMapper.add(inventory);
@@ -52,6 +56,10 @@ public class InventoryServiceImpl implements InventoryService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public Inventory addBlank(Inventory inventory) throws Exception {
+		Inventory inventoryIfExists = inventoryMapper.getInventoryByInventoryDate(inventory.getInventory_date());
+		if(inventoryIfExists!=null){
+			throw new Exception("该日期库存已存在");
+		}
 		String inventoryId = UUIDUtil.getUUID();
 		inventory.setId(inventoryId);
 		inventoryMapper.add(inventory);

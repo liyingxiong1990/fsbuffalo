@@ -18,7 +18,7 @@
           </el-select>
         </el-form-item>
 
-        <div v-if="this.dialog.type ===  'get' || this.dialog.type ===  'statistic'" class="dialog-cust-from">
+        <div class="dialog-cust-from">
           <div class="dialog-cust-from-row">
             <div class="dialog-cust-from">
               <div class="dialog-cust-from-row-column">
@@ -144,10 +144,6 @@ export default {
       switch (this.dialog.type) {
         case 'post':
           this.dialog.data = {}
-          this.dialog.title = '新增进仓单'
-          break
-        case 'post_blank':
-          this.dialog.data = {}
           this.dialog.data.itemList = []
           for (var i = 0; i < this.productList.length; i++) {
             this.dialog.data.itemList.push({
@@ -157,7 +153,7 @@ export default {
               quantity: 0
             })
           }
-          this.dialog.title = '新增空白进仓单'
+          this.dialog.title = '新增进仓单'
           break
         case 'put':
           this.dialog.data = {}

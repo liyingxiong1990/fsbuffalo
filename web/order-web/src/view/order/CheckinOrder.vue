@@ -44,8 +44,8 @@ export default {
         cols: [
           { label: '进仓单号', prop: 'id', minwidth: '90px' },
           { label: '进仓日期', prop: 'checkin_date', minwidth: '90px', formatter: this.formatterTime },
-          { label: '缴仓', prop: 'carrier', minwidth: '90px' },
-          { label: '仓管', prop: 'in_order_recorder', minwidth: '90px' }
+          { label: '仓管', prop: 'in_order_recorder', minwidth: '90px' },
+          { label: '缴仓', prop: 'carrier', minwidth: '90px' }
         ],
         contextMenuData: [
           {

@@ -30,6 +30,16 @@
 		order by inventory_date desc
 	</select>
 
+	<select id="getInventoryByInventoryDate" parameterType="com.buffalo.order.model.Inventory" resultMap="InventoryResultMap">
+		select
+		inventory.*
+		from ord_inventory inventory
+		where inventory.sys_status = 1
+		and inventory.inventory_date = #{last_date}
+		limit 1
+	</select>
+
+
 	
 	
 	<!-- 新增 -->
@@ -112,7 +122,13 @@
 		modified_time = now()
 		where id = #{id}
 	</update>
-	
+
+	<delete id="deleteItemList" parameterType="String">
+		update ord_inventory_item
+		set sys_status = 0,
+		modified_time = now()
+		where inventory_id=#{inventory_id}
+	</delete>
 
 
 </mapper>

@@ -11,8 +11,11 @@ public interface InventoryService {
     
     public Inventory add(Inventory inventory) throws Exception;
 
+    public Inventory addBlank(Inventory inventory) throws Exception;
+
     public void update(Inventory inventory) throws Exception;
 
     public void delete(Inventory inventory) throws Exception;
+
 
 }

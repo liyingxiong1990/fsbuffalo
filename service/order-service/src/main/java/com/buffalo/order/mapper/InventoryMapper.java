@@ -5,6 +5,7 @@ import com.buffalo.order.model.Inventory;
 import com.buffalo.order.model.InventoryItem;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -12,7 +13,9 @@ import java.util.List;
 public interface InventoryMapper {
 
     public List<Inventory> list(Inventory inventory) throws Exception;
-    
+
+    public Inventory getInventoryByInventoryDate(Date last_date) throws Exception;
+
     public void add(Inventory inventory) throws Exception;
 
     public void update(Inventory inventory) throws Exception;
@@ -23,4 +26,5 @@ public interface InventoryMapper {
 
     public void updateInventoryItem(InventoryItem InventoryItem) throws Exception;
 
+    public void deleteItemList(String inventory_id) throws Exception;
 }

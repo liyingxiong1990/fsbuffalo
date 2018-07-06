@@ -65,6 +65,25 @@ public class InventoryController {
 	}
 
 	/**
+	 * 新增空白库存
+	 * @param inventory
+	 * @param model
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/blank", method = RequestMethod.POST, consumes="application/json")
+	public <T> Map<String, T> createBlank(@RequestBody Inventory inventory, Model model) {
+		try {
+			inventory = inventoryService.addBlank(inventory);
+			return (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "新增空白库存成功", inventory);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "新增空白库存失败. " + e.getMessage(), inventory);
+		}
+	}
+
+	/**
 	 * 修改库存
 	 * @param inventory
 	 * @param model

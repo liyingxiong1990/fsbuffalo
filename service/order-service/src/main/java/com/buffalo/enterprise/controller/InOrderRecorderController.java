@@ -24,6 +24,22 @@ public class InOrderRecorderController {
     @Autowired
     private InOrderRecorderService outOrderRecorderService;
 
+	/**
+	 * 查询所有仓管列表
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/all", method = RequestMethod.GET)
+	public <T> Map<String, T> getAllInOrderRecorder() {
+		try {
+			List<InOrderRecorder> list = outOrderRecorderService.list("");
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "查询所有仓管列表成功", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "查询所有仓管列表失败. " + e.getMessage());
+		}
+	}
 
 	/**
 	 * 查询仓管列表

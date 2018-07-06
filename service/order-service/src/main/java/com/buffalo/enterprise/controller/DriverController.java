@@ -33,6 +33,23 @@ public class DriverController {
 	}
 
 	/**
+	 * 查询所有专卖店司机列表
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/all", method = RequestMethod.GET)
+	public <T> Map<String, T> getAllDriver() {
+		try {
+			List<Driver> list = driverService.list("");
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "查询所有专卖店司机列表成功", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "查询所有专卖店司机列表失败. " + e.getMessage());
+		}
+	}
+
+	/**
 	 * 查询专卖店司机列表
 	 * @param <T>
 	 * @return

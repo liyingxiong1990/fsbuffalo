@@ -11,6 +11,10 @@ public class CheckinOrder extends ModelUtil {
 	private Date checkin_date;
 	private String in_order_recorder_id;
 	private String carrier_id;
+
+	private String in_order_recorder;
+	private String carrier;
+
 	private List<CheckinOrderItem> itemList;
 
 	public CheckinOrder() {
@@ -48,6 +52,22 @@ public class CheckinOrder extends ModelUtil {
 
 	public void setCarrier_id(String carrier_id) {
 		this.carrier_id = carrier_id;
+	}
+
+	public String getIn_order_recorder() {
+		return in_order_recorder;
+	}
+
+	public void setIn_order_recorder(String in_order_recorder) {
+		this.in_order_recorder = in_order_recorder;
+	}
+
+	public String getCarrier() {
+		return carrier;
+	}
+
+	public void setCarrier(String carrier) {
+		this.carrier = carrier;
 	}
 
 	public List<CheckinOrderItem> getItemList() {

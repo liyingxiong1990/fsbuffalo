@@ -25,6 +25,22 @@ public class DelivererController {
     @Autowired
     private DelivererService delivererService;
 
+	/**
+	 * 查询全部外县市司机列表
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/all", method = RequestMethod.GET)
+	public <T> Map<String, T> getAllDeliverer() {
+		try {
+			List<Deliverer> list = delivererService.list("");
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "查询全部外县市司机列表成功", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "查询全部外县市司机列表失败. " + e.getMessage());
+		}
+	}
 
 	/**
 	 * 查询外县市司机列表

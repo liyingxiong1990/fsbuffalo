@@ -3,6 +3,7 @@ package com.buffalo.order.service;
 
 import com.buffalo.order.model.Inventory;
 
+import java.util.Date;
 import java.util.List;
 
 public interface InventoryService {
@@ -17,5 +18,7 @@ public interface InventoryService {
 
     public void delete(Inventory inventory) throws Exception;
 
+    public Inventory getInventoryByInventoryDate(Date checkin_date) throws Exception;
 
+    public void addItemQuantity(String inventoryId, String productId, int quantity) throws Exception;
 }

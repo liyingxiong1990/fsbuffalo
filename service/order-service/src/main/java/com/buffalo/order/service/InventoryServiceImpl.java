@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -90,6 +91,25 @@ public class InventoryServiceImpl implements InventoryService {
 		inventoryMapper.deleteItemList(inventory.getId());
 		//操作记录
 		operateLogMessageSender.send(request.getHeader("userid"),"库存","删除库存："+inventory.getInventory_date());
+	}
+
+	@Override
+	public Inventory getInventoryByInventoryDate(Date checkin_date) throws Exception {
+		return inventoryMapper.getInventoryByInventoryDate(checkin_date);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
+	public void addItemQuantity(String inventoryId, String productId, int quantity) throws Exception {
+		InventoryItem inventoryItemQuery = new InventoryItem();
+		inventoryItemQuery.setInventory_id(inventoryId);
+		inventoryItemQuery.setProduct_id(productId);
+		InventoryItem inventoryItem = inventoryMapper.getByInventoryIdAndProductId(inventoryItemQuery);
+		if(inventoryItem==null){
+			throw new Exception("库存记录中无该产品！");
+		}
+		inventoryItem.setQuantity(inventoryItem.getQuantity()+quantity);
+		inventoryMapper.updateInventoryItem(inventoryItem);
 	}
 
 

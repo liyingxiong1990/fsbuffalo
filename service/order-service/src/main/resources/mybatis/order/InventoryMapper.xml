@@ -131,4 +131,15 @@
 	</delete>
 
 
+	<select id="getByInventoryIdAndProductId" parameterType="com.buffalo.order.model.InventoryItem" resultType="com.buffalo.order.model.InventoryItem">
+		select
+		inventoryItem.*
+		from ord_inventory_item inventoryItem
+		where inventoryItem.sys_status = 1
+		and inventoryItem.inventory_id=#{inventory_id}
+		and inventoryItem.product_id=#{product_id}
+		limit 1
+	</select>
+
+
 </mapper>

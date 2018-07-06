@@ -27,4 +27,6 @@ public interface InventoryMapper {
     public void updateInventoryItem(InventoryItem InventoryItem) throws Exception;
 
     public void deleteItemList(String inventory_id) throws Exception;
+
+    public InventoryItem getByInventoryIdAndProductId(InventoryItem inventoryItemQuery) throws Exception;
 }

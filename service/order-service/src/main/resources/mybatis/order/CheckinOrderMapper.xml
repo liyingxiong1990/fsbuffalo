@@ -31,7 +31,7 @@
 		<if test="keyword != ''">
 			and concat(checkinOrder.checkin_date, carrier.name, in_order_recorder.name) like "%${keyword}%"
 		</if>
-		order by checkin_date desc
+		order by if(isnull(checkinOrder.modified_time),0,checkinOrder.modified_time) desc,checkinOrder.created_time desc
 	</select>
 
 	<!-- 新增 -->

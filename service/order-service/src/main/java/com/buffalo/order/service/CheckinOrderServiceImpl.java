@@ -3,8 +3,10 @@ package com.buffalo.order.service;
 
 import com.buffalo.message.OperateLogMessageSender;
 import com.buffalo.order.mapper.CheckinOrderMapper;
+import com.buffalo.order.mapper.InventoryMapper;
 import com.buffalo.order.model.CheckinOrder;
 import com.buffalo.order.model.CheckinOrderItem;
+import com.buffalo.order.model.Inventory;
 import com.buffalo.util.UUIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -19,6 +23,9 @@ public class CheckinOrderServiceImpl implements CheckinOrderService {
 	
 	@Autowired
 	private CheckinOrderMapper checkinOrderMapper;
+
+	@Autowired
+	private InventoryService inventoryService;
 	
 	@Autowired
 	private OperateLogMessageSender operateLogMessageSender;
@@ -36,12 +43,24 @@ public class CheckinOrderServiceImpl implements CheckinOrderService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public CheckinOrder add(CheckinOrder checkinOrder) throws Exception {
-		String checkinOrderId = UUIDUtil.getUUID();
+		Date checkinDate = checkinOrder.getCheckin_date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Inventory inventory = inventoryService.getInventoryByInventoryDate(checkinDate);
+		if(inventory==null){
+			throw new Exception(sdf.format(checkinDate)+"库存记录不存在！");
+		}
+		String inventoryId = inventory.getId();
+		String checkinOrderId =  sdf.format(checkinDate)+"-"+ UUIDUtil.getUUID().substring(0,10);
 		checkinOrder.setId(checkinOrderId);
 		checkinOrderMapper.add(checkinOrder);
 		for(CheckinOrderItem checkinOrderItem :checkinOrder.getItemList()){
-			checkinOrderItem.setCheckin_order_id(checkinOrderId);
-			checkinOrderMapper.addCheckinOrderItem(checkinOrderItem);
+			int quantity = checkinOrderItem.getQuantity();
+			if(quantity>0){
+				checkinOrderItem.setCheckin_order_id(checkinOrderId);
+				checkinOrderMapper.addCheckinOrderItem(checkinOrderItem);
+				String productId = checkinOrderItem.getProduct_id();
+				inventoryService.addItemQuantity(inventoryId,productId,quantity);
+			}
 		}
 		//操作记录
 		operateLogMessageSender.send(request.getHeader("userid"),"进仓单","添加进仓单："+checkinOrder.getCheckin_date());

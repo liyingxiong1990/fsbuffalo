@@ -150,5 +150,23 @@ export default {
       url: '/order/order/inventory/delete',
       method: 'put'
     }
+  },
+  checkinOrder: { // 库存
+    getAll: {
+      url: '/order/order/checkinOrder',
+      method: 'get'
+    },
+    add: {
+      url: '/order/order/checkinOrder',
+      method: 'post'
+    },
+    update: {
+      url: '/order/order/checkinOrder',
+      method: 'put'
+    },
+    delete: {
+      url: '/order/order/checkinOrder/delete',
+      method: 'put'
+    }
   }
 }

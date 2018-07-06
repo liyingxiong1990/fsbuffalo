@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/fastdfs-service" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/nsh-service" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/registry" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/sdc-service" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/sys-service" vcs="svn" />
+  </component>
+</project>

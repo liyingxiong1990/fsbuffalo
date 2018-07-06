@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="acct-service" />
+        <module name="boss-service" />
+        <module name="cibs-service" />
+        <module name="config-server" />
+        <module name="fastdfs-service" />
+        <module name="gateway-boss" />
+        <module name="gateway-cibs" />
+        <module name="gateway-order" />
+        <module name="gateway-sdc" />
+        <module name="microsoft-service" />
+        <module name="mongodb-service" />
+        <module name="nsh-service" />
+        <module name="order-service" />
+        <module name="ppjh-service" />
+        <module name="registry" />
+        <module name="sdc-service" />
+        <module name="sys-service" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>

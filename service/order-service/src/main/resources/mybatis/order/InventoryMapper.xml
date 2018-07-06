@@ -3,7 +3,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.buffalo.order.mapper.InventoryMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
 
-
+	<resultMap id="InventoryResultMap" type="com.buffalo.order.model.Inventory" >
+		<id column="id" property="id"  />
+		<collection property="itemList" column="id" javaType="ArrayList" ofType="com.buffalo.order.model.InventoryItem" select="getItemListByInventoryId"></collection>
+	</resultMap>
+	<select id="getItemListByInventoryId" resultType="com.buffalo.order.model.InventoryItem" parameterType="String" >
+		select
+		ii.*,
+		product.name product_name,
+		product.scale product_scale,
+		product.index product_index
+		from ord_inventory_item ii, ent_product product
+		where ii.sys_status = 1 and product.sys_status = 1 and ii.product_id = product.id
+		and ii.inventory_id = #{id}
+		order by product.index
+	</select>
 	<!-- 列表 -->
 	<select id="list" parameterType="com.buffalo.order.model.Inventory" resultType="com.buffalo.order.model.Inventory">
 		select
@@ -15,6 +29,7 @@
 		</if>
 		order by if(isnull(inventory.modified_time),0,inventory.modified_time) desc,inventory.created_time desc
 	</select>
+
 	
 	
 	<!-- 新增 -->

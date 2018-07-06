@@ -11,7 +11,9 @@ public class InventoryItem extends ModelUtil {
 	private String product_id;
 	private int quantity;
 
-
+	private String product_name;
+	private int product_scale;
+	private int product_index;
 
 	public InventoryItem() {
 		super();
@@ -48,5 +50,29 @@ public class InventoryItem extends ModelUtil {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+
+	public String getProduct_name() {
+		return product_name;
+	}
+
+	public void setProduct_name(String product_name) {
+		this.product_name = product_name;
+	}
+
+	public int getProduct_scale() {
+		return product_scale;
+	}
+
+	public void setProduct_scale(int product_scale) {
+		this.product_scale = product_scale;
+	}
+
+	public int getProduct_index() {
+		return product_index;
+	}
+
+	public void setProduct_index(int product_index) {
+		this.product_index = product_index;
 	}
 }

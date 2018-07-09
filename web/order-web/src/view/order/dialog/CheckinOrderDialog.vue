@@ -112,6 +112,15 @@ export default {
   },
   mounted () {
     this.dialog.rules = {
+      checkin_date: [
+        { required: true, message: '请选择进仓日期', trigger: 'change' }
+      ],
+      in_order_recorder_id: [
+        { required: true, message: '请选择仓管', trigger: 'change' }
+      ],
+      carrier_id: [
+        { required: true, message: '请选择缴仓', trigger: 'change' }
+      ]
     }
   },
   methods: {
@@ -138,7 +147,6 @@ export default {
           if (res.data.itemList) {
             vm.dialog.data.itemList = []
             Object.assign(vm.dialog.data, res.data)
-            // vm.$set(vm.dialog.data, 'itemList', res.data.itemList)
           }
         }
       })
@@ -168,10 +176,8 @@ export default {
           }
           this.dialog.title = '新增进仓单'
           break
-        case 'put':
-          this.dialog.data = {}
-          Object.assign(this.dialog.data, this.dialog.currentRow)
-          this.dialog.title = '修改进仓单'
+        case 'statistic':
+          this.dialog.title = '按日期统计'
           break
         case 'get':
           this.dialog.data = {}

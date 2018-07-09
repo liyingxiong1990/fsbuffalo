@@ -1,6 +1,8 @@
 
 package com.buffalo.order.service;
 
+import com.buffalo.enterprise.model.Product;
+import com.buffalo.enterprise.service.ProductService;
 import com.buffalo.message.OperateLogMessageSender;
 import com.buffalo.order.mapper.CheckinOrderMapper;
 import com.buffalo.order.mapper.InventoryMapper;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +29,9 @@ public class CheckinOrderServiceImpl implements CheckinOrderService {
 
 	@Autowired
 	private InventoryService inventoryService;
+
+	@Autowired
+	private ProductService productService;
 	
 	@Autowired
 	private OperateLogMessageSender operateLogMessageSender;
@@ -38,6 +44,44 @@ public class CheckinOrderServiceImpl implements CheckinOrderService {
 		CheckinOrder checkinOrder = new CheckinOrder();
 		checkinOrder.setKeyword(keyword);
 		return checkinOrderMapper.list(checkinOrder);
+	}
+
+	@Override
+	public CheckinOrder statistic(Date checkin_date) throws Exception {
+		CheckinOrder result = new CheckinOrder();
+		List<Product> productList = productService.list("");
+		List<CheckinOrderItem> itemList = new ArrayList<CheckinOrderItem>();
+		List<CheckinOrderItem> resultItemList = new ArrayList<CheckinOrderItem>();
+		for(Product product: productList){
+			CheckinOrderItem checkinOrderItem = new CheckinOrderItem();
+			checkinOrderItem.setProduct_id(product.getId());
+			checkinOrderItem.setProduct_index(product.getIndex());
+			checkinOrderItem.setProduct_name(product.getName());
+			checkinOrderItem.setProduct_scale(product.getScale());
+			checkinOrderItem.setQuantity(0);
+			checkinOrderItem.setId(UUIDUtil.getUUID());
+			itemList.add(checkinOrderItem);
+		}
+
+		List<CheckinOrder> list = checkinOrderMapper.getListByCheckinDate(checkin_date);
+		for(CheckinOrder checkinOrder : list){
+			for(CheckinOrderItem checkinOrderItem : checkinOrder.getItemList()){
+				for(CheckinOrderItem checkinOrderItemResult : itemList){
+					if(checkinOrderItemResult.getProduct_id().equals(checkinOrderItem.getProduct_id()) ){
+						checkinOrderItemResult.setQuantity(checkinOrderItemResult.getQuantity()+checkinOrderItem.getQuantity());
+					}
+				}
+			}
+		}
+
+		for(CheckinOrderItem checkinOrderItem: itemList){
+			if(checkinOrderItem.getQuantity()>0){
+				resultItemList.add(checkinOrderItem);
+			}
+		}
+		result.setCheckin_date(checkin_date);
+		result.setItemList(resultItemList);
+		return result;
 	}
 
 	@Override

@@ -45,6 +45,9 @@ public class InventoryServiceImpl implements InventoryService {
 		inventory.setId(inventoryId);
 		inventoryMapper.add(inventory);
 		Inventory lastInventory = inventoryMapper.getInventoryByInventoryDate(inventory.getLast_date());
+		if(lastInventory==null){
+			throw new Exception("上一日期库存不存在");
+		}
 		for(InventoryItem inventoryItem :lastInventory.getItemList()){
 			inventoryItem.setInventory_id(inventoryId);
 			inventoryMapper.addInventoryItem(inventoryItem);

@@ -125,5 +125,19 @@
 		where checkin_order_id=#{checkin_order_id}
 	</delete>
 
+	<!-- 根据进仓日期获取进仓单列表 -->
+	<select id="getListByCheckinDate" parameterType="java.util.Date" resultMap="CheckinOrderResultMap">
+		select
+		checkinOrder.*,
+		carrier.name carrier,
+		in_order_recorder.name in_order_recorder
+		from ord_checkin_order checkinOrder, ent_carrier carrier, ent_in_order_recorder in_order_recorder
+		where checkinOrder.sys_status = 1 and carrier.sys_status = 1 and in_order_recorder.sys_status = 1
+		and checkinOrder.carrier_id = carrier.id
+		and checkinOrder.in_order_recorder_id = in_order_recorder.id
+		and checkinOrder.checkin_date = #{checkin_date}
+		order by if(isnull(checkinOrder.modified_time),0,checkinOrder.modified_time) desc,checkinOrder.created_time desc
+	</select>
+
 
 </mapper>

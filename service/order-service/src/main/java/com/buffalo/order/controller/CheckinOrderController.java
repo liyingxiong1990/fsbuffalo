@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +45,23 @@ public class CheckinOrderController {
 			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "查询进仓单列表失败. " + e.getMessage());
 		}
     }
+
+	/**
+	 * 统计某一天进仓单
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/statistic", method = RequestMethod.POST, consumes="application/json")
+	public <T> Map<String, T> statistic(@RequestBody CheckinOrder checkinOrder, Model model) {
+		try {
+			CheckinOrder result = checkinOrderService.statistic(checkinOrder.getCheckin_date());
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "统计某一天进仓单成功", result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "统计某一天进仓单失败. " + e.getMessage());
+		}
+	}
 
 	/**
 	 * 新增进仓单

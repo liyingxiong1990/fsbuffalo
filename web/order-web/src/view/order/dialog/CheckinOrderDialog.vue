@@ -3,16 +3,16 @@
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible" width="600px" @open="dialogOpen" :before-close="dialogClose">
       <el-form label-width="120px" :model="dialog.data" :class="dialog.type === 'get'?'form-get':''" label-position="right" :rules="dialog.rules" ref="ruleForm">
         <el-form-item label="进仓日期" prop='checkin_date'>
-          <el-date-picker v-model="dialog.data.checkin_date" :disabled="dialog.type === 'get'" clearable size="mini" type="date" placeholder="选择日期"></el-date-picker>
+          <el-date-picker @change="getSTime" v-model="dialog.data.checkin_date" :disabled="dialog.type === 'get'" clearable size="mini" type="date" placeholder="选择日期"></el-date-picker>
         </el-form-item>
 
-        <el-form-item label="仓管" prop='in_order_recorder_id'>
+        <el-form-item v-if="this.dialog.type != 'statistic'" label="仓管" prop='in_order_recorder_id'>
           <el-select v-model="dialog.data.in_order_recorder_id" placeholder="请选择" size="mini" :disabled="dialog.type === 'get'">
             <el-option v-for="(item, index) in this.inOrderRecorderList" :key="index" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
 
-        <el-form-item label="缴仓" prop='carrier_id'>
+        <el-form-item v-if="this.dialog.type != 'statistic'" label="缴仓" prop='carrier_id'>
           <el-select v-model="dialog.data.carrier_id" placeholder="请选择" size="mini" :disabled="dialog.type === 'get'">
             <el-option v-for="(item, index) in this.carrierList" :key="index" :label="item.name" :value="item.id"></el-option>
           </el-select>
@@ -52,7 +52,7 @@
                   <p>{{item.product_scale}}</p>
                 </div>
               </div>
-              <div v-if="dialog.type === 'get'" class="dialog-cust-from-row-column">
+              <div v-if="dialog.type === 'get' || dialog.type === 'statistic'" class="dialog-cust-from-row-column">
                 <div classs="dialog-cust-from-row-column-context">
                   <p>{{item.quantity}}</p>
                 </div>
@@ -70,7 +70,7 @@
       </el-form>
       <div slot="footer">
         <el-button @click="cancelForm('ruleForm')" size="small">取 消</el-button>
-        <el-button v-if="dialog.type === 'post' || dialog.type === 'post_blank'" type="primary" @click="submitForm('ruleForm')" size="small">确 定</el-button>
+        <el-button v-if="dialog.type === 'post'" type="primary" @click="submitForm('ruleForm')" size="small">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -128,6 +128,19 @@ export default {
     getCarrierList () {
       this.$store.state.http.auto('carrier', 'getCarrierList').then((res) => {
         this.carrierList = res.data
+      })
+    },
+    getSTime (val) {
+      var vm = this
+      this.$store.state.http.auto('checkinOrder', 'statistic', { data: { checkin_date: val } }).then((res) => {
+        if (this.dialog.type === 'statistic') {
+          debugger
+          if (res.data.itemList) {
+            vm.dialog.data.itemList = []
+            Object.assign(vm.dialog.data, res.data)
+            // vm.$set(vm.dialog.data, 'itemList', res.data.itemList)
+          }
+        }
       })
     },
     dialogClose: dialogClose,

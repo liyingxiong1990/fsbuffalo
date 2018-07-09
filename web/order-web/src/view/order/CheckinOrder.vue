@@ -35,9 +35,9 @@ export default {
             entitlement: true
           },
           {
-            name: '新增空白进仓单',
+            name: '统计',
             icon: 'el-icon-circle-plus-outline',
-            fn: this.addBlankAlertOpen,
+            fn: this.showStatistic,
             entitlement: true
           }
         ],
@@ -102,8 +102,8 @@ export default {
       this.dialog.type = 'post'
       this.dialog.visible = true
     },
-    addBlankAlertOpen (row) {
-      this.dialog.type = 'post_blank'
+    showStatistic (row) {
+      this.dialog.type = 'statistic'
       this.dialog.visible = true
     },
     putAlertOpen (row) {

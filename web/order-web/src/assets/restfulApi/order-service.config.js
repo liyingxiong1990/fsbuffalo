@@ -191,6 +191,10 @@ export default {
     delete: {
       url: '/order/order/checkinOrder/delete',
       method: 'put'
+    },
+    statistic: {
+      url: '/order/order/checkinOrder/statistic',
+      method: 'post'
     }
   }
 }

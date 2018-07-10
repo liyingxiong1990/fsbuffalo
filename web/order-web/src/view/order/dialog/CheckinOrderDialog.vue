@@ -59,7 +59,7 @@
               </div>
               <div v-if="dialog.type === 'post'" class="dialog-cust-from-row-column">
                 <div classs="dialog-cust-from-row-column-context">
-                  <el-input type="number" style="width: 100%; resize:none;" v-model="item.quantity"></el-input>
+                  <el-input type="number" style="width: 100%; resize:none;" v-model="item.quantity" @blur="handleBlur(item)"></el-input>
                 </div>
               </div>
               <div style="clear: both;"></div>
@@ -149,6 +149,11 @@ export default {
           }
         }
       })
+    },
+    handleBlur (item) {
+      if (!Number.isInteger(Number(item.quantity))) {
+        alert('请输入整数')
+      }
     },
     dialogClose: dialogClose,
     cancelForm (form) {

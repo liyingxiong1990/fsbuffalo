@@ -29,7 +29,7 @@
         </el-form-item>
 
         <el-form-item label="开单人" prop='order_recorder_id'>
-          <el-select v-model="dialog.data.order_recorder_id" placeholder="请选择" size="mini" :disabled="dialog.type === 'get'">
+          <el-select v-model="dialog.data.order_recorder_id" placeholder="请选择" size="mini" :disabled="dialog.type !== 'post'">
             <el-option v-for="(item, index) in this.outOrderRecorderList" :key="index" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
@@ -68,25 +68,24 @@
                   <p>{{item.product_scale}}</p>
                 </div>
               </div>
-              <div v-if="dialog.type === 'get' || dialog.type === 'statistic'" class="dialog-cust-from-row-column">
+              <div v-if="dialog.type === 'get'" class="dialog-cust-from-row-column">
                 <div classs="dialog-cust-from-row-column-context">
                   <p>{{item.quantity}}</p>
                 </div>
               </div>
-              <div v-if="dialog.type === 'post'" class="dialog-cust-from-row-column">
+              <div v-if="dialog.type === 'post' || dialog.type === 'put'" class="dialog-cust-from-row-column">
                 <div classs="dialog-cust-from-row-column-context">
-                  <el-input type="number" style="width: 100%; resize:none;" v-model="item.quantity" @blur="handleBlur(item)"></el-input>
+                  <el-input type="number" style="width: 100%; resize:none;" v-model="item.quantity" @blur="handleBlur(item)" :disabled="dialog.data.is_out === 1"></el-input>
                 </div>
               </div>
               <div style="clear: both;"></div>
             </div>
           </div>
         </div>
-
       </el-form>
       <div slot="footer">
         <el-button @click="cancelForm('ruleForm')" size="small">取 消</el-button>
-        <el-button v-if="dialog.type === 'post'" type="primary" @click="submitForm('ruleForm')" size="small">确 定</el-button>
+        <el-button v-if="dialog.type === 'post' || dialog.type === 'put'" type="primary" @click="submitForm('ruleForm')" size="small">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -163,6 +162,9 @@ export default {
       })
     },
     handleBlur (item) {
+      if (!Number.isInteger(Number(item.quantity))) {
+        alert('请输入整数')
+      }
       var vm = this
       if (vm.inventory[item.product_id] < item.quantity) {
         alert(item.product_name + '库存不足！')
@@ -230,10 +232,14 @@ export default {
           }
           this.dialog.title = '新增送货单'
           break
-        case 'statistic':
-          this.dialog.title = '按日期统计'
+        case 'put':
+          this.chooseLine(this.dialog.currentRow.line_id)
+          this.dialog.data = {}
+          this.dialog.data = this.dialog.currentRow
+          this.dialog.title = '编辑送货单'
           break
         case 'get':
+          this.chooseLine(this.dialog.currentRow.line_id)
           this.dialog.data = {}
           this.dialog.data = this.dialog.currentRow
           this.dialog.title = '查看送货单'
@@ -249,10 +255,6 @@ export default {
           if (vm.dialog.type === 'post') {
             successMessage = '送货单新增成功！'
             requestMethod = 'add'
-          }
-          if (vm.dialog.type === 'post_blank') {
-            successMessage = '空白送货单新增成功！'
-            requestMethod = 'add_blank'
           }
           if (vm.dialog.type === 'put') {
             successMessage = '送货单修改成功！'

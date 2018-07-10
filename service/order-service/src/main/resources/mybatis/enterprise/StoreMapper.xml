@@ -21,15 +21,25 @@
 	<!-- 列表 -->
 	<select id="list" parameterType="com.buffalo.enterprise.model.Store" resultMap="StoreResultMap">
 		select
-		store.*
-		from ent_store store
-		where store.sys_status = 1
+		store.*,
+		line.name line
+		from ent_store store, ent_line line
+		where store.sys_status = 1 and line.sys_status = 1 and store.line_id = line.id
 		<if test="keyword != ''">
 			and concat(store.store_name,store.store_holder,store.address,store.phone,store.line) like "%${keyword}%"
 		</if>
 		order by if(isnull(store.modified_time),0,store.modified_time) desc,store.created_time desc
 	</select>
-	
+
+	<select id="getStoresByLine" parameterType="String" resultMap="StoreResultMap">
+		select
+		store.*
+		from ent_store store
+		where store.sys_status = 1
+		and store.line_id = #{line_id}
+		order by if(isnull(store.modified_time),0,store.modified_time) desc,store.created_time desc
+	</select>
+
 	
 	<!-- 新增 -->
     <insert id="add" parameterType="com.buffalo.enterprise.model.Store" >
@@ -40,7 +50,7 @@
 			store_holder,
 			address,
 			phone,
-			line,
+			line_id,
 			remarks,
 			creator_id,
 			created_time,
@@ -53,7 +63,7 @@
 			#{store_holder},
 			#{address},
 			#{phone},
-			#{line},
+			#{line_id},
 			#{remarks},
 			#{creator_id}, 
 			now(),
@@ -69,7 +79,7 @@
 			store_holder = #{store_holder},
 			address = #{address},
 			phone = #{phone},
-			line = #{line},
+			line_id = #{line_id},
 			remarks = #{remarks} ,
 			modifier_id = #{modifier_id} , 
 			modified_time = now()

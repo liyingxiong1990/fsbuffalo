@@ -8,7 +8,9 @@ import java.util.List;
 public interface StoreService {
 
     public List<Store> list(String keyword) throws Exception;
-    
+
+    public List<Store> getStoresByLine(String line_id) throws Exception;
+
     public Store add(Store store) throws Exception;
 
     public void update(Store store) throws Exception;

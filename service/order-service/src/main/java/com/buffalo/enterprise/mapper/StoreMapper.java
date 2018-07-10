@@ -12,7 +12,9 @@ import java.util.List;
 public interface StoreMapper {
 
     public List<Store> list(Store store) throws Exception;
-    
+
+    public List<Store> getStoresByLine(String line_id) throws Exception;
+
     public void add(Store store) throws Exception;
 
     public void update(Store store) throws Exception;
@@ -24,4 +26,5 @@ public interface StoreMapper {
     public void updateStorePrice(StorePrice storePrice) throws Exception;
 
     public void deleteStorePrice(String store_id) throws Exception;
+
 }

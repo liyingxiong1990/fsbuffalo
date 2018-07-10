@@ -11,9 +11,10 @@ public class Store extends ModelUtil {
 	private String store_holder;
 	private String address;
 	private String phone;
-	private String line;
+	private String line_id;
 	private List<StorePrice> priceList;
 
+	private String line;
 
 	public Store() {
 		super();
@@ -60,12 +61,12 @@ public class Store extends ModelUtil {
 		this.phone = phone;
 	}
 
-	public String getLine() {
-		return line;
+	public String getLine_id() {
+		return line_id;
 	}
 
-	public void setLine(String line) {
-		this.line = line;
+	public void setLine_id(String line_id) {
+		this.line_id = line_id;
 	}
 
 	public List<StorePrice> getPriceList() {
@@ -74,5 +75,13 @@ public class Store extends ModelUtil {
 
 	public void setPriceList(List<StorePrice> priceList) {
 		this.priceList = priceList;
+	}
+
+	public String getLine() {
+		return line;
+	}
+
+	public void setLine(String line) {
+		this.line = line;
 	}
 }

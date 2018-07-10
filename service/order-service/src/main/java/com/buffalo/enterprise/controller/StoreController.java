@@ -42,6 +42,24 @@ public class StoreController {
 	}
 
 	/**
+	 * 根据路线id查询专卖店列表
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/line", method = RequestMethod.GET)
+	public <T> Map<String, T> getStoresByLine(@RequestParam(required = true) String line_id) {
+		try {
+			List<Store> list = storeService.getStoresByLine(line_id);
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "根据路线id查询专卖店列表成功", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "根据路线id查询专卖店列表失败. " + e.getMessage());
+		}
+	}
+
+
+	/**
 	 * 查询专卖店列表
 	 * @param <T>
 	 * @return

@@ -35,6 +35,11 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
+	public List<Store> getStoresByLine(String line_id) throws Exception {
+		return storeMapper.getStoresByLine(line_id);
+	}
+
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public Store add(Store store) throws Exception {
 		String storeId = UUIDUtil.getUUID();

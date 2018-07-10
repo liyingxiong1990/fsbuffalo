@@ -3,7 +3,7 @@
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible" width="600px" @open="dialogOpen" :before-close="dialogClose">
       <el-form label-width="120px" :model="dialog.data" :class="dialog.type === 'get'?'form-get':''" label-position="right" :rules="dialog.rules" ref="ruleForm">
         <el-form-item label="开单日期" prop='order_date'>
-          <el-date-picker v-model="dialog.data.order_date" :disabled="dialog.type === 'get'" clearable size="mini" type="date" placeholder="选择日期"></el-date-picker>
+          <el-date-picker @change="selectOrderDate" v-model="dialog.data.order_date" :disabled="dialog.type === 'get'" clearable size="mini" type="date" placeholder="选择日期"></el-date-picker>
         </el-form-item>
 
         <el-form-item label="送货日期" prop='delivery_date'>
@@ -75,7 +75,7 @@
               </div>
               <div v-if="dialog.type === 'post'" class="dialog-cust-from-row-column">
                 <div classs="dialog-cust-from-row-column-context">
-                  <el-input type="number" style="width: 100%; resize:none;" v-model="item.quantity"></el-input>
+                  <el-input type="number" style="width: 100%; resize:none;" v-model="item.quantity" @blur="handleBlur(item)"></el-input>
                 </div>
               </div>
               <div style="clear: both;"></div>
@@ -124,7 +124,8 @@ export default {
       outOrderRecorderList: [],
       driverList: [],
       lineList: [],
-      storeList: []
+      storeList: [],
+      inventory: null
     }
   },
   mounted () {
@@ -147,6 +148,26 @@ export default {
     }
   },
   methods: {
+    selectOrderDate (val) {
+      var vm = this
+      this.$store.state.http.auto('inventory', 'getByDate', { data: { inventory_date: val } }).then((res) => {
+        if (res.data) {
+          var tempInventory = {}
+          for (var i = 0; i < res.data.itemList.length; i++) {
+            tempInventory[res.data.itemList[i].product_id] = res.data.itemList[i].quantity
+          }
+          vm.inventory = tempInventory
+        } else {
+          alert('该日期没有库存呢记录!')
+        }
+      })
+    },
+    handleBlur (item) {
+      var vm = this
+      if (vm.inventory[item.product_id] < item.quantity) {
+        alert(item.product_name + '库存不足！')
+      }
+    },
     getProductList () {
       this.$store.state.http.auto('product', 'getProductList').then((res) => {
         this.productList = res.data

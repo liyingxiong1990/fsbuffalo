@@ -143,7 +143,6 @@ export default {
       var vm = this
       this.$store.state.http.auto('checkinOrder', 'statistic', { data: { checkin_date: val } }).then((res) => {
         if (this.dialog.type === 'statistic') {
-          debugger
           if (res.data.itemList) {
             vm.dialog.data.itemList = []
             Object.assign(vm.dialog.data, res.data)

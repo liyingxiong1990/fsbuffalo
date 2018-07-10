@@ -29,7 +29,7 @@
 		store.store_holder,
 		store.address
 		from ord_deliverer_order delivererOrder, ent_driver driver, ent_out_order_recorder out_order_recorder, ent_line line, ent_store store
-		where delivererOrder.sys_status = 1 and driver.sys_status = 1 and out_order_recorder.sys_status = 1 and line.sys_status = 1 and store.sys_status = 1
+		where delivererOrder.sys_status = 1
 		and delivererOrder.driver_id = driver.id
 		and delivererOrder.order_recorder_id = out_order_recorder.id
 		and delivererOrder.line_id = line.id

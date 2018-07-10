@@ -46,6 +46,23 @@ public class InventoryController {
     }
 
 	/**
+	 * 根据日期查询库存
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/date", method = RequestMethod.POST)
+	public <T> Map<String, T> getByDate(@RequestBody Inventory inventory, Model model) {
+		try {
+			Inventory inventoryResult = inventoryService.getByDate(inventory.getInventory_date());
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "根据日期查询库存成功", inventoryResult);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "根据日期查询库存失败. " + e.getMessage());
+		}
+	}
+
+	/**
 	 * 新增库存
 	 * @param inventory
 	 * @param model

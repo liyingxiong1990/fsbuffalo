@@ -25,7 +25,7 @@
 		carrier.name carrier,
 		in_order_recorder.name in_order_recorder
 		from ord_checkin_order checkinOrder, ent_carrier carrier, ent_in_order_recorder in_order_recorder
-		where checkinOrder.sys_status = 1 and carrier.sys_status = 1 and in_order_recorder.sys_status = 1
+		where checkinOrder.sys_status = 1
 		and checkinOrder.carrier_id = carrier.id
 		and checkinOrder.in_order_recorder_id = in_order_recorder.id
 		<if test="keyword != ''">
@@ -132,7 +132,7 @@
 		carrier.name carrier,
 		in_order_recorder.name in_order_recorder
 		from ord_checkin_order checkinOrder, ent_carrier carrier, ent_in_order_recorder in_order_recorder
-		where checkinOrder.sys_status = 1 and carrier.sys_status = 1 and in_order_recorder.sys_status = 1
+		where checkinOrder.sys_status = 1
 		and checkinOrder.carrier_id = carrier.id
 		and checkinOrder.in_order_recorder_id = in_order_recorder.id
 		and checkinOrder.checkin_date = #{checkin_date}

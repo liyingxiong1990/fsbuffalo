@@ -35,6 +35,11 @@ public class InventoryServiceImpl implements InventoryService {
 	}
 
 	@Override
+	public Inventory getByDate(Date inventory_date) throws Exception {
+		return inventoryMapper.getInventoryByInventoryDate(inventory_date);
+	}
+
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public Inventory add(Inventory inventory) throws Exception {
 		Inventory inventoryIfExists = inventoryMapper.getInventoryByInventoryDate(inventory.getInventory_date());

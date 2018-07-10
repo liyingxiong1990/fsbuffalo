@@ -131,9 +131,35 @@ export default {
       method: 'put'
     }
   },
+  line: { // 路线
+    getLineList: {
+      url: '/order/enterprise/line/all',
+      method: 'get'
+    },
+    getAll: {
+      url: '/order/enterprise/line',
+      method: 'get'
+    },
+    add: {
+      url: '/order/enterprise/line',
+      method: 'post'
+    },
+    update: {
+      url: '/order/enterprise/line',
+      method: 'put'
+    },
+    delete: {
+      url: '/order/enterprise/line/delete',
+      method: 'put'
+    }
+  },
   store: { // 专卖店
     getStoreList: {
       url: '/order/enterprise/store/all',
+      method: 'get'
+    },
+    getStoresByLine: {
+      url: '/order/enterprise/store/line',
       method: 'get'
     },
     getAll: {
@@ -175,7 +201,7 @@ export default {
       method: 'put'
     }
   },
-  checkinOrder: { // 库存
+  checkinOrder: { // 进仓单
     getAll: {
       url: '/order/order/checkinOrder',
       method: 'get'
@@ -195,6 +221,24 @@ export default {
     statistic: {
       url: '/order/order/checkinOrder/statistic',
       method: 'post'
+    }
+  },
+  delivererOrder: { // 送货单
+    getAll: {
+      url: '/order/order/delivererOrder',
+      method: 'get'
+    },
+    add: {
+      url: '/order/order/delivererOrder',
+      method: 'post'
+    },
+    update: {
+      url: '/order/order/delivererOrder',
+      method: 'put'
+    },
+    delete: {
+      url: '/order/order/delivererOrder/delete',
+      method: 'put'
     }
   }
 }

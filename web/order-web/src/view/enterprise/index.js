@@ -4,6 +4,7 @@ import OutOrderRecorder from './OutOrderRecorder'
 import InOrderRecorder from './InOrderRecorder'
 import Carrier from './Carrier'
 import Product from './Product'
+import Line from './Line'
 import Store from './Store'
 
 export default [
@@ -36,6 +37,11 @@ export default [
     path: '/enterprise/product',
     name: 'Product',
     component: Product
+  },
+  {
+    path: '/enterprise/line',
+    name: 'Line',
+    component: Line
   },
   {
     path: '/enterprise/store',

@@ -1,17 +1,17 @@
 <template>
-  <div class="enterprise-checkinOrder">
+  <div class="enterprise-delivererOrder">
     <base-table tableHandLeftPlaceholder="库存日期" :pageQuery="table.pageQuery" :handRightBotton="table.handRightBotton" :rowContextdblClick="getAlertOpen" :tableCols="table.cols" :contextMenuData="table.contextMenuData"></base-table>
-    <checkinOrder-dialog :dialog="dialog" :submitCallback="submitCallback"></checkinOrder-dialog>
+    <delivererOrder-dialog :dialog="dialog" :submitCallback="submitCallback"></delivererOrder-dialog>
   </div>
 </template>
 
 <script>
 import { dateFormatterTool } from 'gdotc@common/assets/common/common'
-import checkinOrderDialog from './dialog/checkinOrderDialog'
+import delivererOrderDialog from './dialog/delivererOrderDialog'
 export default {
-  name: 'checkinOrder',
+  name: 'delivererOrder',
   components: {
-    checkinOrderDialog
+    delivererOrderDialog
   },
   props: {
   },
@@ -23,29 +23,28 @@ export default {
     return {
       table: {
         pageQuery: {
-          apiModule: 'checkinOrder',
+          apiModule: 'delivererOrder',
           apiMethod: 'getAll',
           reload: true
         },
         handRightBotton: [
           {
-            name: '新增进仓单',
+            name: '新增送货单',
             icon: 'el-icon-circle-plus-outline',
             fn: this.addAlertOpen,
-            entitlement: true
-          },
-          {
-            name: '统计',
-            icon: 'el-icon-circle-plus-outline',
-            fn: this.showStatistic,
             entitlement: true
           }
         ],
         cols: [
-          { label: '进仓单号', prop: 'id', minwidth: '90px' },
-          { label: '进仓日期', prop: 'checkin_date', minwidth: '90px', formatter: this.formatterTime },
-          { label: '仓管', prop: 'in_order_recorder', minwidth: '90px' },
-          { label: '缴仓', prop: 'carrier', minwidth: '90px' }
+          { label: '送货单号', prop: 'id', minwidth: '90px' },
+          { label: '出单日期', prop: 'order_date', minwidth: '90px', formatter: this.formatterTime },
+          { label: '司机', prop: 'driver', minwidth: '90px' },
+          { label: '路线', prop: 'line_name', minwidth: '90px' },
+          { label: '专卖店', prop: 'store_name', minwidth: '90px' },
+          { label: '店主', prop: 'store_holder', minwidth: '90px' },
+          { label: '地址', prop: 'address', minwidth: '90px' },
+          { label: '送货日期', prop: 'delivery_date', minwidth: '90px', formatter: this.formatterTime },
+          { label: '是否已出仓', prop: 'is_out', minwidth: '90px', formatter: this.formatterIsOut }
         ],
         contextMenuData: [
           {
@@ -55,7 +54,7 @@ export default {
             entitlement: true
           },
           {
-            name: `新增进仓单`,
+            name: `新增送货单`,
             icon: `el-icon-circle-plus-outline`,
             fnEvent: this.addAlertOpen,
             entitlement: true
@@ -80,6 +79,13 @@ export default {
   methods: {
     formatterTime (row, column, cellValue) {
       return dateFormatterTool(cellValue, 'yyyy-MM-dd')
+    },
+    formatterIsOut (row, column, cellValue) {
+      if (cellValue === 1) {
+        return '是'
+      } else if (cellValue === 0) {
+        return '否'
+      }
     },
     rowContextdblClick (row) {
       // this.putAlert(row)
@@ -117,7 +123,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.state.http.auto('checkinOrder', 'delete', { data: row }).then((response) => {
+        this.$store.state.http.auto('delivererOrder', 'delete', { data: row }).then((response) => {
           this.$message.success('删除成功!')
           this.table.pageQuery.reload = true
         })

@@ -1,17 +1,17 @@
 <template>
-  <div class="enterprise-checkinOrder">
-    <base-table tableHandLeftPlaceholder="库存日期" :pageQuery="table.pageQuery" :handRightBotton="table.handRightBotton" :rowContextdblClick="getAlertOpen" :tableCols="table.cols" :contextMenuData="table.contextMenuData"></base-table>
-    <checkinOrder-dialog :dialog="dialog" :submitCallback="submitCallback"></checkinOrder-dialog>
+  <div class="enterprise-line">
+    <base-table tableHandLeftPlaceholder="名称" :pageQuery="table.pageQuery" :addTableRowClick="addAlertOpen" :rowContextdblClick="getAlertOpen" :tableCols="table.cols" :contextMenuData="table.contextMenuData"></base-table>
+    <line-dialog :dialog="dialog" :submitCallback="submitCallback"></line-dialog>
   </div>
 </template>
 
 <script>
 import { dateFormatterTool } from 'gdotc@common/assets/common/common'
-import checkinOrderDialog from './dialog/checkinOrderDialog'
+import lineDialog from './dialog/lineDialog'
 export default {
-  name: 'checkinOrder',
+  name: 'line',
   components: {
-    checkinOrderDialog
+    lineDialog
   },
   props: {
   },
@@ -23,29 +23,12 @@ export default {
     return {
       table: {
         pageQuery: {
-          apiModule: 'checkinOrder',
+          apiModule: 'line',
           apiMethod: 'getAll',
           reload: true
         },
-        handRightBotton: [
-          {
-            name: '新增进仓单',
-            icon: 'el-icon-circle-plus-outline',
-            fn: this.addAlertOpen,
-            entitlement: true
-          },
-          {
-            name: '统计',
-            icon: 'el-icon-circle-plus-outline',
-            fn: this.showStatistic,
-            entitlement: true
-          }
-        ],
         cols: [
-          { label: '进仓单号', prop: 'id', minwidth: '90px' },
-          { label: '进仓日期', prop: 'checkin_date', minwidth: '90px', formatter: this.formatterTime },
-          { label: '仓管', prop: 'in_order_recorder', minwidth: '90px' },
-          { label: '缴仓', prop: 'carrier', minwidth: '90px' }
+          { label: '名称', prop: 'name', minwidth: '90px' }
         ],
         contextMenuData: [
           {
@@ -55,9 +38,15 @@ export default {
             entitlement: true
           },
           {
-            name: `新增进仓单`,
+            name: `新增`,
             icon: `el-icon-circle-plus-outline`,
             fnEvent: this.addAlertOpen,
+            entitlement: true
+          },
+          {
+            name: `修改`,
+            icon: `el-icon-edit`,
+            fnEvent: this.putAlertOpen,
             entitlement: true
           },
           {
@@ -96,10 +85,6 @@ export default {
       this.dialog.type = 'post'
       this.dialog.visible = true
     },
-    showStatistic (row) {
-      this.dialog.type = 'statistic'
-      this.dialog.visible = true
-    },
     putAlertOpen (row) {
       if (!row) {
         row = this.$store.state.tableCurrentRow
@@ -117,7 +102,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.state.http.auto('checkinOrder', 'delete', { data: row }).then((response) => {
+        this.$store.state.http.auto('line', 'delete', { data: row }).then((response) => {
           this.$message.success('删除成功!')
           this.table.pageQuery.reload = true
         })

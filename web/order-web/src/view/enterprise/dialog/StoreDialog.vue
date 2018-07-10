@@ -14,8 +14,14 @@
         <el-form-item label="电话" prop='phone'>
           <el-input v-model="dialog.data.phone" :disabled="dialog.type === 'get'" clearable size="mini"></el-input>
         </el-form-item>
-        <el-form-item label="路线" prop='line'>
-          <el-input v-model="dialog.data.line" :disabled="dialog.type === 'get'" clearable size="mini"></el-input>
+
+        <el-form-item label="路线" prop='line_id'>
+          <el-select style="width: 100%" v-model="dialog.data.line_id"  size="mini"  :disabled="dialog.type !== 'post'" clearable>
+            <el-option v-for="item in lineList" :key="item.id" :label="item.name" :value="item.id">
+              <span style="float: left">{{ item.name }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{ item.id }}</span>
+            </el-option>
+          </el-select>
         </el-form-item>
 
         <div class="dialog-cust-from">
@@ -94,7 +100,8 @@ export default {
   data () {
     return {
       custCurrentData: [],
-      productList: []
+      productList: [],
+      lineList: []
     }
   },
   mounted () {
@@ -112,11 +119,24 @@ export default {
       this.dialog.visible = false
       this.$refs[form].resetFields()
     },
+    lineRemoteMethod () {
+      this.dialog.loading = true
+      let vm = this
+      vm.$store.state.http.auto('line', 'getLineList').then(res => {
+        this.lineList = res.data
+      }).catch(error => {
+        vm.$message.error(error.statusText)
+        vm.dialog.loading = false
+        console.log(error)
+      })
+    },
     dialogOpen () {
+      this.lineRemoteMethod()
       this.dialog.data = {
         store_name: '',
         delivery_line: '',
-        phone: ''
+        phone: '',
+        line_id: ''
       }
       switch (this.dialog.type) {
         case 'post':

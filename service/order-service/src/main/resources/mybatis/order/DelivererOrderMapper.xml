@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.order.mapper.DelivererOrderMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+
+	<resultMap id="DelivererOrderResultMap" type="com.buffalo.order.model.DelivererOrder" >
+		<id column="id" property="id"  />
+		<collection property="itemList" column="id" javaType="ArrayList" ofType="com.buffalo.order.model.DelivererOrderItem" select="getItemListByDelivererOrderId"></collection>
+	</resultMap>
+	<select id="getItemListByDelivererOrderId" resultType="com.buffalo.order.model.DelivererOrderItem" parameterType="String" >
+		select
+		ii.*,
+		product.name product_name,
+		product.scale product_scale,
+		product.index product_index
+		from ord_deliverer_order_item ii, ent_product product
+		where ii.sys_status = 1 and product.sys_status = 1 and ii.product_id = product.id
+		and ii.deliverer_order_id = #{id}
+		order by product.index
+	</select>
+	<!-- 列表 -->
+	<select id="list" parameterType="com.buffalo.order.model.DelivererOrder" resultMap="DelivererOrderResultMap">
+		select
+		delivererOrder.*,
+		driver.driver_name driver,
+		out_order_recorder.name out_order_recorder,
+		line.name line_name,
+		store.store_name,
+		store.store_holder,
+		store.address
+		from ord_deliverer_order delivererOrder, ent_driver driver, ent_out_order_recorder out_order_recorder, ent_line line, ent_store store
+		where delivererOrder.sys_status = 1 and driver.sys_status = 1 and out_order_recorder.sys_status = 1 and line.sys_status = 1 and store.sys_status = 1
+		and delivererOrder.driver_id = driver.id
+		and delivererOrder.order_recorder_id = out_order_recorder.id
+		and delivererOrder.line_id = line.id
+		and delivererOrder.store_id = store.id
+		<if test="keyword != ''">
+			and concat(delivererOrder.order_date, driver.driver_name, out_order_recorder.name) like "%${keyword}%"
+		</if>
+		order by if(isnull(delivererOrder.modified_time),0,delivererOrder.modified_time) desc,delivererOrder.created_time desc
+	</select>
+
+	<!-- 新增 -->
+    <insert id="add" parameterType="com.buffalo.order.model.DelivererOrder" >
+		insert into ord_deliverer_order
+			(
+			id,
+			order_date,
+			driver_id,
+			store_id,
+			delivery_date,
+			order_recorder_id,
+			total_price,
+			line_id,
+			remarks,
+			creator_id,
+			created_time,
+			modified_time
+			)
+		values
+			(
+			#{id},
+			#{order_date},
+			#{driver_id},
+			#{store_id},
+			#{delivery_date},
+			#{order_recorder_id},
+			#{total_price},
+			#{line_id},
+			#{remarks},
+			#{creator_id}, 
+			now(),
+			now()
+			)
+    </insert>
+
+	<!-- 修改 -->
+    <update id="update" parameterType="com.buffalo.order.model.DelivererOrder">
+		update ord_deliverer_order
+		set
+			order_date = #{order_date},
+			driver_id = #{driver_id},
+			store_id = #{store_id},
+			delivery_date = #{delivery_date},
+			order_recorder_id = #{order_recorder_id},
+			total_price = #{total_price},
+			line_id = #{line_id},
+			remarks = #{remarks} ,
+			modifier_id = #{modifier_id} , 
+			modified_time = now()
+		where id = #{id}
+    </update>
+
+	<delete id="delete" parameterType="com.buffalo.order.model.DelivererOrder">
+		update ord_deliverer_order
+			set sys_status = 0,
+			modifier_id = #{modifier_id},
+			modified_time = now()
+			where id=#{id}
+	</delete>
+
+	<!-- 新增库存项目 -->
+	<insert id="addDelivererOrderItem" parameterType="com.buffalo.order.model.DelivererOrderItem" >
+		insert into ord_deliverer_order_item
+		(
+		id,
+		deliverer_order_id,
+		product_id,
+		quantity,
+		remarks,
+		creator_id,
+		created_time,
+		modified_time
+		)
+		values
+		(
+		uuid(),
+		#{deliverer_order_id},
+		#{product_id},
+		#{quantity},
+		#{remarks},
+		#{creator_id},
+		now(),
+		now()
+		)
+	</insert>
+
+	<!-- 修改库存项目 -->
+	<update id="updateDelivererOrderItem" parameterType="com.buffalo.order.model.DelivererOrderItem">
+		update ord_deliverer_order_item
+		set
+		quantity = #{quantity},
+		remarks = #{remarks} ,
+		modifier_id = #{modifier_id} ,
+		modified_time = now()
+		where id = #{id}
+	</update>
+
+	<delete id="deleteItemList" parameterType="String">
+		update ord_deliverer_order_item
+		set sys_status = 0,
+		modified_time = now()
+		where deliverer_order_id=#{deliverer_order_id}
+	</delete>
+
+
+
+</mapper>

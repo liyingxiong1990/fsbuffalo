@@ -3,7 +3,7 @@ spring:
     name: sys-service
   cloud:
     config:
-      uri: http://192.168.16.27:7070
+      uri: http://192.168.16.126:7070
       fail-fast: true
       password: user
       username: user

@@ -2,8 +2,8 @@
   <div class="driver-dialog">
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible" width="380px" @open="dialogOpen" :before-close="dialogClose">
       <el-form label-width="120px" :model="dialog.data"  :class="dialog.type === 'get'?'form-get':''" label-position="right" :rules="dialog.rules" ref="ruleForm">
-        <el-form-item label="姓名" prop='driver_name'>
-          <el-input v-model="dialog.data.driver_name" :disabled="dialog.type === 'get'" clearable size="mini"></el-input>
+        <el-form-item label="姓名" prop='name'>
+          <el-input v-model="dialog.data.name" :disabled="dialog.type === 'get'" clearable size="mini"></el-input>
         </el-form-item>
         <el-form-item label="路线" prop='delivery_line'>
           <el-input v-model="dialog.data.delivery_line" :disabled="dialog.type === 'get'" clearable size="mini"></el-input>
@@ -60,7 +60,7 @@ export default {
     },
     dialogOpen () {
       this.dialog.data = {
-        driver_name: '',
+        name: '',
         delivery_line: '',
         phone: ''
       }

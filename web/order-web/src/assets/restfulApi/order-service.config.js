@@ -244,5 +244,23 @@ export default {
       url: '/order/order/delivererOrder/delete',
       method: 'put'
     }
+  },
+  warehouseOrder: { // 出仓单
+    getAll: {
+      url: '/order/order/warehouseOrder',
+      method: 'get'
+    },
+    getById: {
+      url: '/order/order/warehouseOrder/{id}',
+      method: 'get'
+    },
+    add: {
+      url: '/order/order/warehouseOrder',
+      method: 'post'
+    },
+    delete: {
+      url: '/order/order/warehouseOrder/delete',
+      method: 'put'
+    }
   }
 }

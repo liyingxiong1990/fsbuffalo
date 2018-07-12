@@ -1,17 +1,17 @@
 <template>
-  <div class="enterprise-driver">
-    <base-table tableHandLeftPlaceholder="姓名\线路\电话" :pageQuery="table.pageQuery" :addTableRowClick="addAlertOpen" :rowContextdblClick="getAlertOpen" :tableCols="table.cols" :contextMenuData="table.contextMenuData"></base-table>
-    <driver-dialog :dialog="dialog" :submitCallback="submitCallback"></driver-dialog>
+  <div class="enterprise-warehouseOrder">
+    <base-table tableHandLeftPlaceholder="" :pageQuery="table.pageQuery" :handRightBotton="table.handRightBotton" :rowContextdblClick="getAlertOpen" :tableCols="table.cols" :contextMenuData="table.contextMenuData"></base-table>
+    <warehouseOrder-dialog :dialog="dialog" :submitCallback="submitCallback"></warehouseOrder-dialog>
   </div>
 </template>
 
 <script>
 import { dateFormatterTool } from 'gdotc@common/assets/common/common'
-import driverDialog from './dialog/driverDialog'
+import warehouseOrderDialog from './dialog/warehouseOrderDialog'
 export default {
-  name: 'driver',
+  name: 'warehouseOrder',
   components: {
-    driverDialog
+    warehouseOrderDialog
   },
   props: {
   },
@@ -23,14 +23,24 @@ export default {
     return {
       table: {
         pageQuery: {
-          apiModule: 'driver',
+          apiModule: 'warehouseOrder',
           apiMethod: 'getAll',
           reload: true
         },
+        handRightBotton: [
+          {
+            name: '新增外县市出仓单',
+            icon: 'el-icon-circle-plus-outline',
+            fn: this.addDeliverOpen,
+            entitlement: true
+          }
+        ],
         cols: [
-          { label: '姓名', prop: 'name', minwidth: '90px' },
-          { label: '线路', prop: 'delivery_line', minwidth: '90px' },
-          { label: '电话', prop: 'phone', minwidth: '90px' }
+          { label: '出仓单号', prop: 'id', minwidth: '90px' },
+          { label: '出单日期', prop: 'order_date', minwidth: '90px', formatter: this.formatterTime },
+          { label: '司机', prop: 'deliverer', minwidth: '90px' },
+          { label: '路线', prop: 'line_name', minwidth: '90px' },
+          { label: '开单人', prop: 'out_order_recorder', minwidth: '90px' }
         ],
         contextMenuData: [
           {
@@ -40,15 +50,9 @@ export default {
             entitlement: true
           },
           {
-            name: `新增`,
+            name: `新增外县市出仓单`,
             icon: `el-icon-circle-plus-outline`,
-            fnEvent: this.addAlertOpen,
-            entitlement: true
-          },
-          {
-            name: `修改`,
-            icon: `el-icon-edit`,
-            fnEvent: this.putAlertOpen,
+            fnEvent: this.addDeliverOpen,
             entitlement: true
           },
           {
@@ -83,8 +87,12 @@ export default {
       this.dialog.type = 'get'
       this.dialog.visible = true
     },
-    addAlertOpen (row) {
-      this.dialog.type = 'post'
+    addDeliverOpen (row) {
+      this.dialog.type = 'post_deliver'
+      this.dialog.visible = true
+    },
+    showStatistic (row) {
+      this.dialog.type = 'statistic'
       this.dialog.visible = true
     },
     putAlertOpen (row) {
@@ -104,7 +112,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.state.http.auto('driver', 'delete', { data: row }).then((response) => {
+        this.$store.state.http.auto('warehouseOrder', 'delete', { data: row }).then((response) => {
           this.$message.success('删除成功!')
           this.table.pageQuery.reload = true
         })

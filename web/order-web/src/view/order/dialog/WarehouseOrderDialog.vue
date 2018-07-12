@@ -1,5 +1,5 @@
 <template>
-  <div class="delivererOrder-dialog">
+  <div class="warehouseOrder-dialog">
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible" width="600px" @open="dialogOpen" :before-close="dialogClose">
       <el-form label-width="120px" :model="dialog.data" :class="dialog.type === 'get'?'form-get':''" label-position="right" :rules="dialog.rules" ref="ruleForm">
         <el-form-item label="开单日期" prop='order_date'>
@@ -16,15 +16,9 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="专卖店" prop='store_id'>
-          <el-select v-model="dialog.data.store_id" placeholder="请选择" size="mini" :disabled="dialog.type !== 'post'">
-            <el-option v-for="item in storeList" :key="item.id" :label="item.store_name" :value="item.id"></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="司机" prop='driver_id'>
-          <el-select v-model="dialog.data.driver_id" placeholder="请选择" size="mini" :disabled="dialog.type === 'get'">
-            <el-option v-for="(item, index) in this.driverList" :key="index" :label="item.name" :value="item.id"></el-option>
+        <el-form-item label="司机" prop='deliverer_id'>
+          <el-select v-model="dialog.data.deliverer_id" placeholder="请选择" size="mini" :disabled="dialog.type === 'get'">
+            <el-option v-for="(item, index) in this.delivererList" :key="index" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
 
@@ -73,7 +67,7 @@
                   <p>{{item.quantity}}</p>
                 </div>
               </div>
-              <div v-if="dialog.type === 'post' || dialog.type === 'put'" class="dialog-cust-from-row-column">
+              <div v-if="dialog.type === 'post_deliver' || dialog.type === 'put'" class="dialog-cust-from-row-column">
                 <div classs="dialog-cust-from-row-column-context">
                   <el-input type="number" style="width: 100%; resize:none;" v-model="item.quantity" @blur="handleBlur(item)" :disabled="dialog.data.is_out === 1"></el-input>
                 </div>
@@ -85,7 +79,7 @@
       </el-form>
       <div slot="footer">
         <el-button @click="cancelForm('ruleForm')" size="small">取 消</el-button>
-        <el-button v-if="dialog.type === 'post' || dialog.type === 'put'" type="primary" @click="submitForm('ruleForm')" size="small">确 定</el-button>
+        <el-button v-if="dialog.type === 'post_deliver' || dialog.type === 'put'" type="primary" @click="submitForm('ruleForm')" size="small">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -94,11 +88,10 @@
 <script>
 import { dialogClose } from 'gdotc@common/assets/common/common'
 export default {
-  name: 'delivererOrderDialog',
+  name: 'warehouseOrderDialog',
   created () {
     this.getProductList()
     this.getOutOrderRecorderList()
-    this.getDriverList()
   },
   computed: {
   },
@@ -121,9 +114,8 @@ export default {
     return {
       productList: [],
       outOrderRecorderList: [],
-      driverList: [],
+      delivererList: [],
       lineList: [],
-      storeList: [],
       inventory: null
     }
   },
@@ -132,17 +124,14 @@ export default {
       order_date: [
         { required: true, message: '请选择出单日期', trigger: 'change' }
       ],
-      line_id: [
-        { required: true, message: '请选择路线', trigger: 'change' }
-      ],
-      store_id: [
-        { required: true, message: '请选择专卖店', trigger: 'change' }
-      ],
-      driver_id: [
-        { required: true, message: '请选择司机', trigger: 'change' }
-      ],
+      // line_id: [
+      //   { required: true, message: '请选择路线', trigger: 'change' }
+      // ],
       order_recorder_id: [
         { required: true, message: '请选择开单人', trigger: 'change' }
+      ],
+      deliverer_id: [
+        { required: true, message: '请选择司机', trigger: 'change' }
       ]
     }
   },
@@ -180,10 +169,16 @@ export default {
         this.outOrderRecorderList = res.data
       })
     },
-    getDriverList () {
-      this.$store.state.http.auto('driver', 'getDriverList').then((res) => {
-        this.driverList = res.data
-      })
+    getDelivererList () {
+      if (this.dialog.data.type === 'deliver') {
+        this.$store.state.http.auto('deliverer', 'getDelivererList').then((res) => {
+          this.delivererList = res.data
+        })
+      } else if (this.dialog.data.type === 'driver') {
+        this.$store.state.http.auto('driver', 'getDriverList').then((res) => {
+          this.delivererList = res.data
+        })
+      }
     },
     lineRemoteMethod () {
       this.dialog.loading = true
@@ -199,14 +194,14 @@ export default {
     chooseLine (val) {
       // this.dialog.data.store_id = ''
       this.dialog.loading = true
-      let vm = this
-      vm.$store.state.http.auto('store', 'getStoresByLine', { params: { line_id: val } }).then(res => {
-        this.storeList = res.data
-      }).catch(error => {
-        vm.$message.error(error.statusText)
-        vm.dialog.loading = false
-        console.log(error)
-      })
+      // let vm = this
+      // vm.$store.state.http.auto('store', 'getStoresByLine', { params: { line_id: val } }).then(res => {
+      //   this.storeList = res.data
+      // }).catch(error => {
+      //   vm.$message.error(error.statusText)
+      //   vm.dialog.loading = false
+      //   console.log(error)
+      // })
     },
     dialogClose: dialogClose,
     cancelForm (form) {
@@ -215,11 +210,21 @@ export default {
     },
     dialogOpen () {
       this.lineRemoteMethod()
+      this.getDelivererList()
       this.dialog.data = {
-        phone: ''
+        id: '',
+        order_date: '',
+        deliverer_id: '',
+        delivery_date: '',
+        order_recorder_id: '',
+        type: '',
+        line_id: '',
+        deliverer: '',
+        out_order_recorder: '',
+        line_name: ''
       }
       switch (this.dialog.type) {
-        case 'post':
+        case 'post_deliver':
           this.dialog.data = {}
           this.dialog.data.itemList = []
           for (var i = 0; i < this.productList.length; i++) {
@@ -230,21 +235,35 @@ export default {
               quantity: 0
             })
           }
-          this.dialog.title = '新增送货单'
-          break
-        case 'put':
-          this.chooseLine(this.dialog.currentRow.line_id)
-          this.dialog.data = {}
-          this.dialog.data = this.dialog.currentRow
-          this.dialog.title = '编辑送货单'
+          this.dialog.title = '新增外县市出仓单'
+          this.dialog.data.type = 'deliver'
           break
         case 'get':
-          this.chooseLine(this.dialog.currentRow.line_id)
-          this.dialog.data = {}
-          this.dialog.data = this.dialog.currentRow
-          this.dialog.title = '查看送货单'
+          this.warehouseRemoteMethod(this.dialog.currentRow.id)
+          this.dialog.title = '查看出仓单'
           break
       }
+    },
+    warehouseRemoteMethod (query) {
+      // setTimeout(() => {
+      this.$store.state.http
+        .auto('warehouseOrder', 'getById', {
+          params: { id: query }
+        })
+        .then(res => {
+          if (res && res.data) {
+            debugger
+            Object.assign(this.dialog.data, res.data)
+            this.dialog.data.cust_id = query
+            this.dialog.currentRow = res.data
+            this.dialog.visible = true
+          }
+        })
+        .catch(function (error) {
+          this.$message.error('查询失败!')
+          console.log(error)
+        })
+      // }, 200)
     },
     submitForm (form) {
       let vm = this
@@ -252,15 +271,15 @@ export default {
         if (valid) {
           let successMessage = null
           let requestMethod = null
-          if (vm.dialog.type === 'post') {
-            successMessage = '送货单新增成功！'
+          if (vm.dialog.type === 'post_deliver') {
+            successMessage = '外县市出仓单新增成功！'
             requestMethod = 'add'
           }
           if (vm.dialog.type === 'put') {
-            successMessage = '送货单修改成功！'
+            successMessage = '出仓单修改成功！'
             requestMethod = 'update'
           }
-          this.$store.state.http.auto('delivererOrder', requestMethod, { data: this.dialog.data }).then((res) => {
+          this.$store.state.http.auto('warehouseOrder', requestMethod, { data: this.dialog.data }).then((res) => {
             this.$message.success(successMessage)
             this.$refs[form].resetFields()
             this.dialog.visible = false

@@ -236,6 +236,10 @@ export default {
       url: '/order/order/delivererOrder',
       method: 'get'
     },
+    getByDateDriverLine: {
+      url: '/order/order/delivererOrder/getByDateDriverLine',
+      method: 'post'
+    },
     add: {
       url: '/order/order/delivererOrder',
       method: 'post'

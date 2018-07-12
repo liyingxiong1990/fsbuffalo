@@ -155,7 +155,6 @@ export default {
         })
         .then(res => {
           if (res && res.data) {
-            debugger
             Object.assign(this.dialog.data, res.data)
             this.dialog.data.id = query
             this.dialog.currentRow = res.data

@@ -33,6 +33,12 @@ export default {
             icon: 'el-icon-circle-plus-outline',
             fn: this.addDeliverOpen,
             entitlement: true
+          },
+          {
+            name: `新增专卖店出仓单`,
+            icon: `el-icon-circle-plus-outline`,
+            fn: this.addDriverOpen,
+            entitlement: true
           }
         ],
         cols: [
@@ -53,6 +59,12 @@ export default {
             name: `新增外县市出仓单`,
             icon: `el-icon-circle-plus-outline`,
             fnEvent: this.addDeliverOpen,
+            entitlement: true
+          },
+          {
+            name: `新增专卖店出仓单`,
+            icon: `el-icon-circle-plus-outline`,
+            fnEvent: this.addDriverOpen,
             entitlement: true
           },
           {
@@ -89,6 +101,10 @@ export default {
     },
     addDeliverOpen (row) {
       this.dialog.type = 'post_deliver'
+      this.dialog.visible = true
+    },
+    addDriverOpen (row) {
+      this.dialog.type = 'post_driver'
       this.dialog.visible = true
     },
     showStatistic (row) {

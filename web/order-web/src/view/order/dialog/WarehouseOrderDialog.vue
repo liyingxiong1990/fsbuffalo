@@ -10,12 +10,6 @@
           <el-date-picker v-model="dialog.data.delivery_date" :disabled="dialog.type === 'get'" clearable size="mini" type="date" placeholder="选择日期"></el-date-picker>
         </el-form-item>
 
-        <el-form-item v-if="dialog.type === 'post_driver'" label="路线" prop='line_id'>
-          <el-select v-model="dialog.data.line_id" placeholder="请选择" size="mini" :disabled="dialog.type !== 'post'" @change="chooseLine">
-            <el-option v-for="item in lineList" :key="item.id" :label="item.name" :value="item.id"></el-option>
-          </el-select>
-        </el-form-item>
-
         <el-form-item v-if="dialog.type === 'get'" label="司机">{{dialog.data.deliverer}}</el-form-item>
         <el-form-item v-if="dialog.type === 'get'" label="开单人">{{dialog.data.out_order_recorder}}</el-form-item>
 
@@ -25,13 +19,19 @@
           </el-select>
         </el-form-item>
 
+        <el-form-item v-if="dialog.type === 'post_driver'" label="路线" prop='line_id'>
+          <el-select v-model="dialog.data.line_id" placeholder="请选择" size="mini" :disabled="dialog.type === 'get'" @change="chooseLine">
+            <el-option v-for="item in lineList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+
         <el-form-item v-if="dialog.type === 'post_deliver' || dialog.type === 'post_driver'" label="开单人" prop='order_recorder_id'>
           <el-select v-model="dialog.data.order_recorder_id" placeholder="请选择" size="mini" :disabled="dialog.type === 'get'">
             <el-option v-for="(item, index) in this.outOrderRecorderList" :key="index" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
 
-        <div class="dialog-cust-from">
+        <div v-if="dialog.type === 'post_deliver'" class="dialog-cust-from">
           <div class="dialog-cust-from-row">
             <div class="dialog-cust-from">
               <div class="dialog-cust-from-row-column">
@@ -65,14 +65,14 @@
                   <p>{{item.product_scale}}</p>
                 </div>
               </div>
-              <div v-if="dialog.type === 'get'" class="dialog-cust-from-row-column">
+              <div v-if="dialog.type === 'get' || dialog.type === 'post_driver'" class="dialog-cust-from-row-column">
                 <div classs="dialog-cust-from-row-column-context">
                   <p>{{item.quantity}}</p>
                 </div>
               </div>
-              <div v-if="dialog.type === 'post_deliver' || dialog.type === 'put'" class="dialog-cust-from-row-column">
+              <div v-if="dialog.type === 'post_deliver'" class="dialog-cust-from-row-column">
                 <div classs="dialog-cust-from-row-column-context">
-                  <el-input type="number" style="width: 100%; resize:none;" v-model="item.quantity" @blur="handleBlur(item)" :disabled="dialog.data.is_out === 1"></el-input>
+                  <el-input type="number" style="width: 100%; resize:none;" v-model="item.quantity" @blur="handleBlur(item)"></el-input>
                 </div>
               </div>
               <div style="clear: both;"></div>
@@ -82,7 +82,7 @@
       </el-form>
       <div slot="footer">
         <el-button @click="cancelForm('ruleForm')" size="small">取 消</el-button>
-        <el-button v-if="dialog.type === 'post_deliver' || dialog.type === 'put'" type="primary" @click="submitForm('ruleForm')" size="small">确 定</el-button>
+        <el-button v-if="dialog.type === 'post_deliver' || dialog.type === 'post_driver'" type="primary" @click="submitForm('ruleForm')" size="small">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -196,11 +196,18 @@ export default {
       })
     },
     chooseLine (val) {
-      // this.dialog.data.store_id = ''
-      this.dialog.loading = true
+      // this.dialog.loading = true
       // let vm = this
-      // vm.$store.state.http.auto('store', 'getStoresByLine', { params: { line_id: val } }).then(res => {
-      //   this.storeList = res.data
+      // vm.dialog.data.driver_id = vm.dialog.data.deliverer_id
+      // vm.$store.state.http.auto('delivererOrder', 'getByDateDriverLine', { data: vm.dialog.data }).then(res => {
+      //   var tempData = this.dialog.data
+      //   res.data.order_date = tempData.order_date
+      //   res.data.deliverer_id = tempData.deliverer_id
+      //   res.data.delivery_date = tempData.delivery_date
+      //   res.data.order_recorder_id = tempData.order_recorder_id
+      //   res.data.type = tempData.type
+      //   Object.assign(vm.dialog.data, res.data)
+      //   vm.dialog.data.line_id = val
       // }).catch(error => {
       //   vm.$message.error(error.statusText)
       //   vm.dialog.loading = false
@@ -213,7 +220,6 @@ export default {
       this.$refs[form].resetFields()
     },
     dialogOpen () {
-      this.lineRemoteMethod()
       this.dialog.data = {
         id: '',
         order_date: '',
@@ -241,6 +247,13 @@ export default {
           this.dialog.title = '新增外县市出仓单'
           this.dialog.data.type = 'deliver'
           this.getDelivererList()
+          break
+        case 'post_driver':
+          this.dialog.data = {}
+          this.dialog.title = '新增专卖店出仓单'
+          this.dialog.data.type = 'driver'
+          this.getDelivererList()
+          this.lineRemoteMethod()
           break
         case 'get':
           this.warehouseRemoteMethod(this.dialog.currentRow.id)
@@ -277,9 +290,9 @@ export default {
             successMessage = '外县市出仓单新增成功！'
             requestMethod = 'add'
           }
-          if (vm.dialog.type === 'put') {
-            successMessage = '出仓单修改成功！'
-            requestMethod = 'update'
+          if (vm.dialog.type === 'post_driver') {
+            successMessage = '专卖店出仓单新增成功！'
+            requestMethod = 'add'
           }
           this.$store.state.http.auto('warehouseOrder', requestMethod, { data: this.dialog.data }).then((res) => {
             this.$message.success(successMessage)

@@ -10,6 +10,8 @@ public interface InventoryService {
 
     public List<Inventory> list(String keyword) throws Exception;
 
+    public Inventory getById(String id) throws Exception;
+
     public Inventory getByDate(Date inventory_date) throws Exception;
 
     public Inventory add(Inventory inventory) throws Exception;
@@ -25,4 +27,5 @@ public interface InventoryService {
     public void increaseItemQuantity(String inventoryId, String productId, int quantity) throws Exception;
 
     public void decreaseItemQuantity(String inventoryId, String productId, int quantity) throws Exception;
+
 }

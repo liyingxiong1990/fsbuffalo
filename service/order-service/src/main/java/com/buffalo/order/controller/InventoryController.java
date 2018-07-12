@@ -46,6 +46,23 @@ public class InventoryController {
     }
 
 	/**
+	 * 根据id查询库存
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/{id}", method = RequestMethod.GET)
+	public <T> Map<String, T> getById(@PathVariable String id) {
+		try {
+			Inventory inventory = inventoryService.getById(id);
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "根据id查询库存成功", inventory);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "根据id查询库存失败. " + e.getMessage());
+		}
+	}
+
+	/**
 	 * 根据日期查询库存
 	 * @param <T>
 	 * @return

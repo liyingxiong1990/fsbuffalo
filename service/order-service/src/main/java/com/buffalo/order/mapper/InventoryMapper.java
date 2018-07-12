@@ -14,6 +14,8 @@ public interface InventoryMapper {
 
     public List<Inventory> list(Inventory inventory) throws Exception;
 
+    public Inventory getById(String id) throws Exception;
+
     public Inventory getInventoryByInventoryDate(Date last_date) throws Exception;
 
     public void add(Inventory inventory) throws Exception;
@@ -29,4 +31,5 @@ public interface InventoryMapper {
     public void deleteItemList(String inventory_id) throws Exception;
 
     public InventoryItem getByInventoryIdAndProductId(InventoryItem inventoryItemQuery) throws Exception;
+
 }

@@ -90,5 +90,52 @@ public class DelivererOrderServiceImpl implements DelivererOrderService {
 		operateLogMessageSender.send(request.getHeader("userid"),"送货单","删除送货单："+delivererOrder.getOrder_date());
 	}
 
+	@Override
+	public DelivererOrder getByDateDriverLine(DelivererOrder delivererOrder) throws Exception {
+		DelivererOrder resultDelivererOrder = new DelivererOrder();
+		List<DelivererOrderItem> resultDelivererOrderItemList = new ArrayList<DelivererOrderItem>();
+		List<Product> productList = productService.list("");
+		List<DelivererOrderItem> itemList = new ArrayList<DelivererOrderItem>();
+		for(Product product: productList){
+			DelivererOrderItem delivererOrderItem = new DelivererOrderItem();
+			delivererOrderItem.setProduct_id(product.getId());
+			delivererOrderItem.setProduct_index(product.getIndex());
+			delivererOrderItem.setProduct_name(product.getName());
+			delivererOrderItem.setProduct_scale(product.getScale());
+			delivererOrderItem.setQuantity(0);
+			delivererOrderItem.setId(UUIDUtil.getUUID());
+			itemList.add(delivererOrderItem);
+		}
+
+		List<DelivererOrder> delivererOrderList = delivererOrderMapper.getByDateDriverLine(delivererOrder);
+		for(DelivererOrder dOrder :delivererOrderList){
+			for(DelivererOrderItem delivererOrderItem:dOrder.getItemList()){
+				for(DelivererOrderItem dOI: itemList){
+					if(dOI.getProduct_id().equals(delivererOrderItem.getProduct_id())){
+						dOI.setQuantity(dOI.getQuantity()+delivererOrderItem.getQuantity());
+					}
+				}
+			}
+		}
+
+		for(DelivererOrderItem delivererOrderItem: itemList){
+			if(delivererOrderItem.getQuantity()>0){
+				resultDelivererOrderItemList.add(delivererOrderItem);
+			}
+		}
+
+		resultDelivererOrder.setItemList(resultDelivererOrderItemList);
+		return resultDelivererOrder;
+	}
+
+	@Override
+	public void setOut(DelivererOrder delivererOrderQuery) throws Exception {
+		List<DelivererOrder> delivererOrderList = delivererOrderMapper.getByDateDriverLine(delivererOrderQuery);
+		for(DelivererOrder delivererOrder : delivererOrderList){
+			delivererOrder.setIs_out(1);
+			delivererOrderMapper.update(delivererOrder);
+		}
+	}
+
 
 }

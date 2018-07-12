@@ -35,6 +35,11 @@ public class InventoryServiceImpl implements InventoryService {
 	}
 
 	@Override
+	public Inventory getById(String id) throws Exception {
+		return inventoryMapper.getById(id);
+	}
+
+	@Override
 	public Inventory getByDate(Date inventory_date) throws Exception {
 		return inventoryMapper.getInventoryByInventoryDate(inventory_date);
 	}

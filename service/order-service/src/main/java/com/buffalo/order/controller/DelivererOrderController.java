@@ -46,6 +46,23 @@ public class DelivererOrderController {
     }
 
 	/**
+	 * 根据日期，司机，路线查询送货单列表
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/getByDateDriverLine", method = RequestMethod.POST, consumes="application/json")
+	public <T> Map<String, T> getByDateDriverLine(@RequestBody DelivererOrder delivererOrder, Model model) {
+		try {
+			DelivererOrder delivererOrderResult = delivererOrderService.getByDateDriverLine(delivererOrder);
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "根据日期，司机，路线查询送货单列表成功", delivererOrderResult);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "根据日期，司机，路线查询送货单列表失败. " + e.getMessage());
+		}
+	}
+
+	/**
 	 * 新增送货单
 	 * @param delivererOrder
 	 * @param model

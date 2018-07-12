@@ -39,8 +39,14 @@
 		limit 1
 	</select>
 
-
-	
+	<select id="getById" parameterType="String" resultMap="InventoryResultMap">
+		select
+		inventory.*
+		from ord_inventory inventory
+		where inventory.sys_status = 1
+		and inventory.id = #{id}
+		limit 1
+	</select>
 	
 	<!-- 新增 -->
     <insert id="add" parameterType="com.buffalo.order.model.Inventory" >

@@ -16,4 +16,7 @@ public interface DelivererOrderService {
 
     public void delete(DelivererOrder delivererOrder) throws Exception;
 
+    public DelivererOrder getByDateDriverLine(DelivererOrder delivererOrder) throws Exception;
+
+    public void setOut(DelivererOrder delivererOrderQuery) throws Exception;
 }

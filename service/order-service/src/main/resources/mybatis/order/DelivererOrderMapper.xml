@@ -85,6 +85,7 @@
 			order_recorder_id = #{order_recorder_id},
 			total_price = #{total_price},
 			line_id = #{line_id},
+			is_out = #{is_out},
 			remarks = #{remarks} ,
 			modifier_id = #{modifier_id} , 
 			modified_time = now()
@@ -142,6 +143,17 @@
 		modified_time = now()
 		where deliverer_order_id=#{deliverer_order_id}
 	</delete>
+
+	<select id="getByDateDriverLine" parameterType="com.buffalo.order.model.DelivererOrder" resultMap="DelivererOrderResultMap">
+		select
+		delivererOrder.*
+		from ord_deliverer_order delivererOrder
+		where delivererOrder.sys_status = 1
+		and delivererOrder.order_date = #{order_date}
+		and delivererOrder.driver_id = #{driver_id}
+		and delivererOrder.line_id = #{line_id}
+		and delivererOrder.is_out = 0
+	</select>
 
 
 

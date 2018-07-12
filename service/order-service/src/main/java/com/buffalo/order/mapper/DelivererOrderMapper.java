@@ -25,4 +25,6 @@ public interface DelivererOrderMapper {
     public void updateDelivererOrderItem(DelivererOrderItem delivererOrderItem) throws Exception;
 
     public void deleteItemList(String deliverer_order_id) throws Exception;
+
+    public List<DelivererOrder> getByDateDriverLine(DelivererOrder delivererOrder) throws Exception;
 }

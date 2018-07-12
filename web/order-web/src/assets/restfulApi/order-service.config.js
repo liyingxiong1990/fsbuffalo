@@ -184,6 +184,10 @@ export default {
       url: '/order/order/inventory',
       method: 'get'
     },
+    getById: {
+      url: '/order/order/inventory/{id}',
+      method: 'get'
+    },
     getByDate: {
       url: '/order/order/inventory/date',
       method: 'post'

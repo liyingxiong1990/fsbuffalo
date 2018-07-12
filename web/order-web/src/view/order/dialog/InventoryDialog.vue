@@ -143,10 +143,29 @@ export default {
           break
         case 'get':
           this.dialog.data = {}
-          this.dialog.data = this.dialog.currentRow
+          this.inventoryRemoteMethod(this.dialog.currentRow.id)
           this.dialog.title = '查看库存记录'
           break
       }
+    },
+    inventoryRemoteMethod (query) {
+      this.$store.state.http
+        .auto('inventory', 'getById', {
+          params: { id: query }
+        })
+        .then(res => {
+          if (res && res.data) {
+            debugger
+            Object.assign(this.dialog.data, res.data)
+            this.dialog.data.id = query
+            this.dialog.currentRow = res.data
+            this.dialog.visible = true
+          }
+        })
+        .catch(function (error) {
+          this.$message.error('查询失败!')
+          console.log(error)
+        })
     },
     submitForm (form) {
       let vm = this

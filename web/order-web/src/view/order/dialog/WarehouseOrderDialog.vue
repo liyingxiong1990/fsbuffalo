@@ -10,20 +10,23 @@
           <el-date-picker v-model="dialog.data.delivery_date" :disabled="dialog.type === 'get'" clearable size="mini" type="date" placeholder="选择日期"></el-date-picker>
         </el-form-item>
 
-        <el-form-item label="路线" prop='line_id'>
+        <el-form-item v-if="dialog.type === 'post_driver'" label="路线" prop='line_id'>
           <el-select v-model="dialog.data.line_id" placeholder="请选择" size="mini" :disabled="dialog.type !== 'post'" @change="chooseLine">
             <el-option v-for="item in lineList" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
 
-        <el-form-item label="司机" prop='deliverer_id'>
+        <el-form-item v-if="dialog.type === 'get'" label="司机">{{dialog.data.deliverer}}</el-form-item>
+        <el-form-item v-if="dialog.type === 'get'" label="开单人">{{dialog.data.out_order_recorder}}</el-form-item>
+
+        <el-form-item v-if="dialog.type === 'post_deliver' || dialog.type === 'post_driver'" label="司机" prop='deliverer_id'>
           <el-select v-model="dialog.data.deliverer_id" placeholder="请选择" size="mini" :disabled="dialog.type === 'get'">
             <el-option v-for="(item, index) in this.delivererList" :key="index" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
 
-        <el-form-item label="开单人" prop='order_recorder_id'>
-          <el-select v-model="dialog.data.order_recorder_id" placeholder="请选择" size="mini" :disabled="dialog.type !== 'post'">
+        <el-form-item v-if="dialog.type === 'post_deliver' || dialog.type === 'post_driver'" label="开单人" prop='order_recorder_id'>
+          <el-select v-model="dialog.data.order_recorder_id" placeholder="请选择" size="mini" :disabled="dialog.type === 'get'">
             <el-option v-for="(item, index) in this.outOrderRecorderList" :key="index" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
@@ -170,6 +173,7 @@ export default {
       })
     },
     getDelivererList () {
+      this.delivererList = []
       if (this.dialog.data.type === 'deliver') {
         this.$store.state.http.auto('deliverer', 'getDelivererList').then((res) => {
           this.delivererList = res.data
@@ -210,7 +214,6 @@ export default {
     },
     dialogOpen () {
       this.lineRemoteMethod()
-      this.getDelivererList()
       this.dialog.data = {
         id: '',
         order_date: '',
@@ -237,6 +240,7 @@ export default {
           }
           this.dialog.title = '新增外县市出仓单'
           this.dialog.data.type = 'deliver'
+          this.getDelivererList()
           break
         case 'get':
           this.warehouseRemoteMethod(this.dialog.currentRow.id)
@@ -245,7 +249,6 @@ export default {
       }
     },
     warehouseRemoteMethod (query) {
-      // setTimeout(() => {
       this.$store.state.http
         .auto('warehouseOrder', 'getById', {
           params: { id: query }
@@ -254,7 +257,7 @@ export default {
           if (res && res.data) {
             debugger
             Object.assign(this.dialog.data, res.data)
-            this.dialog.data.cust_id = query
+            this.dialog.data.id = query
             this.dialog.currentRow = res.data
             this.dialog.visible = true
           }
@@ -263,7 +266,6 @@ export default {
           this.$message.error('查询失败!')
           console.log(error)
         })
-      // }, 200)
     },
     submitForm (form) {
       let vm = this

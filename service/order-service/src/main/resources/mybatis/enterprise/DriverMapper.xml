@@ -11,7 +11,7 @@
 		from ent_driver driver
 		where driver.sys_status = 1
 		<if test="keyword != ''">
-			and concat(driver.driver_name,driver.delivery_line,driver.phone) like "%${keyword}%"
+			and concat(driver.name,driver.delivery_line,driver.phone) like "%${keyword}%"
 		</if>
 		order by if(isnull(driver.modified_time),0,driver.modified_time) desc,driver.created_time desc
 	</select>
@@ -22,7 +22,7 @@
 		insert into ent_driver 
 			(
 			id,
-			driver_name,
+			name,
 			delivery_line,
 			phone,
 			remarks,
@@ -33,7 +33,7 @@
 		values
 			(
 			uuid(),
-			#{driver_name},
+			#{name},
 			#{delivery_line},
 			#{phone},
 			#{remarks},
@@ -47,7 +47,7 @@
     <update id="update" parameterType="com.buffalo.enterprise.model.Driver">
 		update ent_driver 
 		set
-			driver_name = #{driver_name},
+			name = #{name},
 			delivery_line = #{delivery_line},
 			phone = #{phone},
 			remarks = #{remarks} ,

@@ -81,7 +81,7 @@
 			where id=#{id}
 	</delete>
 
-	<!-- 新增库存项目 -->
+	<!-- 新增项目 -->
 	<insert id="addCheckinOrderItem" parameterType="com.buffalo.order.model.CheckinOrderItem" >
 		insert into ord_checkin_order_item
 		(
@@ -107,7 +107,7 @@
 		)
 	</insert>
 
-	<!-- 修改库存项目 -->
+	<!-- 修改项目 -->
 	<update id="updateCheckinOrderItem" parameterType="com.buffalo.order.model.CheckinOrderItem">
 		update ord_checkin_order_item
 		set

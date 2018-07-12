@@ -36,7 +36,7 @@ public class DriverServiceImpl implements DriverService {
 		driverMapper.add(driver);
 
 		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"专卖店司机","添加专卖店司机："+driver.getDriver_name());
+		operateLogMessageSender.send(request.getHeader("userid"),"专卖店司机","添加专卖店司机："+driver.getName());
 		return driver;
 	}
 
@@ -44,7 +44,7 @@ public class DriverServiceImpl implements DriverService {
 	public void update(Driver driver) throws Exception {
 		driverMapper.update(driver);
 		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"专卖店司机","修改专卖店司机："+driver.getDriver_name());
+		operateLogMessageSender.send(request.getHeader("userid"),"专卖店司机","修改专卖店司机："+driver.getName());
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class DriverServiceImpl implements DriverService {
 	public void delete(Driver driver) throws Exception {
 		driverMapper.delete(driver);
 		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"专卖店司机","删除专卖店司机："+driver.getDriver_name());
+		operateLogMessageSender.send(request.getHeader("userid"),"专卖店司机","删除专卖店司机："+driver.getName());
 	}
 
 

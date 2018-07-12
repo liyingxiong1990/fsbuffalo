@@ -22,7 +22,7 @@ public interface InventoryService {
 
     public Inventory getInventoryByInventoryDate(Date checkin_date) throws Exception;
 
-    public void addItemQuantity(String inventoryId, String productId, int quantity) throws Exception;
+    public void increaseItemQuantity(String inventoryId, String productId, int quantity) throws Exception;
 
-
+    public void decreaseItemQuantity(String inventoryId, String productId, int quantity) throws Exception;
 }

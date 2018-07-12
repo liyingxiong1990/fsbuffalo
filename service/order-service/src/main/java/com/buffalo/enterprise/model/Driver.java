@@ -8,7 +8,7 @@ import java.util.List;
 public class Driver extends ModelUtil {
 
 	private String id;
-	private String driver_name;
+	private String name;
 	private String delivery_line;
 	private String phone;
 
@@ -25,12 +25,12 @@ public class Driver extends ModelUtil {
 		this.id = id;
 	}
 
-	public String getDriver_name() {
-		return driver_name;
+	public String getName() {
+		return name;
 	}
 
-	public void setDriver_name(String driver_name) {
-		this.driver_name = driver_name;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getDelivery_line() {

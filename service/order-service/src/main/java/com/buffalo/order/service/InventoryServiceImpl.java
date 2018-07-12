@@ -108,7 +108,7 @@ public class InventoryServiceImpl implements InventoryService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
-	public void addItemQuantity(String inventoryId, String productId, int quantity) throws Exception {
+	public void increaseItemQuantity(String inventoryId, String productId, int quantity) throws Exception {
 		InventoryItem inventoryItemQuery = new InventoryItem();
 		inventoryItemQuery.setInventory_id(inventoryId);
 		inventoryItemQuery.setProduct_id(productId);
@@ -117,6 +117,23 @@ public class InventoryServiceImpl implements InventoryService {
 			throw new Exception("库存记录中无该产品！");
 		}
 		inventoryItem.setQuantity(inventoryItem.getQuantity()+quantity);
+		inventoryMapper.updateInventoryItem(inventoryItem);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
+	public void decreaseItemQuantity(String inventoryId, String productId, int quantity) throws Exception {
+		InventoryItem inventoryItemQuery = new InventoryItem();
+		inventoryItemQuery.setInventory_id(inventoryId);
+		inventoryItemQuery.setProduct_id(productId);
+		InventoryItem inventoryItem = inventoryMapper.getByInventoryIdAndProductId(inventoryItemQuery);
+		if(inventoryItem==null){
+			throw new Exception("库存记录中无该产品！");
+		}
+		if(inventoryItem.getQuantity()-quantity<0){
+			throw new Exception("该产品库存不足！");
+		}
+		inventoryItem.setQuantity(inventoryItem.getQuantity()-quantity);
 		inventoryMapper.updateInventoryItem(inventoryItem);
 	}
 

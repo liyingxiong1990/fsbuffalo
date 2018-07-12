@@ -103,7 +103,7 @@ public class CheckinOrderServiceImpl implements CheckinOrderService {
 				checkinOrderItem.setCheckin_order_id(checkinOrderId);
 				checkinOrderMapper.addCheckinOrderItem(checkinOrderItem);
 				String productId = checkinOrderItem.getProduct_id();
-				inventoryService.addItemQuantity(inventoryId,productId,quantity);
+				inventoryService.increaseItemQuantity(inventoryId,productId,quantity);
 			}
 		}
 		//操作记录

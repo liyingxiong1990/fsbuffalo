@@ -1,6 +1,7 @@
 
 package com.buffalo.order.service;
 
+import com.buffalo.enterprise.model.Product;
 import com.buffalo.enterprise.service.ProductService;
 import com.buffalo.message.OperateLogMessageSender;
 import com.buffalo.order.mapper.WarehouseOrderMapper;
@@ -87,7 +88,13 @@ public class WarehouseOrderServiceImpl implements WarehouseOrderService {
 		for(WarehouseOrderItem warehouseOrderItem :warehouseOrder.getItemList()){
 			int quantity = warehouseOrderItem.getQuantity();
 			if(quantity>0){
+				Product product = productService.getById(warehouseOrderItem.getProduct_id());
+				int scale = product.getScale();
+				int numberOfBoxes = quantity/scale;
+				int remainder = quantity%scale;
 				warehouseOrderItem.setWarehouse_order_id(warehouseOrderId);
+				warehouseOrderItem.setNumber_of_boxes(numberOfBoxes);
+				warehouseOrderItem.setRemainder(remainder);
 				warehouseOrderMapper.addWarehouseOrderItem(warehouseOrderItem);
 				String productId = warehouseOrderItem.getProduct_id();
 				inventoryService.decreaseItemQuantity(inventoryId,productId,quantity);

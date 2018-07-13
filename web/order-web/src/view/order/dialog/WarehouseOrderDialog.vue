@@ -1,6 +1,6 @@
 <template>
   <div class="warehouseOrder-dialog">
-    <el-dialog :title="dialog.title" :visible.sync="dialog.visible" width="600px" @open="dialogOpen" :before-close="dialogClose">
+    <el-dialog :title="dialog.title" :visible.sync="dialog.visible" width="1000px" @open="dialogOpen" :before-close="dialogClose">
       <el-form label-width="120px" :model="dialog.data" :class="dialog.type === 'get'?'form-get':''" label-position="right" :rules="dialog.rules" ref="ruleForm">
         <el-form-item label="开单日期" prop='order_date'>
           <el-date-picker @change="selectOrderDate" v-model="dialog.data.order_date" :disabled="dialog.type === 'get'" clearable size="mini" type="date" placeholder="选择日期"></el-date-picker>
@@ -49,7 +49,16 @@
                   <p>数量</p>
                 </div>
               </div>
-
+              <div v-if="dialog.type === 'get'" class="dialog-cust-from-row-column">
+                <div classs="dialog-cust-from-row-column-context">
+                  <p>箱数</p>
+                </div>
+              </div>
+              <div v-if="dialog.type === 'get'" class="dialog-cust-from-row-column">
+                <div classs="dialog-cust-from-row-column-context">
+                  <p>零头</p>
+                </div>
+              </div>
               <div style="clear: both;"></div>
             </div>
           </div>
@@ -75,6 +84,17 @@
                   <el-input type="number" style="width: 100%; resize:none;" v-model="item.quantity" @blur="handleBlur(item)"></el-input>
                 </div>
               </div>
+              <div v-if="dialog.type === 'get'" class="dialog-cust-from-row-column">
+                <div classs="dialog-cust-from-row-column-context">
+                  <p>{{item.number_of_boxes}}</p>
+                </div>
+              </div>
+              <div v-if="dialog.type === 'get'" class="dialog-cust-from-row-column">
+                <div classs="dialog-cust-from-row-column-context">
+                  <p>{{item.remainder}}</p>
+                </div>
+              </div>
+
               <div style="clear: both;"></div>
             </div>
           </div>
@@ -325,7 +345,7 @@ export default {
   margin-bottom: 3px;
   .dialog-cust-from-row {
     .dialog-cust-from-row-column {
-      width: calc(100% / 3 - 5px);
+      width: calc(100% / 5 - 5px);
       float: left;
       padding-left: 5px;
     }

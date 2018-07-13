@@ -1,7 +1,7 @@
 <template>
   <div class="warehouseOrder-dialog">
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible" width="1000px" @open="dialogOpen" :before-close="dialogClose">
-      <el-form label-width="120px" :model="dialog.data" :class="dialog.type === 'get'?'form-get':''" label-position="right" :rules="dialog.rules" ref="ruleForm">
+      <el-form id="warehouse-order-form" label-width="120px" :model="dialog.data" :class="dialog.type === 'get'?'form-get':''" label-position="right" :rules="dialog.rules" ref="ruleForm">
         <el-form-item label="开单日期" prop='order_date'>
           <el-date-picker @change="selectOrderDate" v-model="dialog.data.order_date" :disabled="dialog.type === 'get'" clearable size="mini" type="date" placeholder="选择日期"></el-date-picker>
         </el-form-item>
@@ -100,7 +100,7 @@
           </div>
         </div>
       </el-form>
-      <div slot="footer">
+      <div slot="footer" v-if="dialog.type != 'get'">
         <el-button @click="cancelForm('ruleForm')" size="small">取 消</el-button>
         <el-button v-if="dialog.type === 'post_deliver' || dialog.type === 'post_driver'" type="primary" @click="submitForm('ruleForm')" size="small">确 定</el-button>
       </div>
@@ -112,6 +112,8 @@
 import { dialogClose } from 'gdotc@common/assets/common/common'
 export default {
   name: 'warehouseOrderDialog',
+  components: {
+  },
   created () {
     this.getProductList()
     this.getOutOrderRecorderList()

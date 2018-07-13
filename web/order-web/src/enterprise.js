@@ -5,6 +5,8 @@ import store from './store/index'
 import ElementUI from 'element-ui'
 import './assets/css/element-variables.scss'
 import './assets/bootstrap/css/bootstrap.css'
+import WarehouseOrderPrint from '@/printForms/WarehouseOrderPrint'
+import router from './printForms/page'
 import { BaseHeader, BaseBar, BaseNav, BaseTable, BaseFolder } from 'gdotc@common/components'
 
 // import ECharts from 'vue-echarts/components/ECharts.vue'
@@ -24,6 +26,7 @@ Vue.component('BaseFolder', BaseFolder)
 new Vue({
   el: '#app',
   store,
-  template: '<App/>',
-  components: {}
+  router,
+  template: '<WarehouseOrderPrint/>',
+  components: { WarehouseOrderPrint }
 })

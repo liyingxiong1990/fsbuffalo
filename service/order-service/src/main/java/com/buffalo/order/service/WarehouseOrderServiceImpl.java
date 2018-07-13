@@ -87,18 +87,17 @@ public class WarehouseOrderServiceImpl implements WarehouseOrderService {
 
 		for(WarehouseOrderItem warehouseOrderItem :warehouseOrder.getItemList()){
 			int quantity = warehouseOrderItem.getQuantity();
-			if(quantity>0){
-				Product product = productService.getById(warehouseOrderItem.getProduct_id());
-				int scale = product.getScale();
-				int numberOfBoxes = quantity/scale;
-				int remainder = quantity%scale;
-				warehouseOrderItem.setWarehouse_order_id(warehouseOrderId);
-				warehouseOrderItem.setNumber_of_boxes(numberOfBoxes);
-				warehouseOrderItem.setRemainder(remainder);
-				warehouseOrderMapper.addWarehouseOrderItem(warehouseOrderItem);
-				String productId = warehouseOrderItem.getProduct_id();
-				inventoryService.decreaseItemQuantity(inventoryId,productId,quantity);
-			}
+			Product product = productService.getById(warehouseOrderItem.getProduct_id());
+			int scale = product.getScale();
+			int numberOfBoxes = quantity/scale;
+			int remainder = quantity%scale;
+			warehouseOrderItem.setWarehouse_order_id(warehouseOrderId);
+			warehouseOrderItem.setNumber_of_boxes(numberOfBoxes);
+			warehouseOrderItem.setRemainder(remainder);
+			warehouseOrderMapper.addWarehouseOrderItem(warehouseOrderItem);
+			String productId = warehouseOrderItem.getProduct_id();
+			inventoryService.decreaseItemQuantity(inventoryId,productId,quantity);
+
 		}
 		if(warehouseOrder.getType().equals("driver")) {
 			delivererOrderService.setOut(delivererOrderQuery);

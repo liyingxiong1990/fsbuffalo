@@ -60,10 +60,9 @@ public class DelivererOrderServiceImpl implements DelivererOrderService {
 		delivererOrderMapper.add(delivererOrder);
 		for(DelivererOrderItem delivererOrderItem :delivererOrder.getItemList()){
 			int quantity = delivererOrderItem.getQuantity();
-			if(quantity>0){
-				delivererOrderItem.setDeliverer_order_id(delivererOrderId);
-				delivererOrderMapper.addDelivererOrderItem(delivererOrderItem);
-			}
+			delivererOrderItem.setDeliverer_order_id(delivererOrderId);
+			delivererOrderMapper.addDelivererOrderItem(delivererOrderItem);
+
 		}
 		//操作记录
 		operateLogMessageSender.send(request.getHeader("userid"),"送货单","添加送货单："+delivererOrder.getOrder_date());
@@ -119,9 +118,7 @@ public class DelivererOrderServiceImpl implements DelivererOrderService {
 		}
 
 		for(DelivererOrderItem delivererOrderItem: itemList){
-			if(delivererOrderItem.getQuantity()>0){
-				resultDelivererOrderItemList.add(delivererOrderItem);
-			}
+			resultDelivererOrderItemList.add(delivererOrderItem);
 		}
 
 		resultDelivererOrder.setItemList(resultDelivererOrderItemList);

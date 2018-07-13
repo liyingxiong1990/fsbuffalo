@@ -71,7 +71,7 @@ public class WarehouseOrderServiceImpl implements WarehouseOrderService {
 			delivererOrderQuery.setDriver_id(warehouseOrder.getDeliverer_id());
 			delivererOrderQuery.setLine_id(warehouseOrder.getLine_id());
 			DelivererOrder delivererOrder= delivererOrderService.getByDateDriverLine(delivererOrderQuery);
-			if(delivererOrder==null){
+			if(delivererOrder==null || delivererOrder.getItemList().size()==0){
 				throw new Exception("没查到相关的送货单记录！");
 			}
 			List<WarehouseOrderItem> warehouseOrderItemList = new ArrayList<WarehouseOrderItem>();

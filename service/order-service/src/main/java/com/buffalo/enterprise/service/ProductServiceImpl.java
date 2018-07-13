@@ -32,6 +32,11 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public Product getById(String id) throws Exception {
+		return productMapper.getById(id);
+	}
+
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public Product add(Product product) throws Exception {
 		productMapper.add(product);

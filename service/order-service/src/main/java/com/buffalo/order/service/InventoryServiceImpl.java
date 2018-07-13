@@ -1,6 +1,8 @@
 
 package com.buffalo.order.service;
 
+import com.buffalo.enterprise.model.Product;
+import com.buffalo.enterprise.service.ProductService;
 import com.buffalo.message.OperateLogMessageSender;
 import com.buffalo.order.mapper.InventoryMapper;
 import com.buffalo.order.model.Inventory;
@@ -20,6 +22,9 @@ public class InventoryServiceImpl implements InventoryService {
 	
 	@Autowired
 	private InventoryMapper inventoryMapper;
+
+	@Autowired
+	private ProductService productService;
 	
 	@Autowired
 	private OperateLogMessageSender operateLogMessageSender;
@@ -136,7 +141,8 @@ public class InventoryServiceImpl implements InventoryService {
 			throw new Exception("库存记录中无该产品！");
 		}
 		if(inventoryItem.getQuantity()-quantity<0){
-			throw new Exception("该产品库存不足！");
+			Product product = productService.getById(inventoryItem.getProduct_id());
+			throw new Exception(product.getName()+"库存不足！");
 		}
 		inventoryItem.setQuantity(inventoryItem.getQuantity()-quantity);
 		inventoryMapper.updateInventoryItem(inventoryItem);

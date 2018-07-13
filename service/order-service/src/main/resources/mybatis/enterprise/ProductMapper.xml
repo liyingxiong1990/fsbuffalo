@@ -15,8 +15,15 @@
 		</if>
 		order by if(isnull(product.modified_time),0,product.modified_time) desc,product.created_time desc
 	</select>
-	
-	
+
+	<select id="getById" parameterType="String" resultType="com.buffalo.enterprise.model.Product">
+		select
+		product.*
+		from ent_product product
+		where product.sys_status = 1
+		and id = #{id}
+	</select>
+
 	<!-- 新增 -->
     <insert id="add" parameterType="com.buffalo.enterprise.model.Product" >
 		insert into ent_product 

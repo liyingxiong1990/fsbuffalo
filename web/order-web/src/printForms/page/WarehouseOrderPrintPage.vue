@@ -1,17 +1,20 @@
 <template>
   <div class="page-base-info" :class="flag?'flag' : ''">
+    <h1>百富露水牛奶有限公司</h1>
     <table border="0" border-spacing="0" border-collapse="collapse" cellspacing="0" style="width: 100%; border-color: grey;margin: auto;">
       <tr>
+        <td width="20%" class="td">单号</td>
+        <td width="30%">{{data.id}}</td>
         <td width="20%" class="td">开单日期</td>
         <td width="30%">{{formatterTime(null,null,data.order_date)}}</td>
-        <td width="20%" class="td">送货日期</td>
-        <td width="30%">{{formatterTime(null,null,data.deliver_date)}}</td>
       </tr>
       <tr>
         <td width="20%" class="td">司机</td>
         <td width="30%">{{data.deliverer}}</td>
-        <td width="20%" class="td">开单人</td>
-        <td width="30%">{{data.out_order_recorder}}</td>
+        <td width="20%" class="td">送货日期</td>
+        <td width="30%">{{formatterTime(null,null,data.deliver_date)}}</td>
+        <!-- <td width="20%" class="td">开单人</td>
+        <td width="30%">{{data.out_order_recorder}}</td> -->
       </tr>
     </table>
 
@@ -22,14 +25,24 @@
         <td width="20%" class="td">数量</td>
         <td width="20%" class="td">箱数</td>
         <td width="20%" class="td">零头</td>
+        <td width="20%" class="td">备注</td>
       </tr>
-      <tr v-for="item of data.itemList" :key="item.id">
+      <tr v-if="data.itemList[0]">
+        <td width="20%" class="td">产品</td>
+        <td width="20%" class="td">规格</td>
+        <td width="20%" class="td">数量</td>
+        <td width="20%" class="td">箱数</td>
+        <td width="20%" class="td">零头</td>
+        <td width="20%" class="td">备注</td>
+      </tr>
+      <!-- <tr v-for="item of data.itemList" :key="item.id">
         <td width="20%" >{{item.product_name}}</td>
-        <td width="20%" >{{item.product_scale}}</td>
+        <td width="20%" >1*{{item.product_scale}}</td>
         <td width="20%" >{{item.quantity}}</td>
         <td width="20%" >{{item.number_of_boxes}}</td>
         <td width="20%" >{{item.remainder}}</td>
-      </tr>
+        <td width="20%" ></td>
+      </tr> -->
     </table>
   </div>
 </template>

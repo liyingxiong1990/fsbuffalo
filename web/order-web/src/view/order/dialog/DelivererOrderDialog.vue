@@ -237,6 +237,7 @@ export default {
           this.dialog.data = {}
           this.dialog.data = this.dialog.currentRow
           this.dialog.title = '编辑送货单'
+          this.selectOrderDate(this.dialog.data.order_date)
           break
         case 'get':
           this.chooseLine(this.dialog.currentRow.line_id)

@@ -31,7 +31,7 @@
           </el-select>
         </el-form-item>
 
-        <div v-if="dialog.type === 'post_deliver'" class="dialog-cust-from">
+        <div v-if="dialog.type === 'post_deliver' || dialog.type === 'get'" class="dialog-cust-from">
           <div class="dialog-cust-from-row">
             <div class="dialog-cust-from">
               <div class="dialog-cust-from-row-column">

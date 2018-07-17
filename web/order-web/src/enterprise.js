@@ -5,8 +5,7 @@ import store from './store/index'
 import ElementUI from 'element-ui'
 import './assets/css/element-variables.scss'
 import './assets/bootstrap/css/bootstrap.css'
-import WarehouseOrderPrint from '@/printForms/WarehouseOrderPrint'
-import CheckinOrderPrint from '@/printForms/CheckinOrderPrint'
+import PrintTemplate from '@/printForms/PrintTemplate'
 import router from './printForms/page'
 import { BaseHeader, BaseBar, BaseNav, BaseTable, BaseFolder } from 'gdotc@common/components'
 
@@ -29,14 +28,14 @@ new Vue({
   el: '#app',
   store,
   router,
-  template: '<CheckinOrderPrint/>',
-  components: { CheckinOrderPrint }
+  template: '<PrintTemplate/>',
+  components: { PrintTemplate }
 })
 
-new Vue({
-  el: '#app',
-  store,
-  router,
-  template: '<WarehouseOrderPrint/>',
-  components: { WarehouseOrderPrint }
-})
+// new Vue({
+//   el: '#app',
+//   store,
+//   router,
+//   template: '<WarehouseOrderPrint/>',
+//   components: { WarehouseOrderPrint }
+// })

@@ -3,7 +3,7 @@
     <div class="content">
       <div class="base-navigaion">
         <el-tabs type="border-card">
-          <el-tab-pane label="" :router="'/'+$route.params.id+'/checkin_order'"></el-tab-pane>
+          <el-tab-pane></el-tab-pane>
           <keep-alive>
             <router-view/>
           </keep-alive>
@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: 'PrintCheckinOrder',
+  name: 'PrintWarehosueOrder',
   components: {
   },
   props: {

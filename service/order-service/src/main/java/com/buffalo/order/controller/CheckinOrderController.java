@@ -54,8 +54,8 @@ public class CheckinOrderController {
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
 	public <T> Map<String, T> getById(@PathVariable String id) {
 		try {
-			CheckinOrder warehouseOrder = checkinOrderService.getById(id);
-			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "根据id查询进仓单成功", warehouseOrder);
+			CheckinOrder checkinOrder = checkinOrderService.getById(id);
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "根据id查询进仓单成功", checkinOrder);
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO Auto-generated catch block

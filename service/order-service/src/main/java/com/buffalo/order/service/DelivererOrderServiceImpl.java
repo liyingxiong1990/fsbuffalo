@@ -46,6 +46,11 @@ public class DelivererOrderServiceImpl implements DelivererOrderService {
 	}
 
 	@Override
+	public DelivererOrder getById(String id) throws Exception {
+		return delivererOrderMapper.getById(id) ;
+	}
+
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public DelivererOrder add(DelivererOrder delivererOrder) throws Exception {
 		Date orderDate = delivererOrder.getOrder_date();

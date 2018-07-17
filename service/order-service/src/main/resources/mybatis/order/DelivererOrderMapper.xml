@@ -40,6 +40,25 @@
 		order by if(isnull(delivererOrder.modified_time),0,delivererOrder.modified_time) desc,delivererOrder.created_time desc
 	</select>
 
+	<select id="getById" parameterType="String" resultMap="DelivererOrderResultMap">
+		select
+		delivererOrder.*,
+		driver.name driver,
+		out_order_recorder.name out_order_recorder,
+		line.name line_name,
+		store.store_name,
+		store.store_holder,
+		store.address
+		from ord_deliverer_order delivererOrder, ent_driver driver, ent_out_order_recorder out_order_recorder, ent_line line, ent_store store
+		where delivererOrder.sys_status = 1
+		and delivererOrder.driver_id = driver.id
+		and delivererOrder.order_recorder_id = out_order_recorder.id
+		and delivererOrder.line_id = line.id
+		and delivererOrder.store_id = store.id
+		and delivererOrder.id = #{id}
+	</select>
+
+
 	<!-- 新增 -->
     <insert id="add" parameterType="com.buffalo.order.model.DelivererOrder" >
 		insert into ord_deliverer_order

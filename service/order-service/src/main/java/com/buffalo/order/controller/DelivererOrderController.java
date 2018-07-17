@@ -46,6 +46,23 @@ public class DelivererOrderController {
     }
 
 	/**
+	 * 根据id查询送货单
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/{id}", method = RequestMethod.GET)
+	public <T> Map<String, T> getById(@PathVariable String id) {
+		try {
+			DelivererOrder delivererOrder = delivererOrderService.getById(id);
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "根据id查询送货单成功", delivererOrder);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "根据id查询送货单失败. " + e.getMessage());
+		}
+	}
+
+	/**
 	 * 根据日期，司机，路线查询送货单列表
 	 * @param <T>
 	 * @return

@@ -1,21 +1,30 @@
 <template>
   <div class="page-base-info" :class="flag?'flag' : ''">
-    <h1>出仓单</h1>
+    <h1>送货单</h1>
     <table border="0" border-spacing="0" border-collapse="collapse" cellspacing="0" style="width: 100%; border-color: grey;margin: auto;">
       <tr>
-        <td width="20%" class="td">单号</td>
-        <td width="30%">{{data.id}}</td>
-        <td width="20%" class="td">开单日期</td>
-        <td width="30%">{{formatterTime(null,null,data.order_date)}}</td>
+        <td width="15%" class="td">单号</td>
+        <td width="15%">{{data.id}}</td>
+        <td width="15%" class="td">专卖店</td>
+        <td width="15%">{{data.store_name}}</td>
+        <td width="15%" class="td">开单日期</td>
+        <td width="15%">{{formatterTime(null,null,data.order_date)}}</td>
       </tr>
       <tr>
-        <td width="20%" class="td">司机</td>
-        <td width="30%">{{data.deliverer}}</td>
-        <td width="20%" class="td">送货日期</td>
-        <td width="30%">{{formatterTime(null,null,data.deliver_date)}}</td>
+        <td width="15%" class="td">司机</td>
+        <td width="15%">{{data.driver}}</td>
+        <td width="15%" class="td">店主</td>
+        <td width="15%">{{data.store_holder}}</td>
+        <td width="15%" class="td">送货日期</td>
+        <td width="15%">{{formatterTime(null,null,data.delivery_date)}}</td>
+      </tr>
+      <tr>
+        <td width="15%" class="td">地址</td>
+        <td width="15%">{{data.address}}</td>
       </tr>
     </table>
 
+  
     <table border="0" border-spacing="0" border-collapse="collapse" cellspacing="0" style="width: 100%; border-color: grey;margin: auto;">
       <tr>
         <td width="22%" class="td">产品</td>
@@ -265,7 +274,9 @@
         <td width="15%"></td>
       </tr>
     </table>
-    白色：仓库, 红色：会计, 蓝色：司机, 黄色：保管
+    开单人签名	    	收货人签名	    	司机签名	    
+回箱数	    	回瓶数	    	送货箱数	    
+白色：司机  红色：会计  蓝色：回单  黄色：客户
   </div>
 </template>
 
@@ -280,7 +291,7 @@ export default {
   created () {
     let vm = this
     if (this.$route.params && this.$route.params.id) {
-      this.$store.state.http.auto('warehouseOrder', 'getById', { params: { id: this.$route.params.id } }).then((res) => {
+      this.$store.state.http.auto('delivererOrder', 'getById', { params: { id: this.$route.params.id } }).then((res) => {
         this.data = res.data
         console.log(this.data.itemList[0])
         this.flag = !this.flag

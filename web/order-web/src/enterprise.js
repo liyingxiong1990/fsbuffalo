@@ -31,11 +31,3 @@ new Vue({
   template: '<PrintTemplate/>',
   components: { PrintTemplate }
 })
-
-// new Vue({
-//   el: '#app',
-//   store,
-//   router,
-//   template: '<WarehouseOrderPrint/>',
-//   components: { WarehouseOrderPrint }
-// })

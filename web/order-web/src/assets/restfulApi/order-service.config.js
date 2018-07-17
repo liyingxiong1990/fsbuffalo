@@ -240,6 +240,10 @@ export default {
       url: '/order/order/delivererOrder',
       method: 'get'
     },
+    getById: {
+      url: '/order/order/delivererOrder/{id}',
+      method: 'get'
+    },
     getByDateDriverLine: {
       url: '/order/order/delivererOrder/getByDateDriverLine',
       method: 'post'

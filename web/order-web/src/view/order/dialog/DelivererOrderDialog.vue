@@ -83,6 +83,9 @@
           </div>
         </div>
       </el-form>
+      <div slot="footer" v-if="dialog.type === 'get'">
+        <el-button v-if="dialog.type === 'get'" @click="printFrom()" size="small">打印</el-button>
+      </div>
       <div slot="footer">
         <el-button @click="cancelForm('ruleForm')" size="small">取 消</el-button>
         <el-button v-if="dialog.type === 'post' || dialog.type === 'put'" type="primary" @click="submitForm('ruleForm')" size="small">确 定</el-button>
@@ -147,6 +150,16 @@ export default {
     }
   },
   methods: {
+    printFrom () {
+      let urlPath = window.location.origin
+      let paths = window.location.pathname.split('/')
+      for (let pathName of paths) {
+        if (pathName !== '' && pathName != null && pathName.indexOf('html') < 0) {
+          urlPath += '/' + pathName
+        }
+      }
+      window.open(`${urlPath}/enterprise.html#/${this.dialog.data.id}/deliverer_order`)
+    },
     selectOrderDate (val) {
       var vm = this
       this.$store.state.http.auto('inventory', 'getByDate', { data: { inventory_date: val } }).then((res) => {

@@ -66,6 +66,12 @@ export default {
             entitlement: true
           },
           {
+            name: `打印`,
+            icon: `el-icon-circle-plus-outline`,
+            fnEvent: this.printFrom,
+            entitlement: true
+          },
+          {
             name: `删除`,
             icon: `el-icon-delete`,
             fnEvent: this.deleteAlertOpen,
@@ -83,6 +89,19 @@ export default {
     }
   },
   methods: {
+    printFrom (row) {
+      if (!row) {
+        row = this.$store.state.tableCurrentRow
+      }
+      let urlPath = window.location.origin
+      let paths = window.location.pathname.split('/')
+      for (let pathName of paths) {
+        if (pathName !== '' && pathName != null && pathName.indexOf('html') < 0) {
+          urlPath += '/' + pathName
+        }
+      }
+      window.open(`${urlPath}/enterprise.html#/${row.id}/deliverer_order`)
+    },
     formatterTime (row, column, cellValue) {
       return dateFormatterTool(cellValue, 'yyyy-MM-dd')
     },

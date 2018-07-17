@@ -47,6 +47,23 @@ public class CheckinOrderController {
     }
 
 	/**
+	 * 根据id查询进仓单
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/{id}", method = RequestMethod.GET)
+	public <T> Map<String, T> getById(@PathVariable String id) {
+		try {
+			CheckinOrder warehouseOrder = checkinOrderService.getById(id);
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "根据id查询进仓单成功", warehouseOrder);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "根据id查询进仓单失败. " + e.getMessage());
+		}
+	}
+
+	/**
 	 * 统计某一天进仓单
 	 * @param <T>
 	 * @return

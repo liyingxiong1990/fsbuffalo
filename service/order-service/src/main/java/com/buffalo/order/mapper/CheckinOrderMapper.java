@@ -26,5 +26,7 @@ public interface CheckinOrderMapper {
 
     public void deleteItemList(String checkin_order_id) throws Exception;
 
-    List<CheckinOrder> getListByCheckinDate(Date checkin_date) throws Exception;
+    public List<CheckinOrder> getListByCheckinDate(Date checkin_date) throws Exception;
+
+    public CheckinOrder getById(String id) throws Exception;
 }

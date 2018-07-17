@@ -10,7 +10,9 @@ public interface CheckinOrderService {
 
     public List<CheckinOrder> list(String keyword) throws Exception;
 
-    CheckinOrder statistic(Date checkin_date) throws Exception;
+    public CheckinOrder getById(String id)  throws Exception;
+
+    public CheckinOrder statistic(Date checkin_date) throws Exception;
 
     public CheckinOrder add(CheckinOrder checkinOrder) throws Exception;
     

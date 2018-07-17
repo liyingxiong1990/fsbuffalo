@@ -47,6 +47,11 @@ public class CheckinOrderServiceImpl implements CheckinOrderService {
 	}
 
 	@Override
+	public CheckinOrder getById(String id) throws Exception {
+		return checkinOrderMapper.getById(id);
+	}
+
+	@Override
 	public CheckinOrder statistic(Date checkin_date) throws Exception {
 		CheckinOrder result = new CheckinOrder();
 		List<Product> productList = productService.list("");

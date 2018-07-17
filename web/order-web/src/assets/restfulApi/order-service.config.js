@@ -214,6 +214,10 @@ export default {
       url: '/order/order/checkinOrder',
       method: 'get'
     },
+    getById: {
+      url: '/order/order/checkinOrder/{id}',
+      method: 'get'
+    },
     add: {
       url: '/order/order/checkinOrder',
       method: 'post'

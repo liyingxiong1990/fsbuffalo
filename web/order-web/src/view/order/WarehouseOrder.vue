@@ -68,7 +68,7 @@ export default {
             entitlement: true
           },
           {
-            name: `打印预览`,
+            name: `打印`,
             icon: `el-icon-circle-plus-outline`,
             fnEvent: this.printFrom,
             entitlement: true

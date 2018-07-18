@@ -30,7 +30,7 @@ export default {
         cols: [
           { label: '名称', prop: 'name', minwidth: '90px' },
           { label: '规格', prop: 'scale', minwidth: '90px' },
-          { label: '排序', prop: 'index', minwidth: '90px' }
+          { label: '排序', prop: 'product_index', minwidth: '90px' }
         ],
         contextMenuData: [
           {

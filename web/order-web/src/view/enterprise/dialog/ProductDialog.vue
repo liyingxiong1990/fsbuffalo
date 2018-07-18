@@ -8,8 +8,8 @@
         <el-form-item label="规格" prop='scale'>
           <el-input v-model="dialog.data.scale" :disabled="dialog.type === 'get'" clearable size="mini"></el-input>
         </el-form-item>
-        <el-form-item label="排序" prop='index'>
-          <el-input v-model="dialog.data.index" :disabled="dialog.type === 'get'" clearable size="mini"></el-input>
+        <el-form-item label="排序" prop='product_index'>
+          <el-input v-model="dialog.data.product_index" :disabled="dialog.type === 'get'" clearable size="mini"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer">

@@ -83,10 +83,8 @@
           </div>
         </div>
       </el-form>
-      <div slot="footer" v-if="dialog.type === 'get'">
-        <el-button v-if="dialog.type === 'get'" @click="printFrom()" size="small">打印</el-button>
-      </div>
       <div slot="footer">
+        <el-button v-if="dialog.type === 'get'" @click="printFrom()" size="small">打印</el-button>
         <el-button @click="cancelForm('ruleForm')" size="small">取 消</el-button>
         <el-button v-if="dialog.type === 'post' || dialog.type === 'put'" type="primary" @click="submitForm('ruleForm')" size="small">确 定</el-button>
       </div>

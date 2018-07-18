@@ -12,11 +12,11 @@
 		sp.*,
 		product.name product_name,
 		product.scale product_scale,
-		product.index product_index
+		product.product_index product_index
 		from ent_store_price sp, ent_product product
 		where sp.sys_status = 1 and product.sys_status = 1 and sp.product_id = product.id
 		and sp.store_id = #{id}
-		order by product.index
+		order by product.product_index
 	</select>
 	<!-- 列表 -->
 	<select id="list" parameterType="com.buffalo.enterprise.model.Store" resultMap="StoreResultMap">
@@ -29,6 +29,15 @@
 			and concat(store.store_name,store.store_holder,store.address,store.phone,store.line) like "%${keyword}%"
 		</if>
 		order by if(isnull(store.modified_time),0,store.modified_time) desc,store.created_time desc
+	</select>
+
+	<select id="getById" parameterType="com.buffalo.enterprise.model.Store" resultMap="StoreResultMap">
+		select
+		store.*,
+		line.name line
+		from ent_store store, ent_line line
+		where store.sys_status = 1 and line.sys_status = 1 and store.line_id = line.id
+		and store.id = #{id}
 	</select>
 
 	<select id="getStoresByLine" parameterType="String" resultMap="StoreResultMap">

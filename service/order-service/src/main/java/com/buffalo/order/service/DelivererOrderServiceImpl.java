@@ -2,7 +2,10 @@
 package com.buffalo.order.service;
 
 import com.buffalo.enterprise.model.Product;
+import com.buffalo.enterprise.model.Store;
+import com.buffalo.enterprise.model.StorePrice;
 import com.buffalo.enterprise.service.ProductService;
+import com.buffalo.enterprise.service.StoreService;
 import com.buffalo.message.OperateLogMessageSender;
 import com.buffalo.order.mapper.DelivererOrderMapper;
 import com.buffalo.order.model.DelivererOrder;
@@ -15,10 +18,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class DelivererOrderServiceImpl implements DelivererOrderService {
@@ -28,6 +30,9 @@ public class DelivererOrderServiceImpl implements DelivererOrderService {
 
 	@Autowired
 	private InventoryService inventoryService;
+
+	@Autowired
+	private StoreService storeService;
 
 	@Autowired
 	private ProductService productService;
@@ -47,7 +52,32 @@ public class DelivererOrderServiceImpl implements DelivererOrderService {
 
 	@Override
 	public DelivererOrder getById(String id) throws Exception {
-		return delivererOrderMapper.getById(id) ;
+		DelivererOrder delivererOrder = delivererOrderMapper.getById(id) ;
+		Store store = storeService.getById(delivererOrder.getStore_id());
+		Map<String,String> priceMap = new HashMap<String,String>();
+		for(StorePrice storePrice:store.getPriceList()){
+			priceMap.put(storePrice.getProduct_id(),storePrice.getUnit_price());
+		}
+		BigDecimal totalPrice = new BigDecimal("0");
+		for(DelivererOrderItem delivererOrderItem : delivererOrder.getItemList()){
+			String productId = delivererOrderItem.getProduct_id();
+			if(priceMap.get(productId)!=null && priceMap.get(productId).equals("")==false){
+				Product product = productService.getById(delivererOrderItem.getProduct_id());
+				Integer quantity = delivererOrderItem.getQuantity();
+				BigDecimal unitPrice = new BigDecimal(priceMap.get(productId));
+				BigDecimal quantityDemcimal = new BigDecimal(quantity);
+				delivererOrderItem.setUnit_price(priceMap.get(productId));
+				delivererOrderItem.setTotal_price(unitPrice.multiply(quantityDemcimal).toString());
+				totalPrice = totalPrice.add(unitPrice.multiply(quantityDemcimal));
+				int numberOfBoxes = quantity/product.getScale();
+				int remainder = quantity%product.getScale();
+				delivererOrderItem.setNumber_of_boxes(numberOfBoxes);
+				delivererOrderItem.setRemainder(remainder);
+			}
+		}
+		delivererOrder.setTotal_price(totalPrice.toString());
+		return delivererOrder ;
+
 	}
 
 	@Override
@@ -64,7 +94,6 @@ public class DelivererOrderServiceImpl implements DelivererOrderService {
 		delivererOrder.setId(delivererOrderId);
 		delivererOrderMapper.add(delivererOrder);
 		for(DelivererOrderItem delivererOrderItem :delivererOrder.getItemList()){
-			int quantity = delivererOrderItem.getQuantity();
 			delivererOrderItem.setDeliverer_order_id(delivererOrderId);
 			delivererOrderMapper.addDelivererOrderItem(delivererOrderItem);
 
@@ -103,7 +132,7 @@ public class DelivererOrderServiceImpl implements DelivererOrderService {
 		for(Product product: productList){
 			DelivererOrderItem delivererOrderItem = new DelivererOrderItem();
 			delivererOrderItem.setProduct_id(product.getId());
-			delivererOrderItem.setProduct_index(product.getIndex());
+			delivererOrderItem.setProduct_index(product.getProduct_index());
 			delivererOrderItem.setProduct_name(product.getName());
 			delivererOrderItem.setProduct_scale(product.getScale());
 			delivererOrderItem.setQuantity(0);

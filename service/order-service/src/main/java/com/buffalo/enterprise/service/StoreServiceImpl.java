@@ -35,6 +35,11 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
+	public Store getById(String id) throws Exception {
+		return storeMapper.getById(id);
+	}
+
+	@Override
 	public List<Store> getStoresByLine(String line_id) throws Exception {
 		return storeMapper.getStoresByLine(line_id);
 	}

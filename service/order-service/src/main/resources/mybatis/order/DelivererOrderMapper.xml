@@ -12,11 +12,11 @@
 		ii.*,
 		product.name product_name,
 		product.scale product_scale,
-		product.index product_index
+		product.product_index product_index
 		from ord_deliverer_order_item ii, ent_product product
 		where ii.sys_status = 1 and product.sys_status = 1 and ii.product_id = product.id
 		and ii.deliverer_order_id = #{id}
-		order by product.index
+		order by product.product_index
 	</select>
 	<!-- 列表 -->
 	<select id="list" parameterType="com.buffalo.order.model.DelivererOrder" resultMap="DelivererOrderResultMap">

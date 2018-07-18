@@ -7,7 +7,7 @@ public class Product extends ModelUtil {
 	private String id;
 	private String name;
 	private int scale;
-	private int index;
+	private int product_index;
 
 	public Product() {
 		super();
@@ -38,11 +38,11 @@ public class Product extends ModelUtil {
 		this.scale = scale;
 	}
 
-	public int getIndex() {
-		return index;
+	public int getProduct_index() {
+		return product_index;
 	}
 
-	public void setIndex(int index) {
-		this.index = index;
+	public void setProduct_index(int product_index) {
+		this.product_index = product_index;
 	}
 }

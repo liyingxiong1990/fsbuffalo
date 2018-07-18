@@ -13,6 +13,8 @@ public interface StoreMapper {
 
     public List<Store> list(Store store) throws Exception;
 
+    public Store getById(String id) throws Exception;
+
     public List<Store> getStoresByLine(String line_id) throws Exception;
 
     public void add(Store store) throws Exception;

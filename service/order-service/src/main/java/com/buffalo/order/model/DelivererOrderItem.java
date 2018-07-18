@@ -12,6 +12,10 @@ public class DelivererOrderItem extends ModelUtil {
 	private String product_name;
 	private int product_scale;
 	private int product_index;
+	private String unit_price;
+	private String total_price;
+	private int number_of_boxes;
+	private int remainder;
 
 	public DelivererOrderItem() {
 		super();
@@ -72,5 +76,37 @@ public class DelivererOrderItem extends ModelUtil {
 
 	public void setProduct_index(int product_index) {
 		this.product_index = product_index;
+	}
+
+	public String getUnit_price() {
+		return unit_price;
+	}
+
+	public void setUnit_price(String unit_price) {
+		this.unit_price = unit_price;
+	}
+
+	public String getTotal_price() {
+		return total_price;
+	}
+
+	public void setTotal_price(String total_price) {
+		this.total_price = total_price;
+	}
+
+	public int getNumber_of_boxes() {
+		return number_of_boxes;
+	}
+
+	public void setNumber_of_boxes(int number_of_boxes) {
+		this.number_of_boxes = number_of_boxes;
+	}
+
+	public int getRemainder() {
+		return remainder;
+	}
+
+	public void setRemainder(int remainder) {
+		this.remainder = remainder;
 	}
 }

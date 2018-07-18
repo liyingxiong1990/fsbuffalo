@@ -13,7 +13,7 @@
 		<if test="keyword != ''">
 			and product.name like "%${keyword}%"
 		</if>
-		order by if(isnull(product.modified_time),0,product.modified_time) desc,product.created_time desc
+		order by product_index
 	</select>
 
 	<select id="getById" parameterType="String" resultType="com.buffalo.enterprise.model.Product">
@@ -31,7 +31,7 @@
 			id,
 			name,
 			scale,
-			index,
+			product_index,
 			remarks,
 			creator_id,
 			created_time,
@@ -42,7 +42,7 @@
 			uuid(),
 			#{name},
 			#{scale},
-			#{index},
+			#{product_index},
 			#{remarks},
 			#{creator_id}, 
 			now(),
@@ -56,7 +56,7 @@
 		set
 			name = #{name},
 			scale = #{scale},
-			index = #{index},
+			product_index = #{product_index},
 			remarks = #{remarks} ,
 			modifier_id = #{modifier_id} , 
 			modified_time = now()

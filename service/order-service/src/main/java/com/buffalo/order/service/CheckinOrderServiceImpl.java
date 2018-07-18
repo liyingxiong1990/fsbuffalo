@@ -60,7 +60,7 @@ public class CheckinOrderServiceImpl implements CheckinOrderService {
 		for(Product product: productList){
 			CheckinOrderItem checkinOrderItem = new CheckinOrderItem();
 			checkinOrderItem.setProduct_id(product.getId());
-			checkinOrderItem.setProduct_index(product.getIndex());
+			checkinOrderItem.setProduct_index(product.getProduct_index());
 			checkinOrderItem.setProduct_name(product.getName());
 			checkinOrderItem.setProduct_scale(product.getScale());
 			checkinOrderItem.setQuantity(0);

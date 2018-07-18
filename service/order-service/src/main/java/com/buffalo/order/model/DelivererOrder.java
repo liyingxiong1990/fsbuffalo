@@ -13,7 +13,7 @@ public class DelivererOrder extends ModelUtil {
 	private String store_id;
 	private Date delivery_date;
 	private String order_recorder_id;
-	private double total_price;
+	private String total_price;
 	private String line_id;
 	private int is_out;
 
@@ -79,11 +79,11 @@ public class DelivererOrder extends ModelUtil {
 		this.order_recorder_id = order_recorder_id;
 	}
 
-	public double getTotal_price() {
+	public String getTotal_price() {
 		return total_price;
 	}
 
-	public void setTotal_price(double total_price) {
+	public void setTotal_price(String total_price) {
 		this.total_price = total_price;
 	}
 
@@ -159,4 +159,5 @@ public class DelivererOrder extends ModelUtil {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+
 }

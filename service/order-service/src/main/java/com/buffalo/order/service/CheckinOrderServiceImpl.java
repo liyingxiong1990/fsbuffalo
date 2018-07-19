@@ -111,8 +111,6 @@ public class CheckinOrderServiceImpl implements CheckinOrderService {
 				inventoryService.increaseItemQuantity(inventoryId,productId,quantity);
 			}
 		}
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"进仓单","添加进仓单："+checkinOrder.getCheckin_date());
 		return checkinOrder;
 	}
 	
@@ -123,8 +121,6 @@ public class CheckinOrderServiceImpl implements CheckinOrderService {
 		for(CheckinOrderItem checkinOrderItem :checkinOrder.getItemList()){
 			checkinOrderMapper.updateCheckinOrderItem(checkinOrderItem);
 		}
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"进仓单","修改进仓单："+checkinOrder.getCheckin_date());
 	}
 
 	@Override
@@ -132,8 +128,6 @@ public class CheckinOrderServiceImpl implements CheckinOrderService {
 	public void delete(CheckinOrder checkinOrder) throws Exception {
 		checkinOrderMapper.delete(checkinOrder);
 		checkinOrderMapper.deleteItemList(checkinOrder.getId());
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"进仓单","删除进仓单："+checkinOrder.getCheckin_date());
 	}
 
 

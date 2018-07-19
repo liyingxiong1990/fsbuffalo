@@ -35,25 +35,18 @@ public class LineServiceImpl implements LineService {
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public Line add(Line line) throws Exception {
 		lineMapper.add(line);
-
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"路线","添加路线："+line.getName());
 		return line;
 	}
 
 	@Override
 	public void update(Line line) throws Exception {
 		lineMapper.update(line);
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"路线","修改路线："+line.getName());
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public void delete(Line line) throws Exception {
 		lineMapper.delete(line);
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"路线","删除路线："+line.getName());
 	}
 
 

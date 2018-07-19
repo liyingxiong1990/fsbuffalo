@@ -98,8 +98,6 @@ public class DelivererOrderServiceImpl implements DelivererOrderService {
 			delivererOrderMapper.addDelivererOrderItem(delivererOrderItem);
 
 		}
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"送货单","添加送货单："+delivererOrder.getOrder_date());
 		return delivererOrder;
 	}
 	
@@ -110,8 +108,6 @@ public class DelivererOrderServiceImpl implements DelivererOrderService {
 		for(DelivererOrderItem delivererOrderItem :delivererOrder.getItemList()){
 			delivererOrderMapper.updateDelivererOrderItem(delivererOrderItem);
 		}
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"送货单","修改送货单："+delivererOrder.getOrder_date());
 	}
 
 	@Override
@@ -119,8 +115,6 @@ public class DelivererOrderServiceImpl implements DelivererOrderService {
 	public void delete(DelivererOrder delivererOrder) throws Exception {
 		delivererOrderMapper.delete(delivererOrder);
 		delivererOrderMapper.deleteItemList(delivererOrder.getId());
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"送货单","删除送货单："+delivererOrder.getOrder_date());
 	}
 
 	@Override

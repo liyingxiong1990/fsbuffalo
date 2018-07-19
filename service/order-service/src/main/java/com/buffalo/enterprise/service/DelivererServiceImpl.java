@@ -35,25 +35,18 @@ public class DelivererServiceImpl implements DelivererService {
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public Deliverer add(Deliverer deliverer) throws Exception {
 		delivererMapper.add(deliverer);
-
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"外县市司机","添加外县市司机："+deliverer.getName());
 		return deliverer;
 	}
 
 	@Override
 	public void update(Deliverer deliverer) throws Exception {
 		delivererMapper.update(deliverer);
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"外县市司机","修改外县市司机："+deliverer.getName());
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public void delete(Deliverer deliverer) throws Exception {
 		delivererMapper.delete(deliverer);
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"外县市司机","删除外县市司机："+deliverer.getName());
 	}
 
 

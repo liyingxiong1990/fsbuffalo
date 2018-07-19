@@ -35,25 +35,18 @@ public class InOrderRecorderServiceImpl implements InOrderRecorderService {
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public InOrderRecorder add(InOrderRecorder inOrderRecorder) throws Exception {
 		inOrderRecorderMapper.add(inOrderRecorder);
-
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"仓管","添加仓管："+inOrderRecorder.getName());
 		return inOrderRecorder;
 	}
 
 	@Override
 	public void update(InOrderRecorder inOrderRecorder) throws Exception {
 		inOrderRecorderMapper.update(inOrderRecorder);
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"仓管","修改仓管："+inOrderRecorder.getName());
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public void delete(InOrderRecorder inOrderRecorder) throws Exception {
 		inOrderRecorderMapper.delete(inOrderRecorder);
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"仓管","删除仓管："+inOrderRecorder.getName());
 	}
 
 

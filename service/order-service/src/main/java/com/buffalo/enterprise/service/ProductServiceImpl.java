@@ -40,25 +40,18 @@ public class ProductServiceImpl implements ProductService {
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public Product add(Product product) throws Exception {
 		productMapper.add(product);
-
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"产品","添加产品："+product.getName());
 		return product;
 	}
 
 	@Override
 	public void update(Product product) throws Exception {
 		productMapper.update(product);
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"产品","修改产品："+product.getName());
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public void delete(Product product) throws Exception {
 		productMapper.delete(product);
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"产品","删除产品："+product.getName());
 	}
 
 

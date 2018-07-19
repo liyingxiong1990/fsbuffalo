@@ -35,25 +35,18 @@ public class CarrierServiceImpl implements CarrierService {
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public Carrier add(Carrier carrier) throws Exception {
 		carrierMapper.add(carrier);
-
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"缴仓","添加缴仓："+carrier.getName());
 		return carrier;
 	}
 
 	@Override
 	public void update(Carrier carrier) throws Exception {
 		carrierMapper.update(carrier);
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"缴仓","修改缴仓："+carrier.getName());
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public void delete(Carrier carrier) throws Exception {
 		carrierMapper.delete(carrier);
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"缴仓","删除缴仓："+carrier.getName());
 	}
 
 

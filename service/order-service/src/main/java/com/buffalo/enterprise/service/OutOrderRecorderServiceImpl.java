@@ -35,25 +35,18 @@ public class OutOrderRecorderServiceImpl implements OutOrderRecorderService {
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public OutOrderRecorder add(OutOrderRecorder outOrderRecorder) throws Exception {
 		outOrderRecorderMapper.add(outOrderRecorder);
-
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"开单人","添加开单人："+outOrderRecorder.getName());
 		return outOrderRecorder;
 	}
 
 	@Override
 	public void update(OutOrderRecorder outOrderRecorder) throws Exception {
 		outOrderRecorderMapper.update(outOrderRecorder);
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"开单人","修改开单人："+outOrderRecorder.getName());
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public void delete(OutOrderRecorder outOrderRecorder) throws Exception {
 		outOrderRecorderMapper.delete(outOrderRecorder);
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"开单人","删除开单人："+outOrderRecorder.getName());
 	}
 
 

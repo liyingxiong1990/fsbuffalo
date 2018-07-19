@@ -54,8 +54,6 @@ public class StoreServiceImpl implements StoreService {
 			storePrice.setStore_id(storeId);
 			storeMapper.addStorePrice(storePrice);
 		}
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"专卖店","添加专卖店："+store.getStore_name());
 		return store;
 	}
 
@@ -66,8 +64,6 @@ public class StoreServiceImpl implements StoreService {
 		for(StorePrice storePrice : store.getPriceList()){
 			storeMapper.updateStorePrice(storePrice);
 		}
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"专卖店","修改专卖店："+store.getStore_name());
 	}
 
 	@Override
@@ -75,8 +71,6 @@ public class StoreServiceImpl implements StoreService {
 	public void delete(Store store) throws Exception {
 		storeMapper.delete(store);
 		storeMapper.deleteStorePrice(store.getId());
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"专卖店","删除专卖店："+store.getStore_name());
 	}
 
 

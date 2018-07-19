@@ -102,8 +102,6 @@ public class WarehouseOrderServiceImpl implements WarehouseOrderService {
 		if(warehouseOrder.getType().equals("driver")) {
 			delivererOrderService.setOut(delivererOrderQuery);
 		}
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"出仓单","添加出仓单："+warehouseOrder.getOrder_date());
 		return warehouseOrder;
 	}
 
@@ -112,8 +110,6 @@ public class WarehouseOrderServiceImpl implements WarehouseOrderService {
 	public void delete(WarehouseOrder warehouseOrder) throws Exception {
 		warehouseOrderMapper.delete(warehouseOrder);
 		warehouseOrderMapper.deleteItemList(warehouseOrder.getId());
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"出仓单","删除出仓单："+warehouseOrder.getOrder_date());
 	}
 
 

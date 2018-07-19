@@ -67,8 +67,6 @@ public class InventoryServiceImpl implements InventoryService {
 			inventoryItem.setInventory_id(inventoryId);
 			inventoryMapper.addInventoryItem(inventoryItem);
 		}
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"库存","添加库存："+inventory.getInventory_date());
 		return inventory;
 	}
 
@@ -86,8 +84,6 @@ public class InventoryServiceImpl implements InventoryService {
 			inventoryItem.setInventory_id(inventoryId);
 			inventoryMapper.addInventoryItem(inventoryItem);
 		}
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"库存","添加空白库存："+inventory.getInventory_date());
 		return inventory;
 	}
 
@@ -98,8 +94,6 @@ public class InventoryServiceImpl implements InventoryService {
 		for(InventoryItem inventoryItem :inventory.getItemList()){
 			inventoryMapper.updateInventoryItem(inventoryItem);
 		}
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"库存","修改库存："+inventory.getInventory_date());
 	}
 
 	@Override
@@ -107,8 +101,6 @@ public class InventoryServiceImpl implements InventoryService {
 	public void delete(Inventory inventory) throws Exception {
 		inventoryMapper.delete(inventory);
 		inventoryMapper.deleteItemList(inventory.getId());
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"库存","删除库存："+inventory.getInventory_date());
 	}
 
 	@Override

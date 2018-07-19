@@ -34,25 +34,18 @@ public class DriverServiceImpl implements DriverService {
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public Driver add(Driver driver) throws Exception {
 		driverMapper.add(driver);
-
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"专卖店司机","添加专卖店司机："+driver.getName());
 		return driver;
 	}
 
 	@Override
 	public void update(Driver driver) throws Exception {
 		driverMapper.update(driver);
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"专卖店司机","修改专卖店司机："+driver.getName());
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public void delete(Driver driver) throws Exception {
 		driverMapper.delete(driver);
-		//操作记录
-		operateLogMessageSender.send(request.getHeader("userid"),"专卖店司机","删除专卖店司机："+driver.getName());
 	}
 
 

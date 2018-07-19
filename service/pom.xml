@@ -16,6 +16,7 @@
 		<module>config-server</module>
 		<module>fastdfs-service</module>
 		<module>order-service</module>
+		<module>statistic-service</module>
 	</modules>
 
 </project>

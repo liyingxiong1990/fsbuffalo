@@ -70,13 +70,13 @@ export default {
             icon: `el-icon-printer`,
             fnEvent: this.printFrom,
             entitlement: true
-          },
-          {
-            name: `删除`,
-            icon: `el-icon-delete`,
-            fnEvent: this.deleteAlertOpen,
-            entitlement: true
           }
+          // {
+          //   name: `删除`,
+          //   icon: `el-icon-delete`,
+          //   fnEvent: this.deleteAlertOpen,
+          //   entitlement: true
+          // }
         ]
       },
       dialog: {

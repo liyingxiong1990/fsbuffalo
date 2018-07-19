@@ -278,5 +278,11 @@ export default {
       url: '/order/order/warehouseOrder/delete',
       method: 'put'
     }
+  },
+  statistic: { // 统计
+    storeTop10: {
+      url: '/order/statistic/storeTop10',
+      method: 'get'
+    }
   }
 }

@@ -69,7 +69,7 @@ export default {
           },
           {
             name: `打印`,
-            icon: `el-icon-circle-plus-outline`,
+            icon: `el-icon-printer`,
             fnEvent: this.printFrom,
             entitlement: true
           },

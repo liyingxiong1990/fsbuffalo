@@ -1,0 +1,7 @@
+spring:
+  application :
+    name : statistic-service
+
+server:
+  port : 8089
+

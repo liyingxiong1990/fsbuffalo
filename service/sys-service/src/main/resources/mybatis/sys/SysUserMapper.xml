@@ -71,7 +71,7 @@
 		  user_id = #{user_id}
     </update>
     <update id="updatePwd" parameterType="com.buffalo.sys.model.User">
-       update trade.sys_user 
+       update sys_user
 			set
 			pwd = #{pwd} , 
 			modifier_id = #{modifier_id} , 

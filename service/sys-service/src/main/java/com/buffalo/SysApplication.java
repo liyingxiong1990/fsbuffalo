@@ -132,16 +132,6 @@ public class SysApplication {
         return pageHelper;
     }
 
-    @Bean
-    public Queue SDCOperateLogQueue() {
-        return new Queue("sdc_operate_log");
-    }
-
-    @Bean
-    public Queue BOSSOperateLogQueue() {
-        return new Queue("boss_operate_log");
-    }
-
 	public static void main(String[] args) {
 		SpringApplication.run(SysApplication.class, args);
 	}

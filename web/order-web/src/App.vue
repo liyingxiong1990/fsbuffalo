@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <base-header titleName="业务运营支撑系统" subName="(Business & Operation Support System)" v-if="$route.path!=='/login'" v-bind:username="$store.state.nickname?$store.state.nickname:''"  v-on:exitSystemEvent="exitSystem"></base-header>
+    <base-header titleName="综合管理系统" subName="" v-if="$route.path!=='/login'" v-bind:username="$store.state.nickname?$store.state.nickname:''"  v-on:exitSystemEvent="exitSystem"></base-header>
     <base-nav parentId="0d441330-43d9-11e8-a09d-00505695d0f0" v-if="$route.path!=='/login'"></base-nav>
     <router-view v-if="$route.path==='/login'"/>
   </div>

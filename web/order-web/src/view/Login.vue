@@ -3,7 +3,7 @@
     <div class="login-main">
       <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="50px" class="login-form">
         <div class="login-title">
-          业务运营支撑系统
+          综合管理系统
         </div>
         <el-form-item label="账号" prop="username">
           <el-input type="text" v-model="ruleForm.username" auto-complete="off"></el-input>

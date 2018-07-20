@@ -46,6 +46,21 @@ public class CheckinOrderServiceImpl implements CheckinOrderService {
 		checkinOrder.setKeyword(keyword);
 		Calendar calendar=Calendar.getInstance();
 		calendar.setTime(new Date());
+		calendar.add(Calendar.MONTH, -1);
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		checkinOrder.setBound_time(calendar.getTime());
+		return checkinOrderMapper.list(checkinOrder);
+	}
+
+	@Override
+	public List<CheckinOrder> today(String keyword) throws Exception {
+		CheckinOrder checkinOrder = new CheckinOrder();
+		checkinOrder.setKeyword(keyword);
+		Calendar calendar=Calendar.getInstance();
+		calendar.setTime(new Date());
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);

@@ -38,6 +38,21 @@ public class InventoryServiceImpl implements InventoryService {
 	public List<Inventory> list(String keyword) throws Exception {
 		Inventory inventory = new Inventory();
 		inventory.setKeyword(keyword);
+		Calendar calendar=Calendar.getInstance();
+		calendar.setTime(new Date());
+		calendar.add(Calendar.MONTH, -1);
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		inventory.setBound_time(calendar.getTime());
+		return inventoryMapper.list(inventory);
+	}
+
+	@Override
+	public List<Inventory> today(String keyword) throws Exception {
+		Inventory inventory = new Inventory();
+		inventory.setKeyword(keyword);
 		List<Inventory> inventoryList = inventoryMapper.list(inventory);
 		List<Inventory> resultList = new ArrayList<Inventory>();
 		for(int i=0;i<inventoryList.size() && i<2;i++){

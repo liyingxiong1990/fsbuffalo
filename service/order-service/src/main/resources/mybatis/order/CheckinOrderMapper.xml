@@ -32,7 +32,7 @@
 			and concat(checkinOrder.checkin_date, carrier.name, in_order_recorder.name) like "%${keyword}%"
 		</if>
 		<if test="bound_time !=  null ">
-			and checkinOrder.created_time  &gt;=  #{bound_time}
+			and checkinOrder.created_time  <![CDATA[>=]]>  #{bound_time}
 		</if>
 		order by if(isnull(checkinOrder.modified_time),0,checkinOrder.modified_time) desc,checkinOrder.created_time desc
 	</select>

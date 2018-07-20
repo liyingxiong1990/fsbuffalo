@@ -9,6 +9,8 @@ public interface WarehouseOrderService {
 
     public List<WarehouseOrder> list(String keyword) throws Exception;
 
+    public List<WarehouseOrder> today(String keyword) throws Exception;
+
     public WarehouseOrder getById(String id) throws Exception;
 
     public WarehouseOrder add(WarehouseOrder warehouseOrder) throws Exception;

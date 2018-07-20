@@ -46,6 +46,21 @@ public class WarehouseOrderServiceImpl implements WarehouseOrderService {
 		warehouseOrder.setKeyword(keyword);
 		Calendar calendar=Calendar.getInstance();
 		calendar.setTime(new Date());
+		calendar.add(Calendar.MONTH, -1);
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		warehouseOrder.setBound_time(calendar.getTime());
+		return warehouseOrderMapper.list(warehouseOrder);
+	}
+
+	@Override
+	public List<WarehouseOrder> today(String keyword) throws Exception {
+		WarehouseOrder warehouseOrder = new WarehouseOrder();
+		warehouseOrder.setKeyword(keyword);
+		Calendar calendar=Calendar.getInstance();
+		calendar.setTime(new Date());
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);

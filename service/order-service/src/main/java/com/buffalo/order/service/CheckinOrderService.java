@@ -10,6 +10,8 @@ public interface CheckinOrderService {
 
     public List<CheckinOrder> list(String keyword) throws Exception;
 
+    public List<CheckinOrder> today(String keyword) throws Exception;
+
     public CheckinOrder getById(String id)  throws Exception;
 
     public CheckinOrder statistic(Date checkin_date) throws Exception;

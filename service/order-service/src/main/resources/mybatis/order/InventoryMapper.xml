@@ -27,6 +27,9 @@
 		<if test="keyword != ''">
 			and inventory.inventory_date like "%${keyword}%"
 		</if>
+		<if test="bound_time !=  null ">
+			and inventory.created_time  &gt;=  #{bound_time}
+		</if>
 		order by inventory_date desc
 	</select>
 

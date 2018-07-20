@@ -26,24 +26,44 @@ public class DelivererOrderController {
 
 
 	/**
-	 * 查询送货单列表
+	 * 查询所有送货单列表
 	 * @param <T>
 	 * @return
 	 */
-	@RequestMapping(value="", method = RequestMethod.GET)
+	@RequestMapping(value="/all", method = RequestMethod.GET)
     public <T> Map<String, T> getAll(@RequestParam(value = "pageNum",defaultValue = "1")Integer pageNum, @RequestParam(value = "pageSize",defaultValue = "10")Integer pageSize,
 									 @RequestParam(required = false, defaultValue = "") String keyword) {
 		try {
 			PageHelper.startPage(pageNum,pageSize);
 			List<DelivererOrder> list = delivererOrderService.list(keyword);
 			PageInfo<DelivererOrder> pageInfo = new PageInfo<DelivererOrder>(list);
-			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "查询送货单列表成功", pageInfo);
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "查询所有送货单列表成功", pageInfo);
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO Auto-generated catch block
-			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "查询送货单列表失败. " + e.getMessage());
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "查询所有送货单列表失败. " + e.getMessage());
 		}
     }
+
+	/**
+	 * 查询当天送货单列表
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="", method = RequestMethod.GET)
+	public <T> Map<String, T> today(@RequestParam(value = "pageNum",defaultValue = "1")Integer pageNum, @RequestParam(value = "pageSize",defaultValue = "10")Integer pageSize,
+									 @RequestParam(required = false, defaultValue = "") String keyword) {
+		try {
+			PageHelper.startPage(pageNum,pageSize);
+			List<DelivererOrder> list = delivererOrderService.today(keyword);
+			PageInfo<DelivererOrder> pageInfo = new PageInfo<DelivererOrder>(list);
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "查询当天送货单列表成功", pageInfo);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "查询当天送货单列表失败. " + e.getMessage());
+		}
+	}
 
 	/**
 	 * 根据id查询送货单

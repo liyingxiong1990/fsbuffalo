@@ -24,7 +24,7 @@ export default {
       table: {
         pageQuery: {
           apiModule: 'warehouseOrder',
-          apiMethod: 'today',
+          apiMethod: 'getAll',
           reload: true
         },
         handRightBotton: [

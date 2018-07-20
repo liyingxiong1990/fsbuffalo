@@ -181,6 +181,10 @@ export default {
   },
   inventory: { // 库存
     getAll: {
+      url: '/order/order/inventory/all',
+      method: 'get'
+    },
+    today: {
       url: '/order/order/inventory',
       method: 'get'
     },
@@ -211,6 +215,10 @@ export default {
   },
   checkinOrder: { // 进仓单
     getAll: {
+      url: '/order/order/checkinOrder/all',
+      method: 'get'
+    },
+    today: {
       url: '/order/order/checkinOrder',
       method: 'get'
     },
@@ -237,7 +245,11 @@ export default {
   },
   delivererOrder: { // 送货单
     getAll: {
-      url: '/order/order/delivererOrder',
+      url: '/order/order/delivererOrder/all',
+      method: 'get'
+    },
+    today: {
+      url: '/order/order/warehouseOrder',
       method: 'get'
     },
     getById: {
@@ -263,6 +275,10 @@ export default {
   },
   warehouseOrder: { // 出仓单
     getAll: {
+      url: '/order/order/warehouseOrder/all',
+      method: 'get'
+    },
+    today: {
       url: '/order/order/warehouseOrder',
       method: 'get'
     },

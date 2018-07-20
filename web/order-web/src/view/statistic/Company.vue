@@ -1,6 +1,6 @@
 <template>
   <div class="manage-scale">
-    <div class="manage-scale-row">
+    <!-- <div class="manage-scale-row">
       <div class="manage-scale-row-half">
         <base-map-china :mapDatas="mapDataChina"></base-map-china>
       </div>
@@ -26,9 +26,17 @@
         <chart-pie :title="pieCompanyTypeData.title" :cols="pieCompanyTypeData.cols" :data="pieCompanyTypeData.data"></chart-pie>
       </div>
       <div style="clear:both"></div>
-    </div>
+    </div> -->
     <div class="manage-scale-row">
-      <chart-histogram :height="600" :title="histogramScaleData.title" :grid="histogramScaleData.grid" :rotate="histogramScaleData.rotate"  :cols="histogramScaleData.cols" :classifyData="histogramScaleData.classifyData" :select="histogramScaleData.select"></chart-histogram>
+      <div class="manage-scale-row-half">
+        <div class="block">
+          <span class="demonstration">开始</span>
+          <el-date-picker @change="storeTop10" v-model="storeTop10PeriodStart" type="month" placeholder="选择月"></el-date-picker>
+          <span class="demonstration">结束</span>
+          <el-date-picker @change="storeTop10" v-model="storeTop10PeriodEnd" type="month" placeholder="选择月"></el-date-picker>
+        </div>
+        <chart-histogram :height="600" :title="histogramStoreData.title" :grid="histogramStoreData.grid" :rotate="histogramStoreData.rotate" :cols="histogramStoreData.cols" :classifyData="histogramStoreData.classifyData" :select="histogramStoreData.select"></chart-histogram>
+      </div>
       <div style="clear:both"></div>
     </div>
   </div>
@@ -49,7 +57,7 @@ export default {
     // this.quotedTypeAnalysis()
     // this.industryAnalysis()
     // this.operatingCenterAnalysis()
-    this.StoreTop10()
+    this.storeTop10()
   },
   computed: {
     dictProvince () {
@@ -58,6 +66,8 @@ export default {
   },
   data () {
     return {
+      storeTop10PeriodStart: '2018-01',
+      storeTop10PeriodEnd: '2018-04',
       mapDataChina: [],
       mapData: [],
       pieCompanyTypeData: {
@@ -193,25 +203,23 @@ export default {
           gz: 0
         }
       },
-      histogramScaleData: {
-        title: '企业规模Top10',
-        select: `规模`,
+      histogramStoreData: {
+        title: '专卖店销量Top10',
+        select: `销量`,
         grid: { // 控制图的大小，调整下面这些值就可以，
-          // x: 50, // 左侧宽度
-          // x2: 50, // 右侧宽度
           y2: 210 // x轴标题高度
         },
-        rotate: 75,
+        // rotate: 75,
         cols: [
           {
-            label: '注册资本（万元）',
+            label: '销量',
             type: 'bar',
             prop: 'quantity'
           }
         ],
         classifyData: [
           {
-            name: `规模`,
+            name: `销量`,
             data: []
           }
         ]
@@ -304,11 +312,12 @@ export default {
         console.log(error)
       })
     },
-    StoreTop10 () {
+    storeTop10 () {
       let vm = this
-      this.$store.state.http.auto('statistic', 'storeTop10', {}).then(res => {
+      this.$store.state.http.auto('statistic', 'storeTop10', { params: { startTime: this.storeTop10PeriodStart, endTime: this.storeTop10PeriodEnd } }).then(res => {
+        vm.histogramStoreData.classifyData[0].data = []
         for (let item of res.data) {
-          vm.histogramScaleData.classifyData[0].data.push({
+          vm.histogramStoreData.classifyData[0].data.push({
             quantity: Number(item.quantity),
             name: item.name
           })

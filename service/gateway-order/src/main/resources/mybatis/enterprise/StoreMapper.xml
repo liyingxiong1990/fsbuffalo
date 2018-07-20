@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.gateway.enterprise.mapper.StoreMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+
+	<resultMap id="StoreResultMap" type="com.buffalo.gateway.enterprise.model.Store" >
+		<id column="id" property="id"  />
+		<collection property="priceList" column="id" javaType="ArrayList" ofType="com.buffalo.gateway.enterprise.model.StorePrice" select="getPriceListByStoreId"></collection>
+	</resultMap>
+	<select id="getPriceListByStoreId" resultType="com.buffalo.gateway.enterprise.model.StorePrice" parameterType="String" >
+		select
+		sp.*,
+		product.name product_name,
+		product.scale product_scale,
+		product.product_index product_index
+		from ent_store_price sp, ent_product product
+		where sp.sys_status = 1 and product.sys_status = 1 and sp.product_id = product.id
+		and sp.store_id = #{id}
+		order by product.product_index
+	</select>
+	<!-- 列表 -->
+	<select id="list" parameterType="com.buffalo.gateway.enterprise.model.Store" resultMap="StoreResultMap">
+		select
+		store.*,
+		line.name line
+		from ent_store store, ent_line line
+		where store.sys_status = 1 and line.sys_status = 1 and store.line_id = line.id
+		<if test="keyword != ''">
+			and concat(store.store_name,store.store_holder,store.address,store.phone,store.line) like "%${keyword}%"
+		</if>
+		order by if(isnull(store.modified_time),0,store.modified_time) desc,store.created_time desc
+	</select>
+
+	<select id="getById" parameterType="com.buffalo.gateway.enterprise.model.Store" resultMap="StoreResultMap">
+		select
+		store.*,
+		line.name line
+		from ent_store store, ent_line line
+		where store.sys_status = 1 and line.sys_status = 1 and store.line_id = line.id
+		and store.id = #{id}
+	</select>
+
+	<select id="getStoresByLine" parameterType="String" resultMap="StoreResultMap">
+		select
+		store.*
+		from ent_store store
+		where store.sys_status = 1
+		and store.line_id = #{line_id}
+		order by if(isnull(store.modified_time),0,store.modified_time) desc,store.created_time desc
+	</select>
+
+	
+	<!-- 新增 -->
+    <insert id="add" parameterType="com.buffalo.gateway.enterprise.model.Store" >
+		insert into ent_store 
+			(
+			id,
+			store_name,
+			store_holder,
+			address,
+			phone,
+			line_id,
+			remarks,
+			creator_id,
+			created_time,
+			modified_time
+			)
+		values
+			(
+			#{id},
+			#{store_name},
+			#{store_holder},
+			#{address},
+			#{phone},
+			#{line_id},
+			#{remarks},
+			#{creator_id}, 
+			now(),
+			now()
+			)
+    </insert>
+
+	<!-- 修改 -->
+    <update id="update" parameterType="com.buffalo.gateway.enterprise.model.Store">
+		update ent_store 
+		set
+			store_name = #{store_name},
+			store_holder = #{store_holder},
+			address = #{address},
+			phone = #{phone},
+			line_id = #{line_id},
+			remarks = #{remarks} ,
+			modifier_id = #{modifier_id} , 
+			modified_time = now()
+		where id = #{id}
+    </update>
+
+	<delete id="delete" parameterType="com.buffalo.gateway.enterprise.model.Store">
+		update ent_store
+			set sys_status = 0,
+			modifier_id = #{modifier_id},
+			modified_time = now()
+			where id=#{id}
+	</delete>
+
+	<!-- 新增产品单价 -->
+	<insert id="addStorePrice" parameterType="com.buffalo.gateway.enterprise.model.StorePrice" >
+		insert into ent_store_price
+		(
+		id,
+		store_id,
+		product_id,
+		unit_price,
+		remarks,
+		creator_id,
+		created_time,
+		modified_time
+		)
+		values
+		(
+		uuid(),
+		#{store_id},
+		#{product_id},
+		#{unit_price},
+		#{remarks},
+		#{creator_id},
+		now(),
+		now()
+		)
+	</insert>
+
+	<!-- 修改产品单价 -->
+	<update id="updateStorePrice" parameterType="com.buffalo.gateway.enterprise.model.StorePrice">
+		update ent_store_price
+		set
+		unit_price = #{unit_price},
+		remarks = #{remarks} ,
+		modifier_id = #{modifier_id} ,
+		modified_time = now()
+		where id = #{id}
+	</update>
+
+	<!-- 删除产品单价 -->
+	<update id="deleteStorePrice" parameterType="String">
+		update ent_store_price
+		set
+		sys_status = 0,
+		modified_time = now()
+		where store_id = #{store_id}
+	</update>
+
+
+
+</mapper>

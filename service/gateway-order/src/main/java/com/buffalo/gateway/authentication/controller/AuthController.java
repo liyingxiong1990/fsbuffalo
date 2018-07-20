@@ -1,12 +1,12 @@
 
 package com.buffalo.gateway.authentication.controller;
 
-import com.buffalo.gateway.authentication.mapper.PermissionMapper;
+import com.buffalo.gateway.authentication.mapper.AuthPermissionMapper;
 import com.buffalo.gateway.authentication.model.Menu;
 import com.buffalo.gateway.authentication.model.Permission;
 import com.buffalo.gateway.authentication.model.User;
-import com.buffalo.gateway.authentication.service.UserService;
-import com.buffalo.gateway.authentication.util.ResponseUtil;
+import com.buffalo.gateway.authentication.service.AuthUserService;
+import com.buffalo.gateway.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +26,9 @@ public class AuthController {
     private Logger logger =  LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private UserService userService;
+    private AuthUserService authUserService;
 	@Autowired
-	private PermissionMapper permissionMapper;
+	private AuthPermissionMapper permissionMapper;
 	/**
 	 * 根据用户名查询用户信息
 	 * @param <T>
@@ -38,10 +38,10 @@ public class AuthController {
 	public <T> Map<String, T> getInfoByLoginName(@PathVariable String login_name) {
 		try {
 			Map<String, Object> result = new HashMap<>();
-			User user = userService.getByLoginName(login_name);
+			User user = authUserService.getByLoginName(login_name);
 			user.setPwd("");
-			Set<Permission> permissionList = userService.getPermissionsByUserId(user.getUser_id());
-			Set<Menu> menuList = userService.getMenusByUserId(user.getUser_id());
+			Set<Permission> permissionList = authUserService.getPermissionsByUserId(user.getUser_id());
+			Set<Menu> menuList = authUserService.getMenusByUserId(user.getUser_id());
 			result.put("user",user);
 			result.put("permissionList",permissionList);
 			result.put("allPermissionList",permissionMapper.list());

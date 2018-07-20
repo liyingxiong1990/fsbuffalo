@@ -1,9 +1,0 @@
-spring:
-  application:
-    name: gateway-order
-  cloud:
-    config:
-      uri: http://localhost:7070
-      fail-fast: true
-      password: user
-      username: user

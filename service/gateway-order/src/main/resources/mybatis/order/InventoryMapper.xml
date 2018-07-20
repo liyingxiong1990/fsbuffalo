@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.gateway.order.mapper.InventoryMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+
+	<resultMap id="InventoryResultMap" type="com.buffalo.gateway.order.model.Inventory" >
+		<id column="id" property="id"  />
+		<collection property="itemList" column="id" javaType="ArrayList" ofType="com.buffalo.gateway.order.model.InventoryItem" select="getItemListByInventoryId"></collection>
+	</resultMap>
+	<select id="getItemListByInventoryId" resultType="com.buffalo.gateway.order.model.InventoryItem" parameterType="String" >
+		select
+		ii.*,
+		product.name product_name,
+		product.scale product_scale,
+		product.product_index product_index
+		from ord_inventory_item ii, ent_product product
+		where ii.sys_status = 1 and product.sys_status = 1 and ii.product_id = product.id
+		and ii.inventory_id = #{id}
+		order by product.product_index
+	</select>
+	<!-- 列表 -->
+	<select id="list" parameterType="com.buffalo.gateway.order.model.Inventory" resultMap="InventoryResultMap">
+		select
+		inventory.*
+		from ord_inventory inventory
+		where inventory.sys_status = 1
+		<if test="keyword != ''">
+			and inventory.inventory_date like "%${keyword}%"
+		</if>
+		<if test="bound_time !=  null ">
+			and inventory.created_time  &gt;=  #{bound_time}
+		</if>
+		order by inventory_date desc
+	</select>
+
+	<select id="getInventoryByInventoryDate" parameterType="com.buffalo.gateway.order.model.Inventory" resultMap="InventoryResultMap">
+		select
+		inventory.*
+		from ord_inventory inventory
+		where inventory.sys_status = 1
+		and inventory.inventory_date = #{last_date}
+		limit 1
+	</select>
+
+	<select id="getById" parameterType="String" resultMap="InventoryResultMap">
+		select
+		inventory.*
+		from ord_inventory inventory
+		where inventory.sys_status = 1
+		and inventory.id = #{id}
+		limit 1
+	</select>
+	
+	<!-- 新增 -->
+    <insert id="add" parameterType="com.buffalo.gateway.order.model.Inventory" >
+		insert into ord_inventory 
+			(
+			id,
+			inventory_date,
+			last_date,
+			remarks,
+			creator_id,
+			created_time,
+			modified_time
+			)
+		values
+			(
+			#{id},
+			#{inventory_date},
+			#{last_date},
+			#{remarks},
+			#{creator_id}, 
+			now(),
+			now()
+			)
+    </insert>
+
+	<!-- 修改 -->
+    <update id="update" parameterType="com.buffalo.gateway.order.model.Inventory">
+		update ord_inventory 
+		set
+			inventory_date = #{inventory_date},
+			last_date = #{last_date},
+			remarks = #{remarks} ,
+			modifier_id = #{modifier_id} , 
+			modified_time = now()
+		where id = #{id}
+    </update>
+
+	<delete id="delete" parameterType="com.buffalo.gateway.order.model.Inventory">
+		update ord_inventory
+			set sys_status = 0,
+			modifier_id = #{modifier_id},
+			modified_time = now()
+			where id=#{id}
+	</delete>
+
+	<!-- 新增库存项目 -->
+	<insert id="addInventoryItem" parameterType="com.buffalo.gateway.order.model.InventoryItem" >
+		insert into ord_inventory_item
+		(
+		id,
+		inventory_id,
+		product_id,
+		quantity,
+		remarks,
+		creator_id,
+		created_time,
+		modified_time
+		)
+		values
+		(
+		uuid(),
+		#{inventory_id},
+		#{product_id},
+		#{quantity},
+		#{remarks},
+		#{creator_id},
+		now(),
+		now()
+		)
+	</insert>
+
+	<!-- 修改库存项目 -->
+	<update id="updateInventoryItem" parameterType="com.buffalo.gateway.order.model.InventoryItem">
+		update ord_inventory_item
+		set
+		quantity = #{quantity},
+		remarks = #{remarks} ,
+		modifier_id = #{modifier_id} ,
+		modified_time = now()
+		where id = #{id}
+	</update>
+
+	<delete id="deleteItemList" parameterType="String">
+		update ord_inventory_item
+		set sys_status = 0,
+		modified_time = now()
+		where inventory_id=#{inventory_id}
+	</delete>
+
+
+	<select id="getByInventoryIdAndProductId" parameterType="com.buffalo.gateway.order.model.InventoryItem" resultType="com.buffalo.gateway.order.model.InventoryItem">
+		select
+		inventoryItem.*
+		from ord_inventory_item inventoryItem
+		where inventoryItem.sys_status = 1
+		and inventoryItem.inventory_id=#{inventory_id}
+		and inventoryItem.product_id=#{product_id}
+		limit 1
+	</select>
+
+
+</mapper>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.gateway.authentication.mapper.AuthUserMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+
+	<!-- 根据用户名查找 -->
+	<select id="getByLoginName" parameterType="String" resultType="com.buffalo.gateway.authentication.model.User">
+		select
+		*
+		from
+		sys_user
+		where login_name=#{login_name}
+		and sys_status = 1
+	</select>
+
+	<!-- 根据id查找 -->
+	<select id="getById" parameterType="String" resultType="com.buffalo.gateway.authentication.model.User">
+		select
+		*
+		from
+		sys_user
+		where user_id=#{user_id}
+		and sys_status = 1
+	</select>
+
+</mapper>

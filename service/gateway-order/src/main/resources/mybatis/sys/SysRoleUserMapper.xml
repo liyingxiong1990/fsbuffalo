@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.gateway.sys.mapper.RoleUserMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+    <!-- id必须与mapper接口方法名一致，不能出现重载 -->
+   
+
+    <select id="getByUserId"  parameterType="String" resultType="com.buffalo.gateway.sys.model.RoleUser">
+        select 	
+        	role_user_id,
+			user_id,
+			role_id,
+			creator_id,
+			created_time,
+			modifier_id,
+			modified_time 
+			from 
+			sys_role_user
+			where user_id = #{user_id}
+			and sys_status = 1
+			order by if(isnull(modified_time),0,modified_time) desc,created_time desc
+    </select>
+
+	<select id="getByRoleId"  parameterType="String" resultType="java.util.HashMap">
+		select
+		roleUser.*,
+		user.user_id,
+		user.login_name,
+		user.nickname
+		from
+		sys_role_user roleUser, sys_user user
+		where role_id = #{role_id}
+		and user.user_id = roleUser.user_id
+		and user.sys_status = 1 and roleUser.sys_status = 1
+		order by if(isnull(roleUser.modified_time),0,roleUser.modified_time) desc,roleUser.created_time desc
+	</select>
+
+    <insert id="add" parameterType="com.buffalo.gateway.sys.model.RoleUser">
+    	insert into sys_role_user
+			(
+			role_user_id,
+			user_id,
+			role_id,
+			creator_id,
+			created_time,
+			modified_time
+			)
+			select
+            uuid(),
+			#{user_id},
+			#{role_id},
+			#{creator_id},
+			now(),
+			now()
+    </insert>
+
+    <delete id="delete" parameterType="String">
+        update sys_role_user
+			set
+			sys_status = 0 ,
+			modifier_id = #{modifier_id} ,
+			modified_time = now()
+		  where
+		  role_user_id = #{role_user_id}
+    </delete>
+
+	<delete id="deleteByRoleId" parameterType="String">
+        update sys_role_user
+			set
+			sys_status = 0 ,
+			modifier_id = #{modifier_id} ,
+			modified_time = now()
+		  where
+		  role_id = #{role_id}
+    </delete>
+
+</mapper>

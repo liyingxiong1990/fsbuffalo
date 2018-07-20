@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.gateway.enterprise.mapper.OutOrderRecorderMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+
+
+	<!-- 列表 -->
+	<select id="list" parameterType="com.buffalo.gateway.enterprise.model.OutOrderRecorder" resultType="com.buffalo.gateway.enterprise.model.OutOrderRecorder">
+		select
+		out_order_recorder.*
+		from ent_out_order_recorder out_order_recorder
+		where out_order_recorder.sys_status = 1
+		<if test="keyword != ''">
+			and out_order_recorder.name like "%${keyword}%"
+		</if>
+		order by if(isnull(out_order_recorder.modified_time),0,out_order_recorder.modified_time) desc,out_order_recorder.created_time desc
+	</select>
+	
+	
+	<!-- 新增 -->
+    <insert id="add" parameterType="com.buffalo.gateway.enterprise.model.OutOrderRecorder" >
+		insert into ent_out_order_recorder 
+			(
+			id,
+			name,
+			remarks,
+			creator_id,
+			created_time,
+			modified_time
+			)
+		values
+			(
+			uuid(),
+			#{name},
+			#{remarks},
+			#{creator_id}, 
+			now(),
+			now()
+			)
+    </insert>
+
+	<!-- 修改 -->
+    <update id="update" parameterType="com.buffalo.gateway.enterprise.model.OutOrderRecorder">
+		update ent_out_order_recorder 
+		set
+			name = #{name},
+			remarks = #{remarks} ,
+			modifier_id = #{modifier_id} , 
+			modified_time = now()
+		where id = #{id}
+    </update>
+
+	<delete id="delete" parameterType="com.buffalo.gateway.enterprise.model.OutOrderRecorder">
+		update ent_out_order_recorder
+			set sys_status = 0,
+			modifier_id = #{modifier_id},
+			modified_time = now()
+			where id=#{id}
+	</delete>
+
+	
+
+
+</mapper>

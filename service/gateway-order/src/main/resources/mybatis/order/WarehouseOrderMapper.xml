@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.gateway.order.mapper.WarehouseOrderMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+
+	<resultMap id="WarehouseOrderResultMap" type="com.buffalo.gateway.order.model.WarehouseOrder" >
+		<id column="id" property="id"  />
+		<collection property="itemList" column="id" javaType="ArrayList" ofType="com.buffalo.gateway.order.model.WarehouseOrderItem" select="getItemListByWarehouseOrderId"></collection>
+	</resultMap>
+	<select id="getItemListByWarehouseOrderId" resultType="com.buffalo.gateway.order.model.WarehouseOrderItem" parameterType="String" >
+		select
+		ii.*,
+		product.name product_name,
+		product.scale product_scale,
+		product.product_index product_index
+		from ord_warehouse_order_item ii, ent_product product
+		where ii.sys_status = 1 and product.sys_status = 1 and ii.product_id = product.id
+		and ii.warehouse_order_id = #{id}
+		order by product.product_index
+	</select>
+	<!-- 列表 -->
+	<select id="list" parameterType="com.buffalo.gateway.order.model.WarehouseOrder" resultType="com.buffalo.gateway.order.model.WarehouseOrder">
+		select * from
+		(
+			select
+			warehouseOrder.*,
+			deliverer.name deliverer,
+			out_order_recorder.name out_order_recorder,
+			line.name line_name
+			from ord_warehouse_order warehouseOrder
+			left join ent_deliverer deliverer on warehouseOrder.deliverer_id = deliverer.id
+			left join ent_out_order_recorder out_order_recorder on warehouseOrder.order_recorder_id = out_order_recorder.id
+			left join ent_line line on warehouseOrder.line_id = line.id
+			where warehouseOrder.sys_status = 1 and warehouseOrder.type = 'deliver'
+
+			union
+
+			select
+			warehouseOrder.*,
+			driver.name deliverer,
+			out_order_recorder.name out_order_recorder,
+			line.name line_name
+			from ord_warehouse_order warehouseOrder
+			left join ent_driver driver on warehouseOrder.deliverer_id = driver.id
+			left join ent_out_order_recorder out_order_recorder on warehouseOrder.order_recorder_id = out_order_recorder.id
+			left join ent_line line on warehouseOrder.line_id = line.id
+			where warehouseOrder.sys_status = 1 and warehouseOrder.type = 'driver'
+		) tt
+		where 1 = 1
+		<if test="keyword != ''">
+			and concat(tt.order_date, tt.deliverer, tt.out_order_recorder) like "%${keyword}%"
+		</if>
+		<if test="bound_time !=  null ">
+			and tt.created_time  &gt;=  #{bound_time}
+		</if>
+		order by if(isnull(tt.modified_time),0,tt.modified_time) desc,tt.created_time desc
+
+	</select>
+
+	<select id="getById" parameterType="String" resultType="com.buffalo.gateway.order.model.WarehouseOrder">
+		select * from
+		(
+		select
+		warehouseOrder.*,
+		deliverer.name deliverer,
+		out_order_recorder.name out_order_recorder,
+		line.name line_name
+		from ord_warehouse_order warehouseOrder
+		left join ent_deliverer deliverer on warehouseOrder.deliverer_id = deliverer.id
+		left join ent_out_order_recorder out_order_recorder on warehouseOrder.order_recorder_id = out_order_recorder.id
+		left join ent_line line on warehouseOrder.line_id = line.id
+		where warehouseOrder.sys_status = 1 and warehouseOrder.type = 'deliver'
+		and warehouseOrder.id = #{id}
+
+		union
+
+		select
+		warehouseOrder.*,
+		driver.name deliverer,
+		out_order_recorder.name out_order_recorder,
+		line.name line_name
+		from ord_warehouse_order warehouseOrder
+		left join ent_driver driver on warehouseOrder.deliverer_id = driver.id
+		left join ent_out_order_recorder out_order_recorder on warehouseOrder.order_recorder_id = out_order_recorder.id
+		left join ent_line line on warehouseOrder.line_id = line.id
+		where warehouseOrder.sys_status = 1 and warehouseOrder.type = 'driver'
+		and warehouseOrder.id = #{id}
+		) tt limit 1
+	</select>
+
+
+	<!-- 新增 -->
+    <insert id="add" parameterType="com.buffalo.gateway.order.model.WarehouseOrder" >
+		insert into ord_warehouse_order
+			(
+			id,
+			order_date,
+			deliverer_id,
+			delivery_date,
+			order_recorder_id,
+			type,
+			line_id,
+			remarks,
+			creator_id,
+			created_time,
+			modified_time
+			)
+		values
+			(
+			#{id},
+			#{order_date},
+			#{deliverer_id},
+			#{delivery_date},
+			#{order_recorder_id},
+			#{type},
+			#{line_id},
+			#{remarks},
+			#{creator_id}, 
+			now(),
+			now()
+			)
+    </insert>
+	
+
+	<delete id="delete" parameterType="com.buffalo.gateway.order.model.WarehouseOrder">
+		update ord_warehouse_order
+			set sys_status = 0,
+			modifier_id = #{modifier_id},
+			modified_time = now()
+			where id=#{id}
+	</delete>
+
+	<!-- 新增项目 -->
+	<insert id="addWarehouseOrderItem" parameterType="com.buffalo.gateway.order.model.WarehouseOrderItem" >
+		insert into ord_warehouse_order_item
+		(
+		id,
+		warehouse_order_id,
+		product_id,
+		quantity,
+		number_of_boxes,
+		remainder,
+		remarks,
+		creator_id,
+		created_time,
+		modified_time
+		)
+		values
+		(
+		uuid(),
+		#{warehouse_order_id},
+		#{product_id},
+		#{quantity},
+		#{number_of_boxes},
+		#{remainder},
+		#{remarks},
+		#{creator_id},
+		now(),
+		now()
+		)
+	</insert>
+	
+
+	<delete id="deleteItemList" parameterType="String">
+		update ord_warehouse_order_item
+		set sys_status = 0,
+		modified_time = now()
+		where warehouse_order_id=#{warehouse_order_id}
+	</delete>
+
+
+
+</mapper>

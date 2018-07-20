@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.gateway.enterprise.mapper.LineMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+
+
+	<!-- 列表 -->
+	<select id="list" parameterType="com.buffalo.gateway.enterprise.model.Line" resultType="com.buffalo.gateway.enterprise.model.Line">
+		select
+		line.*
+		from ent_line line
+		where line.sys_status = 1
+		<if test="keyword != ''">
+			and line.name like "%${keyword}%"
+		</if>
+		order by if(isnull(line.modified_time),0,line.modified_time) desc,line.created_time desc
+	</select>
+	
+	
+	<!-- 新增 -->
+    <insert id="add" parameterType="com.buffalo.gateway.enterprise.model.Line" >
+		insert into ent_line 
+			(
+			id,
+			name,
+			remarks,
+			creator_id,
+			created_time,
+			modified_time
+			)
+		values
+			(
+			uuid(),
+			#{name},
+			#{remarks},
+			#{creator_id}, 
+			now(),
+			now()
+			)
+    </insert>
+
+	<!-- 修改 -->
+    <update id="update" parameterType="com.buffalo.gateway.enterprise.model.Line">
+		update ent_line 
+		set
+			name = #{name},
+			remarks = #{remarks} ,
+			modifier_id = #{modifier_id} , 
+			modified_time = now()
+		where id = #{id}
+    </update>
+
+	<delete id="delete" parameterType="com.buffalo.gateway.enterprise.model.Line">
+		update ent_line
+			set sys_status = 0,
+			modifier_id = #{modifier_id},
+			modified_time = now()
+			where id=#{id}
+	</delete>
+
+	
+
+
+</mapper>

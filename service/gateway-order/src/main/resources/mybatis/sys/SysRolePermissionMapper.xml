@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.gateway.sys.mapper.RolePermissionMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+    <!-- id必须与mapper接口方法名一致，不能出现重载 -->
+    <select id="getListByRoleId" parameterType="String" resultType="com.buffalo.gateway.sys.model.RolePermission">
+        select 	
+			role_permission_id,
+			role_id,
+			permission_id,
+			creator_id,
+			created_time,
+			modifier_id,
+			modified_time 
+			from 
+			sys_role_permission  
+			where role_id = #{role_id}
+			and sys_status = 1
+    </select>
+
+    <select id="getListByPermissionId" parameterType="String" resultType="com.buffalo.gateway.sys.model.RolePermission">
+        select 	
+			role_permission_id,
+			role_id,
+			permission_id,
+			creator_id,
+			created_time,
+			modifier_id,
+			modified_time 
+			from 
+			sys_role_permission  
+			where permission_id = #{permission_id}
+			and sys_status = 1
+    </select>
+
+    <insert id="add" parameterType="com.buffalo.gateway.sys.model.RolePermission">
+    	insert into sys_role_permission
+			(
+			role_permission_id,
+			role_id,
+			permission_id,
+			creator_id,
+			created_time,
+			modified_time
+			)
+			select
+            uuid(),
+			#{role_id},
+			#{permission_id},
+			#{creator_id},
+			now(),
+			now()
+    </insert>
+
+    <update id="update" parameterType="com.buffalo.gateway.sys.model.RolePermission">
+       update sys_role_permission
+			set
+			role_id = #{role_id} ,
+			permission_id = #{permission_id} ,
+			modifier_id = #{modifier_id} , 
+			modified_time = now()
+		  where
+		  role_permission_id = #{role_permission_id}
+    </update>
+    
+    <delete id="delete" parameterType="String">
+        update sys_role_permission
+			set
+			sys_status = 0 ,
+			modifier_id = #{modifier_id} ,
+			modified_time = now()
+		  where
+		  role_permission_id = #{role_permission_id}
+    </delete>
+    
+    <delete id="deleteByPermissionId" parameterType="String">
+        update sys_role_permission
+			set
+			sys_status = 0 ,
+			modifier_id = #{modifier_id} ,
+			modified_time = now()
+		  where
+		  permission_id = #{permission_id}
+    </delete>
+    
+    <delete id="deleteByRoleId" parameterType="String">
+        update sys_role_permission
+			set
+			sys_status = 0 ,
+			modifier_id = #{modifier_id} ,
+			modified_time = now()
+		  where
+		  role_id = #{role_id}
+    </delete>
+</mapper>

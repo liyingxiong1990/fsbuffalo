@@ -1,7 +1,7 @@
 
 package com.buffalo.gateway.authentication.model;
 
-import com.buffalo.gateway.authentication.util.ModelUtil;
+import com.buffalo.gateway.util.ModelUtil;
 
 
 public class Permission extends ModelUtil {

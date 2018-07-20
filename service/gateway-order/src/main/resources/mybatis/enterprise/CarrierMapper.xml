@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.gateway.enterprise.mapper.CarrierMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+
+
+	<!-- 列表 -->
+	<select id="list" parameterType="com.buffalo.gateway.enterprise.model.Carrier" resultType="com.buffalo.gateway.enterprise.model.Carrier">
+		select
+		carrier.*
+		from ent_carrier carrier
+		where carrier.sys_status = 1
+		<if test="keyword != ''">
+			and carrier.name like "%${keyword}%"
+		</if>
+		order by if(isnull(carrier.modified_time),0,carrier.modified_time) desc,carrier.created_time desc
+	</select>
+	
+	
+	<!-- 新增 -->
+    <insert id="add" parameterType="com.buffalo.gateway.enterprise.model.Carrier" >
+		insert into ent_carrier 
+			(
+			id,
+			name,
+			remarks,
+			creator_id,
+			created_time,
+			modified_time
+			)
+		values
+			(
+			uuid(),
+			#{name},
+			#{remarks},
+			#{creator_id}, 
+			now(),
+			now()
+			)
+    </insert>
+
+	<!-- 修改 -->
+    <update id="update" parameterType="com.buffalo.gateway.enterprise.model.Carrier">
+		update ent_carrier 
+		set
+			name = #{name},
+			remarks = #{remarks} ,
+			modifier_id = #{modifier_id} , 
+			modified_time = now()
+		where id = #{id}
+    </update>
+
+	<delete id="delete" parameterType="com.buffalo.gateway.enterprise.model.Carrier">
+		update ent_carrier
+			set sys_status = 0,
+			modifier_id = #{modifier_id},
+			modified_time = now()
+			where id=#{id}
+	</delete>
+
+	
+
+
+</mapper>

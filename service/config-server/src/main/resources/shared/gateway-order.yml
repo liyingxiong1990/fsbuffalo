@@ -6,10 +6,15 @@ zuul:
 #    info:
 #      sensitiveHeaders: Access-Control-Allow-Origin,Access-Control-Allow-Methods
 #      ignored-headers: Access-Control-Allow-Credentials,Access-Control-Allow-Origin,Vary,X-Frame-Options
-    boss-service:
+    order-service:
       stripPrefix: false
       path: /order/**
       serviceId: order-service
+
+    statistic-service:
+          stripPrefix: false
+          path: /statistic/**
+          serviceId: statistic-service
 
     sys-service:
       stripPrefix: false

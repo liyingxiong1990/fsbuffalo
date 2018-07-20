@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.statistic.mapper.StatisticMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+
+
+	<select id="storeTop10" parameterType="com.buffalo.statistic.model.Period" resultType="java.util.Map">
+		select * from
+		(
+			select store_name name, sum(quantity) as quantity
+			from sta_store_sales
+			where 1 = 1
+			<if test="startTime != ''">
+				and period &gt;=  #{startTime}
+			</if>
+			<if test="endTime != ''">
+				and period &lt;= #{endTime}
+			</if>
+			group by store_name
+		)tt order by quantity desc limit 10
+	</select>
+
+
+
+
+
+</mapper>

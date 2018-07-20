@@ -23,6 +23,7 @@ public class DelivererOrder extends ModelUtil {
 	private String store_name;
 	private String store_holder;
 	private String address;
+	private Date bound_time;
 
 	private List<DelivererOrderItem> itemList;
 
@@ -160,4 +161,11 @@ public class DelivererOrder extends ModelUtil {
 		this.address = address;
 	}
 
+	public Date getBound_time() {
+		return bound_time;
+	}
+
+	public void setBound_time(Date bound_time) {
+		this.bound_time = bound_time;
+	}
 }

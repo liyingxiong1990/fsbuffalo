@@ -14,6 +14,7 @@ public class CheckinOrder extends ModelUtil {
 
 	private String in_order_recorder;
 	private String carrier;
+	private Date bound_time;
 
 	private List<CheckinOrderItem> itemList;
 
@@ -76,5 +77,13 @@ public class CheckinOrder extends ModelUtil {
 
 	public void setItemList(List<CheckinOrderItem> itemList) {
 		this.itemList = itemList;
+	}
+
+	public Date getBound_time() {
+		return bound_time;
+	}
+
+	public void setBound_time(Date bound_time) {
+		this.bound_time = bound_time;
 	}
 }

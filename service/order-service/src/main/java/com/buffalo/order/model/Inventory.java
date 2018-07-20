@@ -12,6 +12,8 @@ public class Inventory extends ModelUtil {
 	private Date last_date;
 	private List<InventoryItem> itemList;
 
+	private Date bound_time;
+
 	public Inventory() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -47,5 +49,13 @@ public class Inventory extends ModelUtil {
 
 	public void setItemList(List<InventoryItem> itemList) {
 		this.itemList = itemList;
+	}
+
+	public Date getBound_time() {
+		return bound_time;
+	}
+
+	public void setBound_time(Date bound_time) {
+		this.bound_time = bound_time;
 	}
 }

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +44,12 @@ public class WarehouseOrderServiceImpl implements WarehouseOrderService {
 	public List<WarehouseOrder> list(String keyword) throws Exception {
 		WarehouseOrder warehouseOrder = new WarehouseOrder();
 		warehouseOrder.setKeyword(keyword);
+		Calendar calendar=Calendar.getInstance();
+		calendar.setTime(new Date());
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		warehouseOrder.setBound_time(calendar.getTime());
 		return warehouseOrderMapper.list(warehouseOrder);
 	}
 

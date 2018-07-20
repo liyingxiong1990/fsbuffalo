@@ -18,7 +18,7 @@ public class WarehouseOrder extends ModelUtil {
 	private String deliverer;
 	private String  out_order_recorder;
 	private String line_name;
-
+	private Date bound_time;
 
 	private List<WarehouseOrderItem> itemList;
 
@@ -113,5 +113,13 @@ public class WarehouseOrder extends ModelUtil {
 
 	public void setItemList(List<WarehouseOrderItem> itemList) {
 		this.itemList = itemList;
+	}
+
+	public Date getBound_time() {
+		return bound_time;
+	}
+
+	public void setBound_time(Date bound_time) {
+		this.bound_time = bound_time;
 	}
 }

@@ -50,6 +50,9 @@
 		<if test="keyword != ''">
 			and concat(tt.order_date, tt.deliverer, tt.out_order_recorder) like "%${keyword}%"
 		</if>
+		<if test="bound_time !=  null ">
+			and tt.created_time  &gt;=  #{bound_time}
+		</if>
 		order by if(isnull(tt.modified_time),0,tt.modified_time) desc,tt.created_time desc
 
 	</select>

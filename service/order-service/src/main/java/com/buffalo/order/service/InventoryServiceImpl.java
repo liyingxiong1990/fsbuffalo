@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +38,12 @@ public class InventoryServiceImpl implements InventoryService {
 	public List<Inventory> list(String keyword) throws Exception {
 		Inventory inventory = new Inventory();
 		inventory.setKeyword(keyword);
-		return inventoryMapper.list(inventory);
+		List<Inventory> inventoryList = inventoryMapper.list(inventory);
+		List<Inventory> resultList = new ArrayList<Inventory>();
+		for(int i=0;i<inventoryList.size() && i<2;i++){
+			resultList.add(inventoryList.get(i));
+		}
+		return resultList;
 	}
 
 	@Override

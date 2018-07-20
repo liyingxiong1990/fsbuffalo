@@ -47,6 +47,12 @@ public class DelivererOrderServiceImpl implements DelivererOrderService {
 	public List<DelivererOrder> list(String keyword) throws Exception {
 		DelivererOrder delivererOrder = new DelivererOrder();
 		delivererOrder.setKeyword(keyword);
+		Calendar calendar=Calendar.getInstance();
+		calendar.setTime(new Date());
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		delivererOrder.setBound_time(calendar.getTime());
 		return delivererOrderMapper.list(delivererOrder);
 	}
 

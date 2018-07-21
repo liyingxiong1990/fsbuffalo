@@ -73,6 +73,45 @@ public class WarehouseOrderServiceImpl implements WarehouseOrderService {
 	}
 
 	@Override
+	public WarehouseOrder statistic(Date order_date) throws Exception {
+		WarehouseOrder result = new WarehouseOrder();
+		List<Product> productList = productService.list("");
+		List<WarehouseOrderItem> itemList = new ArrayList<WarehouseOrderItem>();
+		List<WarehouseOrderItem> resultItemList = new ArrayList<WarehouseOrderItem>();
+		for(Product product: productList){
+			WarehouseOrderItem warehouseOrderItem = new WarehouseOrderItem();
+			warehouseOrderItem.setProduct_id(product.getId());
+			warehouseOrderItem.setProduct_index(product.getProduct_index());
+			warehouseOrderItem.setProduct_name(product.getName());
+			warehouseOrderItem.setProduct_scale(product.getScale());
+			warehouseOrderItem.setQuantity(0);
+			warehouseOrderItem.setId(UUIDUtil.getUUID());
+			itemList.add(warehouseOrderItem);
+		}
+
+		List<WarehouseOrder> list = warehouseOrderMapper.getListByOrderDate(order_date);
+		for(WarehouseOrder warehouseOrder : list){
+			for(WarehouseOrderItem warehouseOrderItem : warehouseOrder.getItemList()){
+				for(WarehouseOrderItem warehouseOrderItemResult : itemList){
+					if(warehouseOrderItemResult.getProduct_id().equals(warehouseOrderItem.getProduct_id()) ){
+						warehouseOrderItemResult.setQuantity(warehouseOrderItemResult.getQuantity()+warehouseOrderItem.getQuantity());
+						System.out.println(warehouseOrderItemResult.getQuantity());
+					}
+				}
+			}
+		}
+
+		for(WarehouseOrderItem warehouseOrderItem: itemList){
+			if(warehouseOrderItem.getQuantity()>0){
+				resultItemList.add(warehouseOrderItem);
+			}
+		}
+		result.setOrder_date(order_date);
+		result.setItemList(resultItemList);
+		return result;
+	}
+
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
 	public WarehouseOrder add(WarehouseOrder warehouseOrder) throws Exception {
 		Date orderDate = warehouseOrder.getOrder_date();

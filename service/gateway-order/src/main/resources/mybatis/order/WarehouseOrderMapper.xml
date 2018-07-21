@@ -168,6 +168,13 @@
 		where warehouse_order_id=#{warehouse_order_id}
 	</delete>
 
-
+	<select id="getListByOrderDate" parameterType="java.util.Date" resultMap="WarehouseOrderResultMap">
+		select
+		warehouseOrder.*
+		from ord_warehouse_order warehouseOrder
+		where warehouseOrder.sys_status = 1
+		and warehouseOrder.order_date = #{order_date}
+		order by if(isnull(warehouseOrder.modified_time),0,warehouseOrder.modified_time) desc,warehouseOrder.created_time desc
+	</select>
 
 </mapper>

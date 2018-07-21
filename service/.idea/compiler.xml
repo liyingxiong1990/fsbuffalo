@@ -22,6 +22,7 @@
         <module name="ppjh-service" />
         <module name="registry" />
         <module name="sdc-service" />
+        <module name="statistic-service" />
         <module name="sys-service" />
       </profile>
     </annotationProcessing>

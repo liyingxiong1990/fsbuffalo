@@ -5,6 +5,7 @@ import com.buffalo.gateway.order.model.WarehouseOrder;
 import com.buffalo.gateway.order.model.WarehouseOrderItem;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -25,4 +26,5 @@ public interface WarehouseOrderMapper {
 
     public void deleteItemList(String deliverer_order_id) throws Exception;
 
+    public List<WarehouseOrder> getListByOrderDate(Date order_date) throws Exception;
 }

@@ -3,6 +3,7 @@ package com.buffalo.gateway.order.service;
 
 import com.buffalo.gateway.order.model.WarehouseOrder;
 
+import java.util.Date;
 import java.util.List;
 
 public interface WarehouseOrderService {
@@ -12,6 +13,8 @@ public interface WarehouseOrderService {
     public List<WarehouseOrder> today(String keyword) throws Exception;
 
     public WarehouseOrder getById(String id) throws Exception;
+
+    public WarehouseOrder statistic(Date order_date) throws Exception;
 
     public WarehouseOrder add(WarehouseOrder warehouseOrder) throws Exception;
 

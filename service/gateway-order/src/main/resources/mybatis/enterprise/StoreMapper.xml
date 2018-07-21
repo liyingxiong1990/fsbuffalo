@@ -26,7 +26,7 @@
 		from ent_store store, ent_line line
 		where store.sys_status = 1 and line.sys_status = 1 and store.line_id = line.id
 		<if test="keyword != ''">
-			and concat(store.store_name,store.store_holder,store.address,store.phone,store.line) like "%${keyword}%"
+			and concat(store.store_name,store.store_holder) like "%${keyword}%"
 		</if>
 		order by if(isnull(store.modified_time),0,store.modified_time) desc,store.created_time desc
 	</select>

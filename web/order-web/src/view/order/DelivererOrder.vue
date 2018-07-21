@@ -1,6 +1,6 @@
 <template>
   <div class="enterprise-delivererOrder">
-    <base-table tableHandLeftPlaceholder="库存日期" :pageQuery="table.pageQuery" :handRightBotton="table.handRightBotton" :rowContextdblClick="getAlertOpen" :tableCols="table.cols" :contextMenuData="table.contextMenuData"></base-table>
+    <base-table tableHandLeftPlaceholder="送货单号/出单日期/司机/路线/专卖店" :pageQuery="table.pageQuery" :handRightBotton="table.handRightBotton" :rowContextdblClick="getAlertOpen" :tableCols="table.cols" :contextMenuData="table.contextMenuData"></base-table>
     <delivererOrder-dialog :dialog="dialog" :submitCallback="submitCallback"></delivererOrder-dialog>
   </div>
 </template>
@@ -24,7 +24,7 @@ export default {
       table: {
         pageQuery: {
           apiModule: 'delivererOrder',
-          apiMethod: 'today',
+          apiMethod: 'getAll',
           reload: true
         },
         handRightBotton: [

@@ -1,6 +1,6 @@
 <template>
   <div class="enterprise-warehouseOrder">
-    <base-table tableHandLeftPlaceholder="" :pageQuery="table.pageQuery" :handRightBotton="table.handRightBotton" :rowContextdblClick="getAlertOpen" :tableCols="table.cols" :contextMenuData="table.contextMenuData"></base-table>
+    <base-table tableHandLeftPlaceholder="出仓单号/出单日期/司机/路线/开单人" :pageQuery="table.pageQuery" :handRightBotton="table.handRightBotton" :rowContextdblClick="getAlertOpen" :tableCols="table.cols" :contextMenuData="table.contextMenuData"></base-table>
     <warehouseOrder-dialog :dialog="dialog" :submitCallback="submitCallback"></warehouseOrder-dialog>
   </div>
 </template>
@@ -24,7 +24,7 @@ export default {
       table: {
         pageQuery: {
           apiModule: 'warehouseOrder',
-          apiMethod: 'today',
+          apiMethod: 'getAll',
           reload: true
         },
         handRightBotton: [

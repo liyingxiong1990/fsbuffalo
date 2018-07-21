@@ -2,22 +2,7 @@
   <div class="checkinOrder-dialog">
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible" width="600px" @open="dialogOpen" :before-close="dialogClose">
       <el-form label-width="120px" :model="dialog.data" :class="dialog.type === 'get'?'form-get':''" label-position="right" :rules="dialog.rules" ref="ruleForm">
-        <el-form-item label="进仓日期" prop='checkin_date'>
-          <el-date-picker @change="getSTime" v-model="dialog.data.checkin_date" :disabled="dialog.type === 'get'" clearable size="mini" type="date" placeholder="选择日期"></el-date-picker>
-        </el-form-item>
-
-        <el-form-item v-if="this.dialog.type != 'statistic'" label="仓管" prop='in_order_recorder_id'>
-          <el-select v-model="dialog.data.in_order_recorder_id" placeholder="请选择" size="mini" :disabled="dialog.type === 'get'">
-            <el-option v-for="(item, index) in this.inOrderRecorderList" :key="index" :label="item.name" :value="item.id"></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item v-if="this.dialog.type != 'statistic'" label="缴仓" prop='carrier_id'>
-          <el-select v-model="dialog.data.carrier_id" placeholder="请选择" size="mini" :disabled="dialog.type === 'get'">
-            <el-option v-for="(item, index) in this.carrierList" :key="index" :label="item.name" :value="item.id"></el-option>
-          </el-select>
-        </el-form-item>
-
+      
         <div class="dialog-cust-from">
           <div class="dialog-cust-from-row">
             <div class="dialog-cust-from">
@@ -36,7 +21,6 @@
                   <p>数量</p>
                 </div>
               </div>
-
               <div style="clear: both;"></div>
             </div>
           </div>
@@ -66,6 +50,22 @@
             </div>
           </div>
         </div>
+
+        <el-form-item label="进仓日期" prop='checkin_date'>
+          <el-date-picker @change="getSTime" v-model="dialog.data.checkin_date" :disabled="dialog.type === 'get'" clearable size="mini" type="date" placeholder="选择日期"></el-date-picker>
+        </el-form-item>
+
+        <el-form-item v-if="this.dialog.type != 'statistic'" label="仓管" prop='in_order_recorder_id'>
+          <el-select v-model="dialog.data.in_order_recorder_id" placeholder="请选择" size="mini" :disabled="dialog.type === 'get'">
+            <el-option v-for="(item, index) in this.inOrderRecorderList" :key="index" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item v-if="this.dialog.type != 'statistic'" label="缴仓" prop='carrier_id'>
+          <el-select v-model="dialog.data.carrier_id" placeholder="请选择" size="mini" :disabled="dialog.type === 'get'">
+            <el-option v-for="(item, index) in this.carrierList" :key="index" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
 
       </el-form>
       <div slot="footer">

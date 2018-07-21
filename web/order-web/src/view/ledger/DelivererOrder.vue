@@ -1,6 +1,6 @@
 <template>
   <div class="enterprise-delivererOrder">
-    <base-table tableHandLeftPlaceholder="库存日期" :pageQuery="table.pageQuery" :handRightBotton="table.handRightBotton" :rowContextdblClick="getAlertOpen" :tableCols="table.cols" :contextMenuData="table.contextMenuData"></base-table>
+    <base-table tableHandLeftPlaceholder="送货单号/出单日期/司机/路线/专卖店" :pageQuery="table.pageQuery" :handRightBotton="table.handRightBotton" :rowContextdblClick="getAlertOpen" :tableCols="table.cols" :contextMenuData="table.contextMenuData"></base-table>
     <delivererOrder-dialog :dialog="dialog" :submitCallback="submitCallback"></delivererOrder-dialog>
   </div>
 </template>
@@ -28,12 +28,6 @@ export default {
           reload: true
         },
         handRightBotton: [
-          {
-            name: '新增送货单',
-            icon: 'el-icon-circle-plus-outline',
-            fn: this.addAlertOpen,
-            entitlement: true
-          }
         ],
         cols: [
           { label: '送货单号', prop: 'id', minwidth: '90px' },
@@ -53,18 +47,18 @@ export default {
             fnEvent: this.getAlertOpen,
             entitlement: true
           },
-          {
-            name: `新增送货单`,
-            icon: `el-icon-circle-plus-outline`,
-            fnEvent: this.addAlertOpen,
-            entitlement: true
-          },
-          {
-            name: `编辑送货单`,
-            icon: `el-icon-edit`,
-            fnEvent: this.putAlertOpen,
-            entitlement: true
-          },
+          // {
+          //   name: `新增送货单`,
+          //   icon: `el-icon-circle-plus-outline`,
+          //   fnEvent: this.addAlertOpen,
+          //   entitlement: true
+          // },
+          // {
+          //   name: `编辑送货单`,
+          //   icon: `el-icon-edit`,
+          //   fnEvent: this.putAlertOpen,
+          //   entitlement: true
+          // },
           {
             name: `打印`,
             icon: `el-icon-printer`,

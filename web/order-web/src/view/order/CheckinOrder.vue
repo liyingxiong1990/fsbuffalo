@@ -1,6 +1,6 @@
 <template>
   <div class="enterprise-checkinOrder">
-    <base-table tableHandLeftPlaceholder="库存日期" :pageQuery="table.pageQuery" :handRightBotton="table.handRightBotton" :rowContextdblClick="getAlertOpen" :tableCols="table.cols" :contextMenuData="table.contextMenuData"></base-table>
+    <base-table tableHandLeftPlaceholder="进仓单号/进仓日期/仓管/缴仓" :pageQuery="table.pageQuery" :handRightBotton="table.handRightBotton" :rowContextdblClick="getAlertOpen" :tableCols="table.cols" :contextMenuData="table.contextMenuData"></base-table>
     <checkinOrder-dialog :dialog="dialog" :submitCallback="submitCallback"></checkinOrder-dialog>
   </div>
 </template>
@@ -24,7 +24,7 @@ export default {
       table: {
         pageQuery: {
           apiModule: 'checkinOrder',
-          apiMethod: 'today',
+          apiMethod: 'getAll',
           reload: true
         },
         handRightBotton: [
@@ -36,7 +36,7 @@ export default {
           },
           {
             name: '统计',
-            icon: 'el-icon-circle-plus-outline',
+            icon: 'el-icon-document',
             fn: this.showStatistic,
             entitlement: true
           }
@@ -97,6 +97,10 @@ export default {
       }
       window.open(`${urlPath}/enterprise.html#/${row.id}/checkin_order`)
     },
+    showStatistic (row) {
+      this.dialog.type = 'statistic'
+      this.dialog.visible = true
+    },
     formatterTime (row, column, cellValue) {
       return dateFormatterTool(cellValue, 'yyyy-MM-dd')
     },
@@ -113,10 +117,6 @@ export default {
     },
     addAlertOpen (row) {
       this.dialog.type = 'post'
-      this.dialog.visible = true
-    },
-    showStatistic (row) {
-      this.dialog.type = 'statistic'
       this.dialog.visible = true
     },
     putAlertOpen (row) {

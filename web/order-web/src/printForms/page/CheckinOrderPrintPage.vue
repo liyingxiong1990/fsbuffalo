@@ -1,7 +1,7 @@
 <template>
   <div class="page-base-info" :class="flag?'flag' : ''">
-    <h1>进仓单</h1>
-    <table border="0" border-spacing="0" border-collapse="collapse" cellspacing="0" style="width: 100%; border-color: grey;margin: auto;">
+    <h1>进仓单{{data.id}}</h1>
+    <table border="0" border-spacing="0" border-collapse="collapse" cellspacing="0" style="width: 87%; border-color: grey;margin: auto;">
       <tr>
         <td width="20%" class="td">单号</td>
         <td width="30%">{{data.id}}</td>
@@ -16,7 +16,7 @@
       </tr>
     </table>
 
-    <table border="0" border-spacing="0" border-collapse="collapse" cellspacing="0" style="width: 100%; border-color: grey;margin: auto;">
+    <table border="0" border-spacing="0" border-collapse="collapse" cellspacing="0" style="width: 87%; border-color: grey;margin: auto;">
       <tr>
         <td width="22%" class="td">产品</td>
         <td width="15%" class="td">规格</td>
@@ -208,12 +208,12 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .page-base-info {
-  width: 100%;
+  width: 87%;
   td {
-    padding: 8px 8px 8px 8px;
-    border: #e4eef6 1px solid;
-    font-size: 5px;
-    line-height: 5px;
+    padding: 10px 10px 10px 10px;
+    border: #000000 1px solid;
+    font-size: 17px;
+    line-height: 3px;
     color: #222;
   }
   .td {

@@ -28,18 +28,18 @@ export default {
           reload: true
         },
         handRightBotton: [
-          {
-            name: '新增库存记录',
-            icon: 'el-icon-circle-plus-outline',
-            fn: this.addAlertOpen,
-            entitlement: true
-          },
-          {
-            name: '新增空白库存记录',
-            icon: 'el-icon-circle-plus-outline',
-            fn: this.addBlankAlertOpen,
-            entitlement: true
-          }
+          // {
+          //   name: '新增库存记录',
+          //   icon: 'el-icon-circle-plus-outline',
+          //   fn: this.addAlertOpen,
+          //   entitlement: true
+          // },
+          // {
+          //   name: '新增空白库存记录',
+          //   icon: 'el-icon-circle-plus-outline',
+          //   fn: this.addBlankAlertOpen,
+          //   entitlement: true
+          // }
         ],
         cols: [
           { label: '库存日期', prop: 'inventory_date', minwidth: '90px', formatter: this.formatterTime },
@@ -51,19 +51,19 @@ export default {
             icon: `el-icon-search`,
             fnEvent: this.getAlertOpen,
             entitlement: true
-          },
-          {
-            name: `新增库存记录`,
-            icon: `el-icon-circle-plus-outline`,
-            fnEvent: this.addAlertOpen,
-            entitlement: true
-          },
-          {
-            name: `新增空白库存记录`,
-            icon: `el-icon-circle-plus-outline`,
-            fnEvent: this.addBlankAlertOpen,
-            entitlement: true
           }
+          // {
+          //   name: `新增库存记录`,
+          //   icon: `el-icon-circle-plus-outline`,
+          //   fnEvent: this.addAlertOpen,
+          //   entitlement: true
+          // },
+          // {
+          //   name: `新增空白库存记录`,
+          //   icon: `el-icon-circle-plus-outline`,
+          //   fnEvent: this.addBlankAlertOpen,
+          //   entitlement: true
+          // }
           // {
           //   name: `删除`,
           //   icon: `el-icon-delete`,

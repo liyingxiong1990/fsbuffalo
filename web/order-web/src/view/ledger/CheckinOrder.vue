@@ -1,6 +1,6 @@
 <template>
   <div class="enterprise-checkinOrder">
-    <base-table tableHandLeftPlaceholder="库存日期" :pageQuery="table.pageQuery" :handRightBotton="table.handRightBotton" :rowContextdblClick="getAlertOpen" :tableCols="table.cols" :contextMenuData="table.contextMenuData"></base-table>
+    <base-table tableHandLeftPlaceholder="进仓单号/进仓日期/仓管/缴仓" :pageQuery="table.pageQuery" :handRightBotton="table.handRightBotton" :rowContextdblClick="getAlertOpen" :tableCols="table.cols" :contextMenuData="table.contextMenuData"></base-table>
     <checkinOrder-dialog :dialog="dialog" :submitCallback="submitCallback"></checkinOrder-dialog>
   </div>
 </template>
@@ -29,14 +29,8 @@ export default {
         },
         handRightBotton: [
           {
-            name: '新增进仓单',
-            icon: 'el-icon-circle-plus-outline',
-            fn: this.addAlertOpen,
-            entitlement: true
-          },
-          {
             name: '统计',
-            icon: 'el-icon-circle-plus-outline',
+            icon: 'el-icon-document',
             fn: this.showStatistic,
             entitlement: true
           }
@@ -52,12 +46,6 @@ export default {
             name: `查看`,
             icon: `el-icon-search`,
             fnEvent: this.getAlertOpen,
-            entitlement: true
-          },
-          {
-            name: `新增进仓单`,
-            icon: `el-icon-circle-plus-outline`,
-            fnEvent: this.addAlertOpen,
             entitlement: true
           },
           {

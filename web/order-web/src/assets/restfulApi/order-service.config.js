@@ -249,7 +249,7 @@ export default {
       method: 'get'
     },
     today: {
-      url: '/order/order/warehouseOrder',
+      url: '/order/order/delivererOrder',
       method: 'get'
     },
     getById: {
@@ -293,6 +293,10 @@ export default {
     delete: {
       url: '/order/order/warehouseOrder/delete',
       method: 'put'
+    },
+    statistic: {
+      url: '/order/order/warehouseOrder/statistic',
+      method: 'post'
     }
   }
 }

@@ -37,7 +37,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .content {
-  padding: 30px calc(50% - 600px) 30px calc(50% - 600px);
+  padding: 3px calc(50% - 600px) 30px calc(50% - 600px);
 }
 </style>
 

@@ -10,6 +10,8 @@ public interface CheckinOrderService {
 
     public List<CheckinOrder> list(String keyword) throws Exception;
 
+    public List<CheckinOrder> get3Day(String keyword) throws Exception;
+
     public List<CheckinOrder> today(String keyword) throws Exception;
 
     public CheckinOrder getById(String id)  throws Exception;
@@ -21,5 +23,6 @@ public interface CheckinOrderService {
     public void update(CheckinOrder checkinOrder) throws Exception;
 
     public void delete(CheckinOrder checkinOrder) throws Exception;
+
 
 }

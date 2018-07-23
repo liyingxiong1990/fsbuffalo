@@ -29,7 +29,7 @@
 		and checkinOrder.carrier_id = carrier.id
 		and checkinOrder.in_order_recorder_id = in_order_recorder.id
 		<if test="keyword != ''">
-			and concat(checkinOrder.checkin_date, carrier.name, in_order_recorder.name) like "%${keyword}%"
+			and concat(checkinOrder.id, checkinOrder.checkin_date, carrier.name, in_order_recorder.name) like "%${keyword}%"
 		</if>
 		<if test="bound_time !=  null ">
 			and checkinOrder.created_time  <![CDATA[>=]]>  #{bound_time}

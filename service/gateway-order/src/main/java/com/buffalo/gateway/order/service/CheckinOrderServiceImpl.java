@@ -52,6 +52,20 @@ public class CheckinOrderServiceImpl implements CheckinOrderService {
 	}
 
 	@Override
+	public List<CheckinOrder> get3Day(String keyword) throws Exception {
+		CheckinOrder checkinOrder = new CheckinOrder();
+		checkinOrder.setKeyword(keyword);
+		Calendar calendar=Calendar.getInstance();
+		calendar.setTime(new Date());
+		calendar.set(Calendar.DATE, -3);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		checkinOrder.setBound_time(calendar.getTime());
+		return checkinOrderMapper.list(checkinOrder);
+	}
+
+	@Override
 	public List<CheckinOrder> today(String keyword) throws Exception {
 		CheckinOrder checkinOrder = new CheckinOrder();
 		checkinOrder.setKeyword(keyword);
@@ -117,7 +131,7 @@ public class CheckinOrderServiceImpl implements CheckinOrderService {
 			throw new Exception(sdf.format(checkinDate)+"库存记录不存在！");
 		}
 		String inventoryId = inventory.getId();
-		String checkinOrderId =  sdf.format(checkinDate)+"-"+ UUIDUtil.getUUID().substring(0,10);
+		String checkinOrderId =  sdf.format(checkinDate)+"-"+ UUIDUtil.getRandomNum(8);
 		checkinOrder.setId(checkinOrderId);
 		checkinOrderMapper.add(checkinOrder);
 		for(CheckinOrderItem checkinOrderItem :checkinOrder.getItemList()){

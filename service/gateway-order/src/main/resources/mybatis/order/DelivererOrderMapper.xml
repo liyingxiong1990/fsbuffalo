@@ -35,7 +35,7 @@
 		and delivererOrder.line_id = line.id
 		and delivererOrder.store_id = store.id
 		<if test="keyword != ''">
-			and concat(delivererOrder.order_date, driver.name, out_order_recorder.name) like "%${keyword}%"
+			and concat(delivererOrder.id, delivererOrder.order_date, driver.name, out_order_recorder.name) like "%${keyword}%"
 		</if>
 		<if test="bound_time !=  null ">
 			and delivererOrder.created_time  &gt;=  #{bound_time}

@@ -57,6 +57,20 @@ public class DelivererOrderServiceImpl implements DelivererOrderService {
 	}
 
 	@Override
+	public List<DelivererOrder> get3Day(String keyword) throws Exception {
+		DelivererOrder delivererOrder = new DelivererOrder();
+		delivererOrder.setKeyword(keyword);
+		Calendar calendar=Calendar.getInstance();
+		calendar.setTime(new Date());
+		calendar.set(Calendar.DATE, -3);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		delivererOrder.setBound_time(calendar.getTime());
+		return delivererOrderMapper.list(delivererOrder);
+	}
+
+	@Override
 	public List<DelivererOrder> today(String keyword) throws Exception {
 		DelivererOrder delivererOrder = new DelivererOrder();
 		delivererOrder.setKeyword(keyword);
@@ -109,7 +123,7 @@ public class DelivererOrderServiceImpl implements DelivererOrderService {
 			throw new Exception(sdf.format(orderDate)+"库存记录不存在！");
 		}
 		String inventoryId = inventory.getId();
-		String delivererOrderId =  sdf.format(orderDate)+"-"+ UUIDUtil.getUUID().substring(0,10);
+		String delivererOrderId =  sdf.format(orderDate)+"-"+ UUIDUtil.getRandomNum(8);
 		delivererOrder.setId(delivererOrderId);
 		delivererOrderMapper.add(delivererOrder);
 		for(DelivererOrderItem delivererOrderItem :delivererOrder.getItemList()){

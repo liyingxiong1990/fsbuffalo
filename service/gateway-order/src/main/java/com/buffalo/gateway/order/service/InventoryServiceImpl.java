@@ -47,6 +47,18 @@ public class InventoryServiceImpl implements InventoryService {
 	}
 
 	@Override
+	public List<Inventory> get3Day(String keyword) throws Exception {
+		Inventory inventory = new Inventory();
+		inventory.setKeyword(keyword);
+		List<Inventory> inventoryList = inventoryMapper.list(inventory);
+		List<Inventory> resultList = new ArrayList<Inventory>();
+		for(int i=0;i<inventoryList.size() && i<3;i++){
+			resultList.add(inventoryList.get(i));
+		}
+		return resultList;
+	}
+
+	@Override
 	public List<Inventory> today(String keyword) throws Exception {
 		Inventory inventory = new Inventory();
 		inventory.setKeyword(keyword);

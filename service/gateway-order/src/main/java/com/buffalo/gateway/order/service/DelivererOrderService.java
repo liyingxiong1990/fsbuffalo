@@ -9,6 +9,8 @@ public interface DelivererOrderService {
 
     public List<DelivererOrder> list(String keyword) throws Exception;
 
+    public List<DelivererOrder> get3Day(String keyword) throws Exception;
+
     public List<DelivererOrder> today(String keyword) throws Exception;
 
     public DelivererOrder getById(String id) throws Exception;
@@ -22,5 +24,4 @@ public interface DelivererOrderService {
     public DelivererOrder getByDateDriverLine(DelivererOrder delivererOrder) throws Exception;
 
     public void setOut(DelivererOrder delivererOrderQuery) throws Exception;
-
 }

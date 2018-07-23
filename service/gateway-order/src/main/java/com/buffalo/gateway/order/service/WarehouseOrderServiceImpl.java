@@ -53,6 +53,20 @@ public class WarehouseOrderServiceImpl implements WarehouseOrderService {
 	}
 
 	@Override
+	public List<WarehouseOrder> get3Day(String keyword) throws Exception {
+		WarehouseOrder warehouseOrder = new WarehouseOrder();
+		warehouseOrder.setKeyword(keyword);
+		Calendar calendar=Calendar.getInstance();
+		calendar.setTime(new Date());
+		calendar.set(Calendar.DATE, -3);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		warehouseOrder.setBound_time(calendar.getTime());
+		return warehouseOrderMapper.list(warehouseOrder);
+	}
+
+	@Override
 	public List<WarehouseOrder> today(String keyword) throws Exception {
 		WarehouseOrder warehouseOrder = new WarehouseOrder();
 		warehouseOrder.setKeyword(keyword);
@@ -95,7 +109,6 @@ public class WarehouseOrderServiceImpl implements WarehouseOrderService {
 				for(WarehouseOrderItem warehouseOrderItemResult : itemList){
 					if(warehouseOrderItemResult.getProduct_id().equals(warehouseOrderItem.getProduct_id()) ){
 						warehouseOrderItemResult.setQuantity(warehouseOrderItemResult.getQuantity()+warehouseOrderItem.getQuantity());
-						System.out.println(warehouseOrderItemResult.getQuantity());
 					}
 				}
 			}
@@ -121,7 +134,7 @@ public class WarehouseOrderServiceImpl implements WarehouseOrderService {
 			throw new Exception(sdf.format(orderDate)+"库存记录不存在！");
 		}
 		String inventoryId = inventory.getId();
-		String warehouseOrderId =  sdf.format(orderDate)+"-"+ UUIDUtil.getUUID().substring(0,10);
+		String warehouseOrderId =  sdf.format(orderDate)+"-"+ UUIDUtil.getRandomNum(8);
 		warehouseOrder.setId(warehouseOrderId);
 		warehouseOrderMapper.add(warehouseOrder);
 		DelivererOrder delivererOrderQuery = new DelivererOrder();

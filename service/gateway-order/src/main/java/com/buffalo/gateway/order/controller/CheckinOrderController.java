@@ -46,11 +46,31 @@ public class CheckinOrderController {
 	}
 
 	/**
+	 * 查询三天内的进仓单列表
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/get3Day", method = RequestMethod.GET)
+	public <T> Map<String, T> get3Day(@RequestParam(value = "pageNum",defaultValue = "1")Integer pageNum, @RequestParam(value = "pageSize",defaultValue = "10")Integer pageSize,
+									   @RequestParam(required = false, defaultValue = "") String keyword) {
+		try {
+			PageHelper.startPage(pageNum,pageSize);
+			List<CheckinOrder> list = checkinOrderService.get3Day(keyword);
+			PageInfo<CheckinOrder> pageInfo = new PageInfo<CheckinOrder>(list);
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "查询三天内的进仓单列表成功", pageInfo);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "查询三天内的进仓单列表失败. " + e.getMessage());
+		}
+	}
+
+	/**
 	 * 查询当天进仓单列表
 	 * @param <T>
 	 * @return
 	 */
-	@RequestMapping(value="", method = RequestMethod.GET)
+	@RequestMapping(value="/today", method = RequestMethod.GET)
     public <T> Map<String, T> getToday(@RequestParam(value = "pageNum",defaultValue = "1")Integer pageNum, @RequestParam(value = "pageSize",defaultValue = "10")Integer pageSize,
 									 @RequestParam(required = false, defaultValue = "") String keyword) {
 		try {

@@ -10,6 +10,8 @@ public interface InventoryService {
 
     public List<Inventory> list(String keyword) throws Exception;
 
+    public List<Inventory> get3Day(String keyword) throws Exception;
+
     public List<Inventory> today(String keyword) throws Exception;
 
     public Inventory getById(String id) throws Exception;

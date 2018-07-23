@@ -184,8 +184,12 @@ export default {
       url: '/order/order/inventory/all',
       method: 'get'
     },
+    get3Day: {
+      url: '/order/order/inventory/get3Day',
+      method: 'get'
+    },
     today: {
-      url: '/order/order/inventory',
+      url: '/order/order/inventory/today',
       method: 'get'
     },
     getById: {
@@ -218,8 +222,12 @@ export default {
       url: '/order/order/checkinOrder/all',
       method: 'get'
     },
+    get3Day: {
+      url: '/order/order/checkinOrder/get3Day',
+      method: 'get'
+    },
     today: {
-      url: '/order/order/checkinOrder',
+      url: '/order/order/checkinOrder/today',
       method: 'get'
     },
     getById: {
@@ -248,8 +256,12 @@ export default {
       url: '/order/order/delivererOrder/all',
       method: 'get'
     },
+    get3Day: {
+      url: '/order/order/delivererOrder/get3Day',
+      method: 'get'
+    },
     today: {
-      url: '/order/order/delivererOrder',
+      url: '/order/order/delivererOrder/today',
       method: 'get'
     },
     getById: {
@@ -278,8 +290,12 @@ export default {
       url: '/order/order/warehouseOrder/all',
       method: 'get'
     },
+    get3Day: {
+      url: '/order/order/warehouseOrder/get3Day',
+      method: 'get'
+    },
     today: {
-      url: '/order/order/warehouseOrder',
+      url: '/order/order/warehouseOrder/today',
       method: 'get'
     },
     getById: {

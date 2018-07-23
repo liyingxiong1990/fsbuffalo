@@ -24,20 +24,14 @@ export default {
       table: {
         pageQuery: {
           apiModule: 'warehouseOrder',
-          apiMethod: 'today',
+          apiMethod: 'get3Day',
           reload: true
         },
         handRightBotton: [
           {
-            name: '新增外县市出仓单',
-            icon: 'el-icon-circle-plus-outline',
-            fn: this.addDeliverOpen,
-            entitlement: true
-          },
-          {
-            name: `新增专卖店出仓单`,
-            icon: `el-icon-circle-plus-outline`,
-            fn: this.addDriverOpen,
+            name: '统计',
+            icon: 'el-icon-document',
+            fn: this.showStatistic,
             entitlement: true
           }
         ],
@@ -55,18 +49,18 @@ export default {
             fnEvent: this.getAlertOpen,
             entitlement: true
           },
-          {
-            name: `新增外县市出仓单`,
-            icon: `el-icon-circle-plus-outline`,
-            fnEvent: this.addDeliverOpen,
-            entitlement: true
-          },
-          {
-            name: `新增专卖店出仓单`,
-            icon: `el-icon-circle-plus-outline`,
-            fnEvent: this.addDriverOpen,
-            entitlement: true
-          },
+          // {
+          //   name: `新增外县市出仓单`,
+          //   icon: `el-icon-circle-plus-outline`,
+          //   fnEvent: this.addDeliverOpen,
+          //   entitlement: true
+          // },
+          // {
+          //   name: `新增专卖店出仓单`,
+          //   icon: `el-icon-circle-plus-outline`,
+          //   fnEvent: this.addDriverOpen,
+          //   entitlement: true
+          // },
           {
             name: `打印`,
             icon: `el-icon-printer`,
@@ -104,6 +98,10 @@ export default {
       }
       window.open(`${urlPath}/enterprise.html#/${row.id}/warehouse_order`)
     },
+    showStatistic (row) {
+      this.dialog.type = 'statistic'
+      this.dialog.visible = true
+    },
     formatterTime (row, column, cellValue) {
       return dateFormatterTool(cellValue, 'yyyy-MM-dd')
     },
@@ -124,10 +122,6 @@ export default {
     },
     addDriverOpen (row) {
       this.dialog.type = 'post_driver'
-      this.dialog.visible = true
-    },
-    showStatistic (row) {
-      this.dialog.type = 'statistic'
       this.dialog.visible = true
     },
     putAlertOpen (row) {

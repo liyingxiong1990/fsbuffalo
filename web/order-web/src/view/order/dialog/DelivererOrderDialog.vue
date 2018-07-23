@@ -173,8 +173,8 @@ export default {
       })
     },
     handleBlur (item) {
-      if (!Number.isInteger(Number(item.quantity))) {
-        alert('请输入整数')
+      if (!Number.isInteger(Number(item.quantity)) || Number(item.quantity) < 0) {
+        alert('请输入正整数')
       }
       var vm = this
       if (vm.inventory[item.product_id] < item.quantity) {

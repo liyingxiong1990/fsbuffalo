@@ -29,15 +29,15 @@ export default {
         },
         handRightBotton: [
           {
-            name: '新增进仓单',
-            icon: 'el-icon-circle-plus-outline',
-            fn: this.addAlertOpen,
-            entitlement: true
-          },
-          {
             name: '统计',
             icon: 'el-icon-document',
             fn: this.showStatistic,
+            entitlement: true
+          },
+          {
+            name: `新增进仓单`,
+            icon: `el-icon-circle-plus-outline`,
+            fn: this.addAlertOpen,
             entitlement: true
           }
         ],
@@ -49,15 +49,15 @@ export default {
         ],
         contextMenuData: [
           {
-            name: `查看`,
-            icon: `el-icon-search`,
-            fnEvent: this.getAlertOpen,
-            entitlement: true
-          },
-          {
             name: `新增进仓单`,
             icon: `el-icon-circle-plus-outline`,
             fnEvent: this.addAlertOpen,
+            entitlement: true
+          },
+          {
+            name: `查看`,
+            icon: `el-icon-search`,
+            fnEvent: this.getAlertOpen,
             entitlement: true
           },
           {
@@ -97,10 +97,6 @@ export default {
       }
       window.open(`${urlPath}/enterprise.html#/${row.id}/checkin_order`)
     },
-    showStatistic (row) {
-      this.dialog.type = 'statistic'
-      this.dialog.visible = true
-    },
     formatterTime (row, column, cellValue) {
       return dateFormatterTool(cellValue, 'yyyy-MM-dd')
     },
@@ -117,6 +113,10 @@ export default {
     },
     addAlertOpen (row) {
       this.dialog.type = 'post'
+      this.dialog.visible = true
+    },
+    showStatistic (row) {
+      this.dialog.type = 'statistic'
       this.dialog.visible = true
     },
     putAlertOpen (row) {

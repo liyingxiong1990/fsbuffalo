@@ -1,20 +1,20 @@
 import Inventory from './Inventory'
-import DelivererOrder from './DelivererOrder'
+import CheckinOrder from './CheckinOrder'
 import WarehouseOrder from './WarehouseOrder'
 
 export default [
   {
-    path: '/order/inventory',
+    path: '/warehouse/inventory',
     name: 'Inventory',
     component: Inventory
   },
   {
-    path: '/order/delivererOrder',
-    name: 'DelivererOrder',
-    component: DelivererOrder
+    path: '/warehouse/checkinOrder',
+    name: 'CheckinOrder',
+    component: CheckinOrder
   },
   {
-    path: '/order/warehouseOrder',
+    path: '/warehouse/warehouseOrder',
     name: 'WarehouseOrder',
     component: WarehouseOrder
   }

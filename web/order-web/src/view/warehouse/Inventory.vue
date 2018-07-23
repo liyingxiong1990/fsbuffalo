@@ -1,17 +1,17 @@
 <template>
-  <div class="enterprise-store">
-    <base-table tableHandLeftPlaceholder="店名\店主" :pageQuery="table.pageQuery" :addTableRowClick="addAlertOpen" :rowContextdblClick="getAlertOpen" :tableCols="table.cols" :contextMenuData="table.contextMenuData"></base-table>
-    <store-dialog :dialog="dialog" :submitCallback="submitCallback"></store-dialog>
+  <div class="enterprise-inventory">
+    <base-table tableHandLeftPlaceholder="库存日期" :pageQuery="table.pageQuery" :handRightBotton="table.handRightBotton" :rowContextdblClick="getAlertOpen" :tableCols="table.cols" :contextMenuData="table.contextMenuData"></base-table>
+    <inventory-dialog :dialog="dialog" :submitCallback="submitCallback"></inventory-dialog>
   </div>
 </template>
 
 <script>
 import { dateFormatterTool } from 'gdotc@common/assets/common/common'
-import storeDialog from './dialog/storeDialog'
+import inventoryDialog from './dialog/inventoryDialog'
 export default {
-  name: 'store',
+  name: 'inventory',
   components: {
-    storeDialog
+    inventoryDialog
   },
   props: {
   },
@@ -23,16 +23,27 @@ export default {
     return {
       table: {
         pageQuery: {
-          apiModule: 'store',
-          apiMethod: 'getAll',
+          apiModule: 'inventory',
+          apiMethod: 'get3Day',
           reload: true
         },
+        handRightBotton: [
+          {
+            name: '新增库存记录',
+            icon: 'el-icon-circle-plus-outline',
+            fn: this.addAlertOpen,
+            entitlement: true
+          },
+          {
+            name: '新增空白库存记录',
+            icon: 'el-icon-circle-plus-outline',
+            fn: this.addBlankAlertOpen,
+            entitlement: true
+          }
+        ],
         cols: [
-          { label: '店名', prop: 'store_name', minwidth: '90px' },
-          { label: '店主', prop: 'store_holder', minwidth: '90px' },
-          { label: '地址', prop: 'address', minwidth: '90px' },
-          { label: '电话', prop: 'phone', minwidth: '90px' },
-          { label: '路线', prop: 'line', minwidth: '90px' }
+          { label: '库存日期', prop: 'inventory_date', minwidth: '90px', formatter: this.formatterTime },
+          { label: '上一库存日期', prop: 'last_date', minwidth: '90px', formatter: this.formatterTime }
         ],
         contextMenuData: [
           {
@@ -42,23 +53,23 @@ export default {
             entitlement: true
           },
           {
-            name: `新增`,
+            name: `新增库存记录`,
             icon: `el-icon-circle-plus-outline`,
             fnEvent: this.addAlertOpen,
             entitlement: true
           },
           {
-            name: `修改`,
-            icon: `el-icon-edit`,
-            fnEvent: this.putAlertOpen,
-            entitlement: true
-          },
-          {
-            name: `删除`,
-            icon: `el-icon-delete`,
-            fnEvent: this.deleteAlertOpen,
+            name: `新增空白库存记录`,
+            icon: `el-icon-circle-plus-outline`,
+            fnEvent: this.addBlankAlertOpen,
             entitlement: true
           }
+          // {
+          //   name: `删除`,
+          //   icon: `el-icon-delete`,
+          //   fnEvent: this.deleteAlertOpen,
+          //   entitlement: true
+          // }
         ]
       },
       dialog: {
@@ -67,8 +78,7 @@ export default {
         type: '',
         data: {},
         loading: false
-      },
-      productList: []
+      }
     }
   },
   methods: {
@@ -90,6 +100,10 @@ export default {
       this.dialog.type = 'post'
       this.dialog.visible = true
     },
+    addBlankAlertOpen (row) {
+      this.dialog.type = 'post_blank'
+      this.dialog.visible = true
+    },
     putAlertOpen (row) {
       if (!row) {
         row = this.$store.state.tableCurrentRow
@@ -107,7 +121,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.state.http.auto('store', 'delete', { data: row }).then((response) => {
+        this.$store.state.http.auto('inventory', 'delete', { data: row }).then((response) => {
           this.$message.success('删除成功!')
           this.table.pageQuery.reload = true
         })

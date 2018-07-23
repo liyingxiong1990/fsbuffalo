@@ -1,5 +1,6 @@
 import ENTERPRISE from './enterprise'
 import ORDER from './order'
+import WAREHOUSE from './warehouse'
 import SYS from './sys'
 import STAT from './statistic'
 import LEDGER from './ledger'
@@ -19,4 +20,4 @@ export default [
     name: 'Login',
     component: Login
   }
-].concat(ENTERPRISE, SYS, ORDER, STAT, LEDGER)
+].concat(ENTERPRISE, SYS, ORDER, WAREHOUSE, STAT, LEDGER)

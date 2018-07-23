@@ -6,7 +6,7 @@
           <el-date-picker @change="selectOrderDate" v-model="dialog.data.order_date" :disabled="dialog.type === 'get'" clearable size="mini" type="date" placeholder="选择日期"></el-date-picker>
         </el-form-item>
 
-        <el-form-item label="送货日期" prop='delivery_date'>
+        <el-form-item v-if="dialog.type != 'statistic'" label="送货日期" prop='delivery_date'>
           <el-date-picker v-model="dialog.data.delivery_date" :disabled="dialog.type === 'get'" clearable size="mini" type="date" placeholder="选择日期"></el-date-picker>
         </el-form-item>
 
@@ -31,7 +31,7 @@
           </el-select>
         </el-form-item>
 
-        <div v-if="dialog.type === 'post_deliver' || dialog.type === 'get'" class="dialog-cust-from">
+        <div v-if="dialog.type === 'post_deliver' || dialog.type === 'get' || dialog.type === 'statistic'" class="dialog-cust-from">
           <div class="dialog-cust-from-row">
             <div class="dialog-cust-from">
               <div class="dialog-cust-from-row-column">
@@ -74,7 +74,7 @@
                   <p>{{item.product_scale}}</p>
                 </div>
               </div>
-              <div v-if="dialog.type === 'get' || dialog.type === 'post_driver'" class="dialog-cust-from-row-column">
+              <div v-if="dialog.type === 'get' || dialog.type === 'post_driver' || dialog.type === 'statistic'" class="dialog-cust-from-row-column">
                 <div classs="dialog-cust-from-row-column-context">
                   <p>{{item.quantity}}</p>
                 </div>
@@ -176,20 +176,31 @@ export default {
     },
     selectOrderDate (val) {
       var vm = this
-      this.$store.state.http.auto('inventory', 'getByDate', { data: { inventory_date: val } }).then((res) => {
-        if (res.data) {
-          var tempInventory = {}
-          for (var i = 0; i < res.data.itemList.length; i++) {
-            tempInventory[res.data.itemList[i].product_id] = res.data.itemList[i].quantity
+      if (this.dialog.type === 'statistic') {
+        this.$store.state.http.auto('warehouseOrder', 'statistic', { data: { order_date: val } }).then((res) => {
+          if (this.dialog.type === 'statistic') {
+            if (res.data.itemList) {
+              vm.dialog.data.itemList = []
+              Object.assign(vm.dialog.data, res.data)
+            }
           }
-          vm.inventory = tempInventory
-        } else {
-          alert('该日期没有库存呢记录!')
-        }
-      })
+        })
+      } else {
+        this.$store.state.http.auto('inventory', 'getByDate', { data: { inventory_date: val } }).then((res) => {
+          if (res.data) {
+            var tempInventory = {}
+            for (var i = 0; i < res.data.itemList.length; i++) {
+              tempInventory[res.data.itemList[i].product_id] = res.data.itemList[i].quantity
+            }
+            vm.inventory = tempInventory
+          } else {
+            alert('该日期没有库存呢记录!')
+          }
+        })
+      }
     },
     handleBlur (item) {
-      if (!Number.isInteger(Number(item.quantity)) || Number(item.quantity) < 0) {
+      if (!Number.isInteger(Number(item.quantity))) {
         alert('请输入整数')
       }
       var vm = this

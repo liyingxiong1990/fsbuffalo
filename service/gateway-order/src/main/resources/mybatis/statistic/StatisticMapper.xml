@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.buffalo.gateway.statistic.mapper.StatisticMapper" ><!-- 命名空间必须指定mapper类的全路径 -->
+
+
+	<select id="todaySales"  resultType="java.util.Map">
+		select sum(quantity) quantity, type
+		from ord_warehouse_order wo,
+		ord_warehouse_order_item woi
+		where wo.sys_status = 1 and woi.sys_status = 1
+		and woi.warehouse_order_id = wo.id
+		and wo.order_date = CURRENT_DATE
+		group by type
+	</select>
+
+	<select id="thisMonthSales"  resultType="java.util.Map">
+		select sum(quantity) quantity, type
+		from ord_warehouse_order wo,
+		ord_warehouse_order_item woi
+		where wo.sys_status = 1 and woi.sys_status = 1
+		and woi.warehouse_order_id = wo.id
+		and wo.order_date BETWEEN concat(substr(CURRENT_DATE,1,7),'-01') and CURRENT_DATE
+		group by type
+	</select>
+
+	<select id="thisYearSales"  resultType="java.util.Map">
+		select sum(quantity) quantity, type
+		from ord_warehouse_order wo,
+		ord_warehouse_order_item woi
+		where wo.sys_status = 1 and woi.sys_status = 1
+		and woi.warehouse_order_id = wo.id
+		and wo.order_date BETWEEN concat(substr(CURRENT_DATE,1,4),'-01-01') and CURRENT_DATE
+		group by type
+	</select>
+
+	<select id="storeSales" parameterType="com.buffalo.gateway.statistic.model.Period" resultType="java.util.Map">
+		select tt.store_id, store.store_name, tt.quantity from
+		(
+			select sum(delivererOrderItem.quantity) quantity, store_id
+			from ord_deliverer_order delivererOrder,
+			ord_deliverer_order_item  delivererOrderItem
+			where delivererOrder.id = delivererOrderItem.deliverer_order_id
+			and delivererOrder.sys_status = 1 and delivererOrderItem.sys_status = 1
+			and delivererOrderItem.quantity > 0
+			<if test="startTime != ''">
+				and order_date <![CDATA[ >= ]]>  #{startTime}
+			</if>
+			<if test="endTime != ''">
+				and order_date <![CDATA[ <= ]]>  #{endTime}
+			</if>
+			group by delivererOrder.store_id
+			) tt, ent_store store
+			where store.id = tt.store_id
+		order by  tt.quantity desc limit 20
+	</select>
+
+	<select id="productSalesToday"  resultType="java.util.Map">
+		select tt.quantity, product.name from
+		(
+			select sum(quantity) quantity, product_id
+			from ord_warehouse_order wo,
+			ord_warehouse_order_item woi
+			where wo.sys_status = 1 and woi.sys_status = 1
+			and woi.warehouse_order_id = wo.id
+			and wo.order_date = CURRENT_DATE
+			group by product_id
+		)tt, ent_product product
+		where tt.product_id = product.id
+		order by product.product_index
+	</select>
+
+
+
+</mapper>

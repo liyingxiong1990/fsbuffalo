@@ -13,7 +13,11 @@ public interface StatisticService {
 
     public List<Map> thisYearSales() throws Exception;
 
+    public List<Map> todayCheckin()  throws Exception;
+
     public List<Map> storeSales(String startTime, String endTime) throws Exception;
 
-    public List<Map> productSalesToday() throws Exception;
+    public List<Map> productSalesThisMonth() throws Exception;
+
+    public List<Map> salesEveryMonth() throws Exception;
 }

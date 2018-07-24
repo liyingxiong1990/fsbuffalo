@@ -75,6 +75,22 @@ public class StatisticController {
 		}
 	}
 
+	/**
+	 * 今天进仓量
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/todayCheckin", method = RequestMethod.GET)
+	public <T> Map<String, T> todayCheckin() {
+		try {
+			List<Map> result = statisticService.todayCheckin();
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "查询今天进仓量成功", result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "查询今天进仓量失败. " + e.getMessage());
+		}
+	}
 
 	/**
 	 * 专卖店销量排名
@@ -98,15 +114,32 @@ public class StatisticController {
 	 * @param <T>
 	 * @return
 	 */
-	@RequestMapping(value="/productSalesToday", method = RequestMethod.GET)
-	public <T> Map<String, T> productSalesToday() {
+	@RequestMapping(value="/productSalesThisMonth", method = RequestMethod.GET)
+	public <T> Map<String, T> productSalesThisMonth() {
 		try {
-			List<Map> list = statisticService.productSalesToday();
+			List<Map> list = statisticService.productSalesThisMonth();
 			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "查询当天产品销量成功", list);
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO Auto-generated catch block
 			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "查询当天产品销量失败. " + e.getMessage());
+		}
+	}
+
+	/**
+	 * 今年各个月销量
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/salesEveryMonth", method = RequestMethod.GET)
+	public <T> Map<String, T> salesEveryMonth() {
+		try {
+			List<Map> list = statisticService.salesEveryMonth();
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "查询今年各个月销量成功", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "查询今年各个月销量失败. " + e.getMessage());
 		}
 	}
 

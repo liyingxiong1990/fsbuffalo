@@ -12,12 +12,20 @@ export default {
       url: '/statistic/thisYearSales',
       method: 'get'
     },
-    storeSales: {
-      url: '/statistic/storeSales',
+    todayCheckin: {
+      url: '/statistic/todayCheckin',
       method: 'get'
     },
-    productSalesToday: {
-      url: '/statistic/productSalesToday',
+    productSalesThisMonth: {
+      url: '/statistic/productSalesThisMonth',
+      method: 'get'
+    },
+    salesEveryMonth: {
+      url: '/statistic/salesEveryMonth',
+      method: 'get'
+    },
+    storeSales: {
+      url: '/statistic/storeSales',
       method: 'get'
     }
   }

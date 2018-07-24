@@ -10,7 +10,7 @@ import App from './App'
 import router from './router'
 import ECharts from 'vue-echarts'
 import echarts from 'echarts'
-import { BaseHeader, BaseBar, BaseNav, BaseTable, BaseFolder, BaseMap, ChartBar, ChartBarHorizontal, ChartHistogram, ChartPie, ChartRadar, ChartSunburst, ChartTable, ChartTree, BasePlanar, BaseDialog, BaseMapChina } from 'gdotc@common/components'
+import { BaseHeader, BaseBar, BaseNav, BaseTable, BaseFolder, BaseMap, ChartBar, ChartBarHorizontal, ChartHistogram, ChartPie, ChartLine, ChartRadar, ChartSunburst, ChartTable, ChartTree, BasePlanar, BaseDialog, BaseMapChina } from 'gdotc@common/components'
 // echarts map
 import MainCity from 'gdotc@common/assets/config/china-main-city'
 import $ from 'jquery'
@@ -34,6 +34,7 @@ Vue.component('ChartBar', ChartBar)
 Vue.component('ChartBarHorizontal', ChartBarHorizontal)
 Vue.component('ChartHistogram', ChartHistogram)
 Vue.component('ChartPie', ChartPie)
+Vue.component('ChartLine', ChartLine)
 Vue.component('ChartRadar', ChartRadar)
 Vue.component('ChartSunburst', ChartSunburst)
 Vue.component('ChartTable', ChartTable)

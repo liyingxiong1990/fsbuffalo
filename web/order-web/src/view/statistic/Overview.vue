@@ -25,13 +25,25 @@
           {{data.thisYearSales}}<br/> 外线：{{data.thisYearSalesDelivery}} / 专卖店：{{data.thisYearSalesDriver}}
         </div>
       </div>
+      <div class="planar-box">
+        <div class="planar-box-title">
+          今天进仓量
+        </div>
+        <div class="planar-box-content">
+          {{data.todayCheckin}}
+        </div>
+      </div>
       <div style="clear:both"></div>
     </div>
 
     <div style="clear:both"></div>
 
     <div class="manage-scale-row">
-      <chart-bar-horizontal :height="1600" :width="2000" :title="data.productSalesTodayData.title" :cols="data.productSalesTodayData.cols" :data="data.productSalesTodayData.data"></chart-bar-horizontal>
+      <chart-line :height="600" :width="800" :title="data.salesEveryMonthData.title" :cols="data.salesEveryMonthData.cols" :data="data.salesEveryMonthData.data"></chart-line>
+    </div>
+
+    <div class="manage-scale-row">
+      <chart-bar-horizontal :height="1600" :width="2000" :title="data.productSalesThisMonthData.title" :cols="data.productSalesThisMonthData.cols" :data="data.productSalesThisMonthData.data"></chart-bar-horizontal>
     </div>
   </div>
 
@@ -62,8 +74,9 @@ export default {
         thisYearSales: 0,
         thisYearSalesDelivery: 0,
         thisYearSalesDriver: 0,
-        productSalesTodayData: {
-          title: '当天产品销量',
+        todayCheckin: 0,
+        productSalesThisMonthData: {
+          title: '本月产品销量',
           cols: [
             {
               label: '销量',
@@ -71,6 +84,12 @@ export default {
               prop: 'all'
             }
           ],
+          data: []
+        },
+        salesEveryMonthData: {
+          title: '销量走势',
+          legend: [],
+          cols: [],
           data: []
         }
 
@@ -82,7 +101,9 @@ export default {
       this.todaySales()
       this.thisMonthSales()
       this.thisYearSales()
-      this.productSalesToday()
+      this.todayCheckin()
+      this.productSalesThisMonth()
+      this.salesEveryMonth()
     },
     todaySales () {
       this.$store.state.http.auto('statistic', 'todaySales', {}).then(res => {
@@ -138,9 +159,18 @@ export default {
         console.log(error)
       })
     },
-    productSalesToday () {
+    todayCheckin () {
+      this.$store.state.http.auto('statistic', 'todayCheckin', {}).then(res => {
+        this.data.todayCheckin = res.data[0].quantity
+      }).catch(error => {
+        this.$message.error(error.statusText)
+        this.dialog.loading = false
+        console.log(error)
+      })
+    },
+    productSalesThisMonth () {
       let vm = this
-      this.$store.state.http.auto('statistic', 'productSalesToday', {}).then(res => {
+      this.$store.state.http.auto('statistic', 'productSalesThisMonth', {}).then(res => {
         var salesArray = []
         var productArray = []
         for (let item of res.data) {
@@ -149,9 +179,39 @@ export default {
         }
         salesArray.reverse()
         productArray.reverse()
-        vm.data.productSalesTodayData.data = {}
-        vm.data.productSalesTodayData.data['销量'] = salesArray
-        vm.data.productSalesTodayData.cols = productArray
+        vm.data.productSalesThisMonthData.data = {}
+        vm.data.productSalesThisMonthData.data['销量'] = salesArray
+        vm.data.productSalesThisMonthData.cols = productArray
+      }).catch(error => {
+        this.$message.error(error.statusText)
+        this.dialog.loading = false
+        console.log(error)
+      })
+    },
+    salesEveryMonth () {
+      let vm = this
+      this.$store.state.http.auto('statistic', 'salesEveryMonth', {}).then(res => {
+        debugger
+        var deliverSalesArray = []
+        var driverSalesArray = []
+        var totalSalesArray = []
+        var monthArray = []
+        for (var i = 0; i < res.data.length; i++) {
+          if (i % 2 === 0) {
+            monthArray.push(res.data[i].month)
+            deliverSalesArray.push(Number(res.data[i].quantity))
+            totalSalesArray.push(Number(res.data[i].quantity) + Number(res.data[i + 1].quantity))
+          } else {
+            driverSalesArray.push(Number(res.data[i].quantity))
+          }
+        }
+        debugger
+        vm.data.salesEveryMonthData.legend = ['外线', '专卖店', '总量']
+        vm.data.salesEveryMonthData.data = {}
+        vm.data.salesEveryMonthData.data['外线'] = deliverSalesArray
+        vm.data.salesEveryMonthData.data['专卖店'] = driverSalesArray
+        vm.data.salesEveryMonthData.data['总量'] = totalSalesArray
+        vm.data.salesEveryMonthData.cols = monthArray
       }).catch(error => {
         this.$message.error(error.statusText)
         this.dialog.loading = false

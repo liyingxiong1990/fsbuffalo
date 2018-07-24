@@ -1,5 +1,5 @@
 import Overview from './Overview'
-import Company from './Company'
+import StoreAnalysis from './StoreAnalysis'
 
 export default [
   {
@@ -8,8 +8,8 @@ export default [
     component: Overview
   },
   {
-    path: '/stats/company',
-    name: 'Company',
-    component: Company
+    path: '/stats/store',
+    name: 'StoreAnalysis',
+    component: StoreAnalysis
   }
 ]

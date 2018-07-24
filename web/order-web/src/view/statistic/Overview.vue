@@ -3,79 +3,38 @@
     <div class="planar">
       <div class="planar-box">
         <div class="planar-box-title">
-          企业总数
+          今天销量
         </div>
         <div class="planar-box-content">
-          {{data.companyNum}}
+          {{data.todaySales}}<br/> 外线：{{data.todaySalesDelivery}} / 专卖店：{{data.todaySalesDriver}}
         </div>
       </div>
       <div class="planar-box">
         <div class="planar-box-title">
-          会员总数
+          本月销量
         </div>
         <div class="planar-box-content">
-          {{data.memberNum}}
+          {{data.thisMonthSales}}<br/> 外线：{{data.thisMonthSalesDelivery}} / 专卖店：{{data.thisMonthSalesDriver}}
         </div>
       </div>
       <div class="planar-box">
         <div class="planar-box-title">
-          挂牌企业家数
+          本年销量
         </div>
         <div class="planar-box-content">
-          {{data.listingNum}}
-        </div>
-      </div>
-      <div class="planar-box">
-        <div class="planar-box-title">
-          本期增加挂牌企业
-        </div>
-        <div class="planar-box-content">
-          {{data.increaseNum}}
-        </div>
-      </div>
-      <div class="planar-box">
-        <div class="planar-box-title">
-          本期减少挂牌企业
-        </div>
-        <div class="planar-box-content">
-          {{data.decreaseNum}}
-        </div>
-      </div>
-      <div class="planar-box">
-        <div class="planar-box-title">
-          总股本
-        </div>
-        <div class="planar-box-content">
-          {{(data.totalCapital/10000).toFixed(2)}} 万元
-        </div>
-      </div>
-      <div class="planar-box">
-        <div class="planar-box-title">
-          总资产
-        </div>
-        <div class="planar-box-content">
-          {{(data.totalAssets/10000).toFixed(2)}} 万元
-        </div>
-      </div>
-      <div class="planar-box">
-        <div class="planar-box-title">
-          营业收入
-        </div>
-        <div class="planar-box-content">
-          {{(data.totalIncome/10000).toFixed(2)}} 万元
-        </div>
-      </div>
-      <div class="planar-box">
-        <div class="planar-box-title">
-          净利润
-        </div>
-        <div class="planar-box-content">
-          {{(data.netProfit/10000).toFixed(2)}} 万元
+          {{data.thisYearSales}}<br/> 外线：{{data.thisYearSalesDelivery}} / 专卖店：{{data.thisYearSalesDriver}}
         </div>
       </div>
       <div style="clear:both"></div>
     </div>
+
+    <div style="clear:both"></div>
+
+    <div class="manage-scale-row">
+      <chart-bar-horizontal :height="1600" :width="2000" :title="data.productSalesTodayData.title" :cols="data.productSalesTodayData.cols" :data="data.productSalesTodayData.data"></chart-bar-horizontal>
+    </div>
   </div>
+
 </template>
 
 <script>
@@ -94,105 +53,105 @@ export default {
   data () {
     return {
       data: {
-        companyNum: 0,
-        memberNum: 0,
-        listingNum: 0,
-        increaseNum: 0,
-        decreaseNum: 0,
-        totalCapital: 0,
-        totalAssets: 0,
-        totalIncome: 0,
-        netProfit: 0
+        todaySales: 0,
+        todaySalesDelivery: 0,
+        todaySalesDriver: 0,
+        thisMonthSales: 0,
+        thisMonthSalesDelivery: 0,
+        thisMonthSalesDriver: 0,
+        thisYearSales: 0,
+        thisYearSalesDelivery: 0,
+        thisYearSalesDriver: 0,
+        productSalesTodayData: {
+          title: '当天产品销量',
+          cols: [
+            {
+              label: '销量',
+              type: 'bar',
+              prop: 'all'
+            }
+          ],
+          data: []
+        }
+
       }
     }
   },
   methods: {
     initData () {
-      this.companyNum()
-      this.memberNum()
-      this.listingNum()
-      this.increaseNum()
-      this.decreaseNum()
-      this.totalCapital()
-      this.totalAssets()
-      this.totalIncome()
-      this.netProfit()
+      this.todaySales()
+      this.thisMonthSales()
+      this.thisYearSales()
+      this.productSalesToday()
     },
-    companyNum () {
-      this.$store.state.http.auto('bossStatistic', 'companyNum', {}).then(res => {
-        this.data.companyNum = res.data
+    todaySales () {
+      this.$store.state.http.auto('statistic', 'todaySales', {}).then(res => {
+        this.data.todaySales = 0
+        for (var item in res.data) {
+          if (res.data[item].type === 'deliver') {
+            this.data.todaySales += res.data[item].quantity
+            this.data.todaySalesDelivery = res.data[item].quantity
+          } else if (res.data[item].type === 'driver') {
+            this.data.todaySales += res.data[item].quantity
+            this.data.todaySalesDriver = res.data[item].quantity
+          }
+        }
       }).catch(error => {
         this.$message.error(error.statusText)
         this.dialog.loading = false
         console.log(error)
       })
     },
-    memberNum () {
-      this.$store.state.http.auto('bossStatistic', 'memberNum', {}).then(res => {
-        this.data.memberNum = res.data
+    thisMonthSales () {
+      this.$store.state.http.auto('statistic', 'thisMonthSales', {}).then(res => {
+        this.data.thisMonthSales = 0
+        for (var item in res.data) {
+          if (res.data[item].type === 'deliver') {
+            this.data.thisMonthSales += res.data[item].quantity
+            this.data.thisMonthSalesDelivery = res.data[item].quantity
+          } else if (res.data[item].type === 'driver') {
+            this.data.thisMonthSales += res.data[item].quantity
+            this.data.thisMonthSalesDriver = res.data[item].quantity
+          }
+        }
       }).catch(error => {
         this.$message.error(error.statusText)
         this.dialog.loading = false
         console.log(error)
       })
     },
-    listingNum () {
-      this.$store.state.http.auto('bossStatistic', 'listingNum', {}).then(res => {
-        this.data.listingNum = res.data
+    thisYearSales () {
+      this.$store.state.http.auto('statistic', 'thisYearSales', {}).then(res => {
+        this.data.thisYearSales = 0
+        for (var item in res.data) {
+          if (res.data[item].type === 'deliver') {
+            this.data.thisYearSales += res.data[item].quantity
+            this.data.thisYearSalesDelivery = res.data[item].quantity
+          } else if (res.data[item].type === 'driver') {
+            this.data.thisYearSales += res.data[item].quantity
+            this.data.thisYearSalesDriver = res.data[item].quantity
+          }
+        }
       }).catch(error => {
         this.$message.error(error.statusText)
         this.dialog.loading = false
         console.log(error)
       })
     },
-    increaseNum () {
-      this.$store.state.http.auto('bossStatistic', 'increaseNum', {}).then(res => {
-        this.data.increaseNum = res.data
-      }).catch(error => {
-        this.$message.error(error.statusText)
-        this.dialog.loading = false
-        console.log(error)
-      })
-    },
-    decreaseNum () {
-      this.$store.state.http.auto('bossStatistic', 'decreaseNum', {}).then(res => {
-        this.data.decreaseNum = res.data
-      }).catch(error => {
-        this.$message.error(error.statusText)
-        this.dialog.loading = false
-        console.log(error)
-      })
-    },
-    totalCapital () {
-      this.$store.state.http.auto('bossStatistic', 'totalCapital', {}).then(res => {
-        this.data.totalCapital = res.data
-      }).catch(error => {
-        this.$message.error(error.statusText)
-        this.dialog.loading = false
-        console.log(error)
-      })
-    },
-    totalAssets () {
-      this.$store.state.http.auto('bossStatistic', 'totalAssets', {}).then(res => {
-        this.data.totalAssets = res.data
-      }).catch(error => {
-        this.$message.error(error.statusText)
-        this.dialog.loading = false
-        console.log(error)
-      })
-    },
-    totalIncome () {
-      this.$store.state.http.auto('bossStatistic', 'totalIncome', {}).then(res => {
-        this.data.totalIncome = res.data
-      }).catch(error => {
-        this.$message.error(error.statusText)
-        this.dialog.loading = false
-        console.log(error)
-      })
-    },
-    netProfit () {
-      this.$store.state.http.auto('bossStatistic', 'netProfit', {}).then(res => {
-        this.data.netProfit = res.data
+    productSalesToday () {
+      let vm = this
+      this.$store.state.http.auto('statistic', 'productSalesToday', {}).then(res => {
+        var salesArray = []
+        var productArray = []
+        for (let item of res.data) {
+          salesArray.push(Number(item.quantity))
+          productArray.push(item.name)
+        }
+        salesArray.reverse()
+        productArray.reverse()
+        vm.data.productSalesTodayData.data = {}
+        vm.data.productSalesTodayData.data['销量'] = salesArray
+        vm.data.productSalesTodayData.cols = productArray
       }).catch(error => {
         this.$message.error(error.statusText)
         this.dialog.loading = false

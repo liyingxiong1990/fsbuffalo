@@ -51,6 +51,12 @@ export default {
             icon: `el-icon-search`,
             fnEvent: this.getAlertOpen,
             entitlement: true
+          },
+          {
+            name: `删除`,
+            icon: `el-icon-delete`,
+            fnEvent: this.deleteAlertOpen,
+            entitlement: true
           }
           // {
           //   name: `新增库存记录`,
@@ -62,12 +68,6 @@ export default {
           //   name: `新增空白库存记录`,
           //   icon: `el-icon-circle-plus-outline`,
           //   fnEvent: this.addBlankAlertOpen,
-          //   entitlement: true
-          // }
-          // {
-          //   name: `删除`,
-          //   icon: `el-icon-delete`,
-          //   fnEvent: this.deleteAlertOpen,
           //   entitlement: true
           // }
         ]

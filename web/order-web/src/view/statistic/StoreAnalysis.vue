@@ -28,17 +28,19 @@
       <div style="clear:both"></div>
     </div> -->
     <div class="manage-scale-row">
-      <div class="manage-scale-row-half">
-        <div class="block">
-          <span class="demonstration">开始</span>
-          <el-date-picker @change="storeTop10" v-model="storeTop10PeriodStart" type="month" placeholder="选择月"></el-date-picker>
-          <span class="demonstration">结束</span>
-          <el-date-picker @change="storeTop10" v-model="storeTop10PeriodEnd" type="month" placeholder="选择月"></el-date-picker>
-        </div>
-        <chart-histogram :height="600" :title="histogramStoreData.title" :grid="histogramStoreData.grid" :rotate="histogramStoreData.rotate" :cols="histogramStoreData.cols" :classifyData="histogramStoreData.classifyData" :select="histogramStoreData.select"></chart-histogram>
+      <!-- <div class="block">
+        <span class="demonstration">开始</span>
+        <el-date-picker @change="storeSales" v-model="storeSalesPeriodStart" type="month" placeholder="选择月"></el-date-picker>
+        <span class="demonstration">结束</span>
+        <el-date-picker @change="storeSales" v-model="storeSalesPeriodEnd" type="month" placeholder="选择月"></el-date-picker>
+      </div> -->
+      <div class="block">
+        <span class="demonstration">请选择时间范围</span>
+        <el-date-picker @change="storeSales" v-model="timePeriod" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2"></el-date-picker>
       </div>
-      <div style="clear:both"></div>
+      <chart-histogram :height="600" :title="histogramStoreData.title" :grid="histogramStoreData.grid" :rotate="histogramStoreData.rotate" :cols="histogramStoreData.cols" :classifyData="histogramStoreData.classifyData" :select="histogramStoreData.select"></chart-histogram>
     </div>
+    <div style="clear:both"></div>
   </div>
 </template>
 
@@ -47,17 +49,18 @@ import {
   tableColumnFormatterTool
 } from 'gdotc@common/assets/common/common'
 export default {
-  name: 'CompanyAnalysis', // 企业分析
+  name: 'StoreAnalysis', // 企业分析
   props: {
   },
   created () {
+    this.initData()
     // this.provinceAnalysis()
     // this.cityAnalysis()
     // this.companyTypeAnalysis()
     // this.quotedTypeAnalysis()
     // this.industryAnalysis()
     // this.operatingCenterAnalysis()
-    this.storeTop10()
+    this.storeSales()
   },
   computed: {
     dictProvince () {
@@ -66,8 +69,36 @@ export default {
   },
   data () {
     return {
-      storeTop10PeriodStart: '2018-01',
-      storeTop10PeriodEnd: '2018-04',
+      timePeriod: '',
+      storeSalesPeriodStart: '',
+      storeSalesPeriodEnd: '',
+      pickerOptions2: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近一个月',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近三个月',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
+          }
+        }]
+      },
       mapDataChina: [],
       mapData: [],
       pieCompanyTypeData: {
@@ -204,12 +235,12 @@ export default {
         }
       },
       histogramStoreData: {
-        title: '专卖店销量Top10',
+        title: '专卖店销量Top20',
         select: `销量`,
         grid: { // 控制图的大小，调整下面这些值就可以，
           y2: 210 // x轴标题高度
         },
-        // rotate: 75,
+        rotate: 15,
         cols: [
           {
             label: '销量',
@@ -227,6 +258,14 @@ export default {
     }
   },
   methods: {
+    initData () {
+      const end = new Date()
+      const start = new Date()
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+      this.timePeriod = []
+      this.timePeriod.push(start)
+      this.timePeriod.push(end)
+    },
     formatterProvince (cellValue) {
       return tableColumnFormatterTool(this.dictProvince, cellValue)
     },
@@ -312,14 +351,14 @@ export default {
         console.log(error)
       })
     },
-    storeTop10 () {
+    storeSales () {
       let vm = this
-      this.$store.state.http.auto('statistic', 'storeTop10', { params: { startTime: this.storeTop10PeriodStart, endTime: this.storeTop10PeriodEnd } }).then(res => {
+      this.$store.state.http.auto('statistic', 'storeSales', { params: { startTime: vm.timePeriod[0], endTime: vm.timePeriod[1] } }).then(res => {
         vm.histogramStoreData.classifyData[0].data = []
         for (let item of res.data) {
           vm.histogramStoreData.classifyData[0].data.push({
             quantity: Number(item.quantity),
-            name: item.name
+            name: item.store_name
           })
         }
       }).catch(error => {

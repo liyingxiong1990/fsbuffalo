@@ -48,7 +48,10 @@ export default {
           vm.$store.state.http.auto('auth', 'login', { params: vm.ruleForm }).then((res) => {
             window.localStorage.setItem('username', vm.ruleForm.username)
             window.localStorage.setItem('token', res.token_type + ' ' + res.access_token)
-            window.localStorage.setItem('TOKEN_TIME', new Date().getTime() + 172800 * 1000)
+            window.localStorage.setItem('TOKEN_TIME', new Date().getTime() + 10800 * 1000)
+            window.onbeforeunload = function () {
+              window.localStorage.removeItem(`token`)
+            }
             vm.$store.dispatch('SYS_INITIAL')
             vm.$router.push('/home')
           }).catch(function (error) {

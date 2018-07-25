@@ -24,7 +24,7 @@ export default {
       table: {
         pageQuery: {
           apiModule: 'checkinOrder',
-          apiMethod: 'getAll',
+          apiMethod: 'get3Day',
           reload: true
         },
         handRightBotton: [

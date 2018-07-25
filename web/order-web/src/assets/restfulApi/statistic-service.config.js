@@ -20,6 +20,10 @@ export default {
       url: '/statistic/productSalesThisMonth',
       method: 'get'
     },
+    productSalesThisYear: {
+      url: '/statistic/productSalesThisYear',
+      method: 'get'
+    },
     salesEveryMonth: {
       url: '/statistic/salesEveryMonth',
       method: 'get'

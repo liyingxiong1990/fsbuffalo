@@ -46,6 +46,12 @@
       <div class="manage-scale-row">
         <chart-bar-horizontal :height="1600" :width="2000" :title="data.productSalesThisMonthData.title" :cols="data.productSalesThisMonthData.cols" :data="data.productSalesThisMonthData.data"></chart-bar-horizontal>
       </div>
+      <div class="manage-scale-row">
+        <chart-pie :title="data.areaSalesThisYearData.title" :cols="data.areaSalesThisYearData.cols" :data="data.areaSalesThisYearData.data"></chart-pie>
+      </div>
+      <div class="manage-scale-row">
+        <chart-pie :title="data.productSalesThisYearData.title" :cols="data.productSalesThisYearData.cols" :data="data.productSalesThisYearData.data"></chart-pie>
+      </div>
     </div>
   </div>
 
@@ -99,8 +105,17 @@ export default {
           legend: [],
           cols: [],
           data: []
+        },
+        areaSalesThisYearData: {
+          title: '本年地区分析',
+          cols: [],
+          data: {}
+        },
+        productSalesThisYearData: {
+          title: '本年产品分析',
+          cols: [],
+          data: {}
         }
-
       }
     }
   },
@@ -113,6 +128,8 @@ export default {
       this.productSalesThisMonth()
       this.salesEveryMonth()
       this.salesEveryDay()
+      this.areaSalesThisYear()
+      this.productSalesThisYear()
     },
     todaySales () {
       this.$store.state.http.auto('statistic', 'todaySales', {}).then(res => {
@@ -295,6 +312,38 @@ export default {
       }).catch(error => {
         this.$message.error(error.statusText)
         this.dialog.loading = false
+        console.log(error)
+      })
+    },
+    areaSalesThisYear () {
+      let vm = this
+      this.$store.state.http.auto('statistic', 'deliverySalesThisYear', {}).then(res => {
+        for (let item of res.data) {
+          vm.data.areaSalesThisYearData.cols.push({
+            label: item.delivery_lines,
+            prop: item.delivery_lines
+          })
+          vm.data.areaSalesThisYearData.data[item.delivery_lines] = Number(item.quantity)
+        }
+      }).catch(error => {
+        vm.$message.error(error.statusText)
+        vm.dialog.loading = false
+        console.log(error)
+      })
+    },
+    productSalesThisYear () {
+      let vm = this
+      this.$store.state.http.auto('statistic', 'productSalesThisYear', {}).then(res => {
+        for (let item of res.data) {
+          vm.data.productSalesThisYearData.cols.push({
+            label: item.name,
+            prop: item.name
+          })
+          vm.data.productSalesThisYearData.data[item.name] = Number(item.quantity)
+        }
+      }).catch(error => {
+        vm.$message.error(error.statusText)
+        vm.dialog.loading = false
         console.log(error)
       })
     }

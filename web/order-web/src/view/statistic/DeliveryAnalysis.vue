@@ -232,16 +232,18 @@ export default {
       this.$store.state.http.auto('statistic', 'deliverySalesThisYear', {}).then(res => {
         vm.data.deliverySalesThisYearData.classifyData[0].data = []
         for (let item of res.data) {
-          vm.data.deliverySalesThisYearData.classifyData[0].data.push({
-            quantity: Number(item.quantity),
-            name: item.name
-          })
+          if (item.name !== '专卖店') {
+            vm.data.deliverySalesThisYearData.classifyData[0].data.push({
+              quantity: Number(item.quantity),
+              name: item.name
+            })
 
-          vm.data.deliveryAreaThisYearData.cols.push({
-            label: item.delivery_lines,
-            prop: item.delivery_lines
-          })
-          vm.data.deliveryAreaThisYearData.data[item.delivery_lines] = Number(item.quantity)
+            vm.data.deliveryAreaThisYearData.cols.push({
+              label: item.delivery_lines,
+              prop: item.delivery_lines
+            })
+            vm.data.deliveryAreaThisYearData.data[item.delivery_lines] = Number(item.quantity)
+          }
         }
       }).catch(error => {
         vm.$message.error(error.statusText)

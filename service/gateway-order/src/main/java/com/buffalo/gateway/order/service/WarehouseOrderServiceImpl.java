@@ -58,7 +58,7 @@ public class WarehouseOrderServiceImpl implements WarehouseOrderService {
 		warehouseOrder.setKeyword(keyword);
 		Calendar calendar=Calendar.getInstance();
 		calendar.setTime(new Date());
-		calendar.set(Calendar.DATE, -3);
+		calendar.add(Calendar.DATE, -3);
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);

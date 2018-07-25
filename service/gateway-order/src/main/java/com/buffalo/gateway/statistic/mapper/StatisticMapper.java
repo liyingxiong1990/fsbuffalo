@@ -23,6 +23,8 @@ public interface StatisticMapper {
 
     public List<Map> productSalesThisMonth() throws Exception;
 
+    public List<Map> productSalesThisYear() throws Exception;
+
     public List<Map> salesEveryMonth() throws Exception;
 
     public List<Map> salesEveryDay() throws Exception;
@@ -34,5 +36,4 @@ public interface StatisticMapper {
     public List<Map> deliverySalesThisYear() throws Exception;
 
     public List<Map> deliveryProductsThisYear() throws Exception;
-
 }

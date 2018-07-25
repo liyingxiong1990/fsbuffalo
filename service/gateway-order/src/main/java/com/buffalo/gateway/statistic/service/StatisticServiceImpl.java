@@ -50,6 +50,11 @@ public class StatisticServiceImpl implements StatisticService {
 	}
 
 	@Override
+	public List<Map> productSalesThisYear() throws Exception {
+		return statisticMapper.productSalesThisYear();
+	}
+
+	@Override
 	public List<Map> salesEveryMonth() throws Exception {
 		return statisticMapper.salesEveryMonth();
 	}

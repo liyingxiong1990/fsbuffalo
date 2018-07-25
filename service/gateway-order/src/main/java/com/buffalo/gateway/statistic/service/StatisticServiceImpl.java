@@ -58,4 +58,24 @@ public class StatisticServiceImpl implements StatisticService {
 	public List<Map> salesEveryDay() throws Exception {
 		return statisticMapper.salesEveryDay();
 	}
+
+	@Override
+	public List<Map> deliverySalesThisMonth() throws Exception {
+		return statisticMapper.deliverySalesThisMonth();
+	}
+
+	@Override
+	public List<Map> deliveryProductsThisMonth() throws Exception {
+		return statisticMapper.deliveryProductsThisMonth();
+	}
+
+	@Override
+	public List<Map> deliverySalesThisYear() throws Exception {
+		return statisticMapper.deliverySalesThisYear();
+	}
+
+	@Override
+	public List<Map> deliveryProductsThisYear() throws Exception {
+		return statisticMapper.deliveryProductsThisYear();
+	}
 }

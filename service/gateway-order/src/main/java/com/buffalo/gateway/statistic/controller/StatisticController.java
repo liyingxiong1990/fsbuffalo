@@ -160,6 +160,74 @@ public class StatisticController {
 		}
 	}
 
+	/**
+	 * 外线本月销量
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/deliverySalesThisMonth", method = RequestMethod.GET)
+	public <T> Map<String, T> deliverySalesThisMonth() {
+		try {
+			List<Map> list = statisticService.deliverySalesThisMonth();
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "查询外线本月销量成功", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "查询外线本月销量失败. " + e.getMessage());
+		}
+	}
+
+	/**
+	 * 外线本月产品分析
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/deliveryProductsThisMonth", method = RequestMethod.GET)
+	public <T> Map<String, T> deliveryProductsThisMonth() {
+		try {
+			List<Map> list = statisticService.deliveryProductsThisMonth();
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "查询外线本月产品分析成功", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "查询外线本月产品分析失败. " + e.getMessage());
+		}
+	}
+
+	/**
+	 * 外线本年销量
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/deliverySalesThisYear", method = RequestMethod.GET)
+	public <T> Map<String, T> deliverySalesThisYear() {
+		try {
+			List<Map> list = statisticService.deliverySalesThisYear();
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "查询外线本年销量成功", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "查询外线本年销量失败. " + e.getMessage());
+		}
+	}
+
+	/**
+	 * 外线本年产品分析
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/deliveryProductsThisYear", method = RequestMethod.GET)
+	public <T> Map<String, T> deliveryProductsThisYear() {
+		try {
+			List<Map> list = statisticService.deliveryProductsThisYear();
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "查询外线本年产品分析成功", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "查询外线本年产品分析失败. " + e.getMessage());
+		}
+	}
+
 
 
 }

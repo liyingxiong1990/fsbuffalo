@@ -22,4 +22,12 @@ public interface StatisticService {
     public List<Map> salesEveryMonth() throws Exception;
 
     public List<Map> salesEveryDay() throws Exception;
+
+    public List<Map> deliverySalesThisMonth() throws Exception;
+
+    public List<Map> deliveryProductsThisMonth() throws Exception;
+
+    public List<Map> deliverySalesThisYear() throws Exception;
+
+    public List<Map> deliveryProductsThisYear() throws Exception;
 }

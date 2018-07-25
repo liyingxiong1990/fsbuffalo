@@ -53,4 +53,9 @@ public class StatisticServiceImpl implements StatisticService {
 	public List<Map> salesEveryMonth() throws Exception {
 		return statisticMapper.salesEveryMonth();
 	}
+
+	@Override
+	public List<Map> salesEveryDay() throws Exception {
+		return statisticMapper.salesEveryDay();
+	}
 }

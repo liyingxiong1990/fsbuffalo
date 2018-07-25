@@ -86,7 +86,18 @@
 		where wo.sys_status = 1 and woi.sys_status = 1
 		and woi.warehouse_order_id = wo.id
 		and wo.order_date BETWEEN concat(substr(CURRENT_DATE,1,4),'-01-01') and CURRENT_DATE
+		<!--and wo.order_date BETWEEN '2017-01-01' and '2017-12-31'-->
 		group by substr(order_date,1,7), type
+	</select>
+
+	<select id="salesEveryDay"  resultType="java.util.Map">
+		select sum(quantity) quantity, order_date day, type
+		from ord_warehouse_order wo,
+		ord_warehouse_order_item woi
+		where wo.sys_status = 1 and woi.sys_status = 1
+		and woi.warehouse_order_id = wo.id
+		and wo.order_date BETWEEN concat(substr(CURRENT_DATE,1,7),'-01') and CURRENT_DATE
+		group by order_date, type
 	</select>
 
 

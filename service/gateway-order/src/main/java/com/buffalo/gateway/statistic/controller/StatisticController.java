@@ -143,6 +143,23 @@ public class StatisticController {
 		}
 	}
 
+	/**
+	 * 本月各天销量
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/salesEveryDay", method = RequestMethod.GET)
+	public <T> Map<String, T> salesEveryDay() {
+		try {
+			List<Map> list = statisticService.salesEveryDay();
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "查询本月各天销量成功", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "查询本月各天销量失败. " + e.getMessage());
+		}
+	}
+
 
 
 }

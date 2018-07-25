@@ -12,7 +12,7 @@ export default {
      */
     title: {
       type: String,
-      default: '主要股东持股排名'
+      default: ''
     },
     /**
      * @augments cols 显示列

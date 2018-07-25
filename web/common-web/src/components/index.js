@@ -7,7 +7,9 @@ import BASE_TABLE from './BaseTable'
 import BASE_MAP from './BaseMap'
 import BASE_MAP_CHINA from './BaseMapChina'
 import CHART_BAR from './ChartBar'
+import CHART_BAR_HORIZONTAL from './ChartBarHorizontal'
 import CHART_HISTOGRAM from './ChartHistogram'
+import CHART_LINE from './ChartLine'
 import CHART_PIE from './ChartPie'
 import CHART_RADAR from './ChartRadar'
 import CHART_SUNBURST from './ChartSunburst'
@@ -25,7 +27,9 @@ export const BaseTable = BASE_TABLE
 export const BaseMap = BASE_MAP
 export const BaseMapChina = BASE_MAP_CHINA
 export const ChartBar = CHART_BAR
+export const ChartBarHorizontal = CHART_BAR_HORIZONTAL
 export const ChartHistogram = CHART_HISTOGRAM
+export const ChartLine = CHART_LINE
 export const ChartPie = CHART_PIE
 export const ChartRadar = CHART_RADAR
 export const ChartSunburst = CHART_SUNBURST

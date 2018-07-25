@@ -17,7 +17,7 @@ export default {
      */
     title: {
       type: String,
-      default: '主要股东持股排名'
+      default: ''
     },
     /**
      * @augments cols 显示列
@@ -133,7 +133,6 @@ export default {
       return {
         title: {
           text: this.title
-          // subtext: '数据来自网络'
         },
         tooltip: {
           trigger: 'axis',
@@ -148,7 +147,7 @@ export default {
           show: this.data,
           feature: {
             dataView: { show: true, readOnly: false },
-            magicType: { show: true, type: ['line', 'bar'] },
+            magicType: { show: true, type: ['bar'] },
             restore: { show: true },
             saveAsImage: { show: true }
           }
@@ -182,16 +181,6 @@ export default {
             axisLabel: {
               formatter: '{value}'
             }
-          },
-          {
-            type: 'value',
-            name: '占比',
-            min: 0,
-            max: 100,
-            interval: 20,
-            axisLabel: {
-              formatter: '{value} %'
-            }
           }
         ],
         series: series
@@ -208,7 +197,7 @@ export default {
       selectValue: ``,
       options: {
         title: {
-          text: '世界人口总量'
+          text: ''
           // subtext: '数据来自网络'
         },
         tooltip: {

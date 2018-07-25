@@ -31,6 +31,22 @@ export default {
     salesEveryDay: {
       url: '/statistic/salesEveryDay',
       method: 'get'
+    },
+    deliverySalesThisMonth: {
+      url: '/statistic/deliverySalesThisMonth',
+      method: 'get'
+    },
+    deliveryProductsThisMonth: {
+      url: '/statistic/deliveryProductsThisMonth',
+      method: 'get'
+    },
+    deliverySalesThisYear: {
+      url: '/statistic/deliverySalesThisYear',
+      method: 'get'
+    },
+    deliveryProductsThisYear: {
+      url: '/statistic/deliveryProductsThisYear',
+      method: 'get'
     }
   }
 }

@@ -1,5 +1,6 @@
 import Overview from './Overview'
 import StoreAnalysis from './StoreAnalysis'
+import DeliveryAnalysis from './DeliveryAnalysis'
 
 export default [
   {
@@ -11,5 +12,10 @@ export default [
     path: '/stats/store',
     name: 'StoreAnalysis',
     component: StoreAnalysis
+  },
+  {
+    path: '/stats/delivery',
+    name: 'DeliveryAnalysis',
+    component: DeliveryAnalysis
   }
 ]

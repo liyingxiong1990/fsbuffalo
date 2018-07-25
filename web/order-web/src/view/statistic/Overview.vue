@@ -40,14 +40,9 @@
 
     <div class="manage-scale">
       <div class="manage-scale-row">
-        <div class="manage-scale-row-half">
-          <chart-line :title="data.salesEveryMonthData.title" :cols="data.salesEveryMonthData.cols" :data="data.salesEveryMonthData.data"></chart-line>
-        </div>
-        <div class="manage-scale-row-half">
-          <chart-line :title="data.salesEveryDayData.title" :cols="data.salesEveryDayData.cols" :data="data.salesEveryDayData.data"></chart-line>
-        </div>
+        <chart-line :title="data.salesEveryMonthData.title" :cols="data.salesEveryMonthData.cols" :data="data.salesEveryMonthData.data"></chart-line>
+        <chart-line :title="data.salesEveryDayData.title" :cols="data.salesEveryDayData.cols" :data="data.salesEveryDayData.data"></chart-line>
       </div>
-
       <div class="manage-scale-row">
         <chart-bar-horizontal :height="1600" :width="2000" :title="data.productSalesThisMonthData.title" :cols="data.productSalesThisMonthData.cols" :data="data.productSalesThisMonthData.data"></chart-bar-horizontal>
       </div>
@@ -186,16 +181,61 @@ export default {
       let vm = this
       this.$store.state.http.auto('statistic', 'productSalesThisMonth', {}).then(res => {
         var salesArray = []
+        var deliveryArray = []
+        var driverArray = []
         var productArray = []
-        for (let item of res.data) {
-          salesArray.push(Number(item.quantity))
-          productArray.push(item.name)
+        for (var i = 0; i < res.data.length; i++) {
+          if (i % 2 === 0) {
+            salesArray.push({
+              delivery: Number(res.data[i].quantity),
+              driver: Number(res.data[i + 1].quantity),
+              name: res.data[i].name
+            })
+          }
         }
-        salesArray.reverse()
+        salesArray.sort(function (a, b) {
+          if (a.delivery + a.driver > b.delivery + b.driver) {
+            return -1
+          } else {
+            return 1
+          }
+        })
+        for (var j = 0; j < salesArray.length; j++) {
+          deliveryArray.push(salesArray[j].delivery)
+          driverArray.push(salesArray[j].driver)
+          productArray.push(salesArray[j].name)
+        }
+        deliveryArray.reverse()
+        driverArray.reverse()
         productArray.reverse()
-        vm.data.productSalesThisMonthData.data = {}
-        vm.data.productSalesThisMonthData.data['销量'] = salesArray
+        vm.data.productSalesThisMonthData.data = []
+        vm.data.productSalesThisMonthData.data.push({
+          name: '外线',
+          type: 'bar',
+          label: {
+            normal: {
+              show: true,
+              position: 'right'
+            }
+          },
+          data: deliveryArray
+        })
+        vm.data.productSalesThisMonthData.data.push({
+          name: '专卖店',
+          type: 'bar',
+          label: {
+            normal: {
+              show: true,
+              position: 'right'
+            }
+          },
+          data: driverArray
+        })
+        vm.data.productSalesThisMonthData.legend = {
+          data: ['外线', '专卖店']
+        }
         vm.data.productSalesThisMonthData.cols = productArray
+        console.log(vm.data.productSalesThisMonthData)
       }).catch(error => {
         this.$message.error(error.statusText)
         this.dialog.loading = false

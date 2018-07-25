@@ -27,6 +27,10 @@ export default {
     storeSales: {
       url: '/statistic/storeSales',
       method: 'get'
+    },
+    salesEveryDay: {
+      url: '/statistic/salesEveryDay',
+      method: 'get'
     }
   }
 }

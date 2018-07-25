@@ -38,12 +38,19 @@
 
     <div style="clear:both"></div>
 
-    <div class="manage-scale-row">
-      <chart-line :height="600" :width="800" :title="data.salesEveryMonthData.title" :cols="data.salesEveryMonthData.cols" :data="data.salesEveryMonthData.data"></chart-line>
-    </div>
+    <div class="manage-scale">
+      <div class="manage-scale-row">
+        <div class="manage-scale-row-half">
+          <chart-line :title="data.salesEveryMonthData.title" :cols="data.salesEveryMonthData.cols" :data="data.salesEveryMonthData.data"></chart-line>
+        </div>
+        <div class="manage-scale-row-half">
+          <chart-line :title="data.salesEveryDayData.title" :cols="data.salesEveryDayData.cols" :data="data.salesEveryDayData.data"></chart-line>
+        </div>
+      </div>
 
-    <div class="manage-scale-row">
-      <chart-bar-horizontal :height="1600" :width="2000" :title="data.productSalesThisMonthData.title" :cols="data.productSalesThisMonthData.cols" :data="data.productSalesThisMonthData.data"></chart-bar-horizontal>
+      <div class="manage-scale-row">
+        <chart-bar-horizontal :height="1600" :width="2000" :title="data.productSalesThisMonthData.title" :cols="data.productSalesThisMonthData.cols" :data="data.productSalesThisMonthData.data"></chart-bar-horizontal>
+      </div>
     </div>
   </div>
 
@@ -87,7 +94,13 @@ export default {
           data: []
         },
         salesEveryMonthData: {
-          title: '销量走势',
+          title: '今年销量走势',
+          legend: [],
+          cols: [],
+          data: []
+        },
+        salesEveryDayData: {
+          title: '本月销量走势',
           legend: [],
           cols: [],
           data: []
@@ -104,6 +117,7 @@ export default {
       this.todayCheckin()
       this.productSalesThisMonth()
       this.salesEveryMonth()
+      this.salesEveryDay()
     },
     todaySales () {
       this.$store.state.http.auto('statistic', 'todaySales', {}).then(res => {
@@ -191,7 +205,6 @@ export default {
     salesEveryMonth () {
       let vm = this
       this.$store.state.http.auto('statistic', 'salesEveryMonth', {}).then(res => {
-        debugger
         var deliverSalesArray = []
         var driverSalesArray = []
         var totalSalesArray = []
@@ -205,13 +218,40 @@ export default {
             driverSalesArray.push(Number(res.data[i].quantity))
           }
         }
-        debugger
         vm.data.salesEveryMonthData.legend = ['外线', '专卖店', '总量']
         vm.data.salesEveryMonthData.data = {}
         vm.data.salesEveryMonthData.data['外线'] = deliverSalesArray
         vm.data.salesEveryMonthData.data['专卖店'] = driverSalesArray
         vm.data.salesEveryMonthData.data['总量'] = totalSalesArray
         vm.data.salesEveryMonthData.cols = monthArray
+      }).catch(error => {
+        this.$message.error(error.statusText)
+        this.dialog.loading = false
+        console.log(error)
+      })
+    },
+    salesEveryDay () {
+      let vm = this
+      this.$store.state.http.auto('statistic', 'salesEveryDay', {}).then(res => {
+        var deliverSalesArray = []
+        var driverSalesArray = []
+        var totalSalesArray = []
+        var dayArray = []
+        for (var i = 0; i < res.data.length; i++) {
+          if (i % 2 === 0) {
+            dayArray.push(res.data[i].day)
+            deliverSalesArray.push(Number(res.data[i].quantity))
+            totalSalesArray.push(Number(res.data[i].quantity) + Number(res.data[i + 1].quantity))
+          } else {
+            driverSalesArray.push(Number(res.data[i].quantity))
+          }
+        }
+        vm.data.salesEveryDayData.legend = ['外线', '专卖店', '总量']
+        vm.data.salesEveryDayData.data = {}
+        vm.data.salesEveryDayData.data['外线'] = deliverSalesArray
+        vm.data.salesEveryDayData.data['专卖店'] = driverSalesArray
+        vm.data.salesEveryDayData.data['总量'] = totalSalesArray
+        vm.data.salesEveryDayData.cols = dayArray
       }).catch(error => {
         this.$message.error(error.statusText)
         this.dialog.loading = false
@@ -243,6 +283,24 @@ export default {
       .planar-box-content {
         margin-bottom: 10px;
         color: #9c9ea2;
+      }
+    }
+  }
+}
+
+.manage-scale {
+  padding-top: 15px;
+  width: 100%;
+  .manage-scale-row {
+    width: 100%;
+    .manage-scale-row-half {
+      width: calc(50% - 8px);
+      float: left;
+      &:nth-child(2n + 1) {
+        margin-right: 8px;
+      }
+      &:nth-child(2n) {
+        margin-left: 8px;
       }
     }
   }

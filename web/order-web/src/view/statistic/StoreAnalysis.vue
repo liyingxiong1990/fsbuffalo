@@ -43,6 +43,9 @@
       <div class="manage-scale-row">
         <chart-pie :title="data.storeProductSalesThisYearData.title" :cols="data.storeProductSalesThisYearData.cols" :data="data.storeProductSalesThisYearData.data"></chart-pie>
       </div>
+      <div class="manage-scale-row">
+        <chart-pie :title="data.storeLineSalesThisYearData.title" :cols="data.storeLineSalesThisYearData.cols" :data="data.storeLineSalesThisYearData.data"></chart-pie>
+      </div>
     </div>
   </div>
 
@@ -110,6 +113,11 @@ export default {
           title: '今年专卖店产品销量',
           cols: [],
           data: {}
+        },
+        storeLineSalesThisYearData: {
+          title: '今年专卖店线路分析',
+          cols: [],
+          data: {}
         }
       }
     }
@@ -123,6 +131,7 @@ export default {
       this.storeProductSalesThisMonth()
       this.storeSalesThisYear()
       this.storeProductSalesThisYear()
+      this.storeLineSalesThisYear()
     },
     todaySales () {
       this.$store.state.http.auto('statistic', 'todaySales', {}).then(res => {
@@ -325,6 +334,22 @@ export default {
             prop: item.name
           })
           vm.data.storeProductSalesThisYearData.data[item.name] = Number(item.quantity)
+        }
+      }).catch(error => {
+        vm.$message.error(error.statusText)
+        vm.dialog.loading = false
+        console.log(error)
+      })
+    },
+    storeLineSalesThisYear () {
+      let vm = this
+      this.$store.state.http.auto('statistic', 'storeLineSalesThisYear', {}).then(res => {
+        for (let item of res.data) {
+          vm.data.storeLineSalesThisYearData.cols.push({
+            label: item.remarks,
+            prop: item.remarks
+          })
+          vm.data.storeLineSalesThisYearData.data[item.remarks] = Number(item.quantity)
         }
       }).catch(error => {
         vm.$message.error(error.statusText)

@@ -63,6 +63,10 @@ export default {
     storeProductSalesThisYear: {
       url: '/statistic/storeProductSalesThisYear',
       method: 'get'
+    },
+    storeLineSalesThisYear: {
+      url: '/statistic/storeLineSalesThisYear',
+      method: 'get'
     }
   }
 }

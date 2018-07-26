@@ -19,8 +19,6 @@ public interface StatisticMapper {
 
     public List<Map> todayCheckin() throws Exception;
 
-    public List<Map> storeSales(Period period) throws Exception;
-
     public List<Map> productSalesThisMonth() throws Exception;
 
     public List<Map> productSalesThisYear() throws Exception;
@@ -36,4 +34,12 @@ public interface StatisticMapper {
     public List<Map> deliverySalesThisYear() throws Exception;
 
     public List<Map> deliveryProductsThisYear() throws Exception;
+
+    public List<Map> storeSalesThisMonth() throws Exception;
+
+    public List<Map> storeProductSalesThisMonth() throws Exception;
+
+    public List<Map> storeSalesThisYear() throws Exception;
+
+    public List<Map> storeProductSalesThisYear() throws Exception;
 }

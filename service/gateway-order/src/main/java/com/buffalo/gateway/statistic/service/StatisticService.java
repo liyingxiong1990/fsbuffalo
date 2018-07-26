@@ -15,8 +15,6 @@ public interface StatisticService {
 
     public List<Map> todayCheckin()  throws Exception;
 
-    public List<Map> storeSales(String startTime, String endTime) throws Exception;
-
     public List<Map> productSalesThisMonth() throws Exception;
 
     public List<Map> productSalesThisYear() throws Exception;
@@ -33,5 +31,11 @@ public interface StatisticService {
 
     public List<Map> deliveryProductsThisYear() throws Exception;
 
+    public List<Map> storeSalesThisMonth() throws Exception;
 
+    public List<Map> storeProductSalesThisMonth() throws Exception;
+
+    public List<Map> storeSalesThisYear() throws Exception;
+
+    public List<Map> storeProductSalesThisYear() throws Exception;
 }

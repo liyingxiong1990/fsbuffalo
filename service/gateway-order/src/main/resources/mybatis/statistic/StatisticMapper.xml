@@ -43,27 +43,6 @@
 		and co.checkin_date = CURRENT_DATE
 	</select>
 
-	<select id="storeSales" parameterType="com.buffalo.gateway.statistic.model.Period" resultType="java.util.Map">
-		select tt.store_id, store.store_name, tt.quantity from
-		(
-			select sum(delivererOrderItem.quantity) quantity, store_id
-			from ord_deliverer_order delivererOrder,
-			ord_deliverer_order_item  delivererOrderItem
-			where delivererOrder.id = delivererOrderItem.deliverer_order_id
-			and delivererOrder.sys_status = 1 and delivererOrderItem.sys_status = 1
-			and delivererOrderItem.quantity > 0
-			<if test="startTime != ''">
-				and order_date <![CDATA[ >= ]]>  #{startTime}
-			</if>
-			<if test="endTime != ''">
-				and order_date <![CDATA[ <= ]]>  #{endTime}
-			</if>
-			group by delivererOrder.store_id
-			) tt, ent_store store
-			where store.id = tt.store_id
-		order by  tt.quantity desc limit 20
-	</select>
-
 	<select id="productSalesThisMonth"  resultType="java.util.Map">
 		select tt.quantity, product.name, tt.type from
 		(
@@ -190,6 +169,70 @@
 		)tt, ent_product product
 		where product.id = tt.product_id
 		order by tt.quantity desc
+	</select>
+
+	<select id="storeSalesThisMonth"  resultType="java.util.Map">
+		select tt.store_id, store.store_name, tt.quantity from
+		(
+		select sum(delivererOrderItem.quantity) quantity, store_id
+		from ord_deliverer_order delivererOrder,
+		ord_deliverer_order_item  delivererOrderItem
+		where delivererOrder.id = delivererOrderItem.deliverer_order_id
+		and delivererOrder.sys_status = 1 and delivererOrderItem.sys_status = 1
+		and delivererOrderItem.quantity > 0
+		and delivererOrder.order_date BETWEEN concat(substr(CURRENT_DATE,1,7),'-01') and CURRENT_DATE
+		group by delivererOrder.store_id
+		) tt, ent_store store
+		where store.id = tt.store_id
+		order by  tt.quantity desc
+	</select>
+
+	<select id="storeProductSalesThisMonth"  resultType="java.util.Map">
+		select product.name, tt.product_id, tt.quantity from
+		(
+		select sum(delivererOrderItem.quantity) quantity, product_id
+		from ord_deliverer_order delivererOrder,
+		ord_deliverer_order_item  delivererOrderItem
+		where delivererOrder.id = delivererOrderItem.deliverer_order_id
+		and delivererOrder.sys_status = 1 and delivererOrderItem.sys_status = 1
+		and delivererOrderItem.quantity > 0
+		and delivererOrder.order_date BETWEEN concat(substr(CURRENT_DATE,1,7),'-01') and CURRENT_DATE
+		group by product_id
+		) tt, ent_product product
+		where product.id = tt.product_id
+		order by  tt.quantity desc
+	</select>
+
+	<select id="storeSalesThisYear"  resultType="java.util.Map">
+		select tt.store_id, store.store_name, tt.quantity from
+		(
+		select sum(delivererOrderItem.quantity) quantity, store_id
+		from ord_deliverer_order delivererOrder,
+		ord_deliverer_order_item  delivererOrderItem
+		where delivererOrder.id = delivererOrderItem.deliverer_order_id
+		and delivererOrder.sys_status = 1 and delivererOrderItem.sys_status = 1
+		and delivererOrderItem.quantity > 0
+		and delivererOrder.order_date BETWEEN concat(substr(CURRENT_DATE,1,4),'-01-01') and CURRENT_DATE
+		group by delivererOrder.store_id
+		) tt, ent_store store
+		where store.id = tt.store_id
+		order by  tt.quantity desc
+	</select>
+
+	<select id="storeProductSalesThisYear"  resultType="java.util.Map">
+		select product.name, tt.product_id, tt.quantity from
+		(
+		select sum(delivererOrderItem.quantity) quantity, product_id
+		from ord_deliverer_order delivererOrder,
+		ord_deliverer_order_item  delivererOrderItem
+		where delivererOrder.id = delivererOrderItem.deliverer_order_id
+		and delivererOrder.sys_status = 1 and delivererOrderItem.sys_status = 1
+		and delivererOrderItem.quantity > 0
+		and delivererOrder.order_date BETWEEN concat(substr(CURRENT_DATE,1,4),'-01-01') and CURRENT_DATE
+		group by product_id
+		) tt, ent_product product
+		where product.id = tt.product_id
+		order by  tt.quantity desc
 	</select>
 
 </mapper>

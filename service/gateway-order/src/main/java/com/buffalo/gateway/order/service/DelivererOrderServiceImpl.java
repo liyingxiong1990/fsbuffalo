@@ -52,6 +52,7 @@ public class DelivererOrderServiceImpl implements DelivererOrderService {
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);
+		calendar.add(Calendar.DATE, -1);
 		delivererOrder.setBound_time(calendar.getTime());
 		return delivererOrderMapper.list(delivererOrder);
 	}

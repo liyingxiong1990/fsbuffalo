@@ -42,6 +42,7 @@ public class InventoryServiceImpl implements InventoryService {
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);
+		calendar.add(Calendar.DATE, -1);
 		inventory.setBound_time(calendar.getTime());
 		return inventoryMapper.list(inventory);
 	}

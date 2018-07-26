@@ -37,14 +37,6 @@ public class StatisticServiceImpl implements StatisticService {
 	}
 
 	@Override
-	public List<Map> storeSales(String startTime,String endTime) throws Exception {
-		Period period = new Period();
-		period.setStartTime(startTime);
-		period.setEndTime(endTime);
-		return statisticMapper.storeSales(period);
-	}
-
-	@Override
 	public List<Map> productSalesThisMonth() throws Exception {
 		return statisticMapper.productSalesThisMonth();
 	}
@@ -82,5 +74,25 @@ public class StatisticServiceImpl implements StatisticService {
 	@Override
 	public List<Map> deliveryProductsThisYear() throws Exception {
 		return statisticMapper.deliveryProductsThisYear();
+	}
+
+	@Override
+	public List<Map> storeSalesThisMonth() throws Exception {
+		return statisticMapper.storeSalesThisMonth();
+	}
+
+	@Override
+	public List<Map> storeProductSalesThisMonth() throws Exception {
+		return statisticMapper.storeProductSalesThisMonth();
+	}
+
+	@Override
+	public List<Map> storeSalesThisYear() throws Exception {
+		return statisticMapper.storeSalesThisYear();
+	}
+
+	@Override
+	public List<Map> storeProductSalesThisYear() throws Exception {
+		return statisticMapper.storeProductSalesThisYear();
 	}
 }

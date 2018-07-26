@@ -47,6 +47,7 @@ public class CheckinOrderServiceImpl implements CheckinOrderService {
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);
+		calendar.add(Calendar.DATE, -1);
 		checkinOrder.setBound_time(calendar.getTime());
 		return checkinOrderMapper.list(checkinOrder);
 	}

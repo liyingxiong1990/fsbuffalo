@@ -28,10 +28,6 @@ export default {
       url: '/statistic/salesEveryMonth',
       method: 'get'
     },
-    storeSales: {
-      url: '/statistic/storeSales',
-      method: 'get'
-    },
     salesEveryDay: {
       url: '/statistic/salesEveryDay',
       method: 'get'
@@ -50,6 +46,22 @@ export default {
     },
     deliveryProductsThisYear: {
       url: '/statistic/deliveryProductsThisYear',
+      method: 'get'
+    },
+    storeSalesThisMonth: {
+      url: '/statistic/storeSalesThisMonth',
+      method: 'get'
+    },
+    storeProductSalesThisMonth: {
+      url: '/statistic/storeProductSalesThisMonth',
+      method: 'get'
+    },
+    storeSalesThisYear: {
+      url: '/statistic/storeSalesThisYear',
+      method: 'get'
+    },
+    storeProductSalesThisYear: {
+      url: '/statistic/storeProductSalesThisYear',
       method: 'get'
     }
   }

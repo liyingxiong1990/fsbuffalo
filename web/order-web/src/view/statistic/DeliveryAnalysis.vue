@@ -58,7 +58,7 @@
 
 <script>
 export default {
-  name: 'statsOverview', // 概况
+  name: 'statsOverview', // 外线分析
   props: {
   },
   created () {

@@ -1,283 +1,314 @@
 <template>
-  <div class="manage-scale">
-    <!-- <div class="manage-scale-row">
-      <div class="manage-scale-row-half">
-        <base-map-china :mapDatas="mapDataChina"></base-map-china>
+  <div class="stats-province-overview">
+    <div class="planar">
+      <div class="planar-box">
+        <div class="planar-box-title">
+          今天销量
+        </div>
+        <div class="planar-box-content">
+          {{data.todaySalesDriver}}
+        </div>
       </div>
-      <div class="manage-scale-row-half">
-        <base-map :mapDatas="mapData"></base-map>
+      <div class="planar-box">
+        <div class="planar-box-title">
+          本月销量
+        </div>
+        <div class="planar-box-content">
+          {{data.thisMonthSalesDriver}}
+        </div>
+      </div>
+      <div class="planar-box">
+        <div class="planar-box-title">
+          本年销量
+        </div>
+        <div class="planar-box-content">
+          {{data.thisYearSalesDriver}}
+        </div>
       </div>
       <div style="clear:both"></div>
     </div>
-    <div class="manage-scale-row">
-      <div class="manage-scale-row-half">
-        <chart-pie :title="pieQuotedTypeData.title" :cols="pieQuotedTypeData.cols" :data="pieQuotedTypeData.data"></chart-pie>
-      </div>
-      <div class="manage-scale-row-half">
-        <chart-histogram :title="histogramIndustryData.title" :grid="histogramIndustryData.grid" :rotate="histogramIndustryData.rotate" :cols="histogramIndustryData.cols" :classifyData="histogramIndustryData.classifyData" :select="histogramIndustryData.select"></chart-histogram>
-      </div>
-      <div style="clear:both"></div>
-    </div>
-    <div class="manage-scale-row">
-      <div class="manage-scale-row-half">
-        <chart-pie :title="pieOperatingCenterData.title" :cols="pieOperatingCenterData.cols" :data="pieOperatingCenterData.data"></chart-pie>
-      </div>
-      <div class="manage-scale-row-half">
-        <chart-pie :title="pieCompanyTypeData.title" :cols="pieCompanyTypeData.cols" :data="pieCompanyTypeData.data"></chart-pie>
-      </div>
-      <div style="clear:both"></div>
-    </div> -->
-    <div class="manage-scale-row">
-      <!-- <div class="block">
-        <span class="demonstration">开始</span>
-        <el-date-picker @change="storeSales" v-model="storeSalesPeriodStart" type="month" placeholder="选择月"></el-date-picker>
-        <span class="demonstration">结束</span>
-        <el-date-picker @change="storeSales" v-model="storeSalesPeriodEnd" type="month" placeholder="选择月"></el-date-picker>
-      </div> -->
-      <div class="block">
-        <span class="demonstration">请选择时间范围</span>
-        <el-date-picker @change="storeSales" v-model="timePeriod" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2"></el-date-picker>
-      </div>
-      <chart-histogram :height="600" :title="histogramStoreData.title" :grid="histogramStoreData.grid" :rotate="histogramStoreData.rotate" :cols="histogramStoreData.cols" :classifyData="histogramStoreData.classifyData" :select="histogramStoreData.select"></chart-histogram>
-    </div>
+
     <div style="clear:both"></div>
+
+    <div class="manage-scale">
+      <div class="manage-scale-row">
+        <chart-bar-horizontal :height="1600" :width="2000" :title="data.storeSalesThisMonthData.title" :cols="data.storeSalesThisMonthData.cols" :data="data.storeSalesThisMonthData.data"></chart-bar-horizontal>
+      </div>
+      <div class="manage-scale-row">
+        <chart-pie :title="data.storeProductSalesThisMonthData.title" :cols="data.storeProductSalesThisMonthData.cols" :data="data.storeProductSalesThisMonthData.data"></chart-pie>
+      </div>
+      <div class="manage-scale-row">
+        <chart-bar-horizontal :height="1600" :width="2000" :title="data.storeSalesThisYearData.title" :cols="data.storeSalesThisYearData.cols" :data="data.storeSalesThisYearData.data"></chart-bar-horizontal>
+      </div>
+      <div class="manage-scale-row">
+        <chart-pie :title="data.storeProductSalesThisYearData.title" :cols="data.storeProductSalesThisYearData.cols" :data="data.storeProductSalesThisYearData.data"></chart-pie>
+      </div>
+    </div>
   </div>
+
 </template>
 
 <script>
-import {
-  tableColumnFormatterTool
-} from 'gdotc@common/assets/common/common'
 export default {
-  name: 'StoreAnalysis', // 企业分析
+  name: 'statsOverview', // 专卖店分析
   props: {
   },
   created () {
     this.initData()
-    // this.provinceAnalysis()
-    // this.cityAnalysis()
-    // this.companyTypeAnalysis()
-    // this.quotedTypeAnalysis()
-    // this.industryAnalysis()
-    // this.operatingCenterAnalysis()
-    this.storeSales()
   },
   computed: {
-    dictProvince () {
-      return this.$store.getters.sysDict('ent_province')
+    dictType () {
+      return this.$store.getters.sysDict('statistic_role_type')
     }
   },
   data () {
     return {
-      timePeriod: '',
-      storeSalesPeriodStart: '',
-      storeSalesPeriodEnd: '',
-      pickerOptions2: {
-        shortcuts: [{
-          text: '最近一周',
-          onClick (picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '最近一个月',
-          onClick (picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '最近三个月',
-          onClick (picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-            picker.$emit('pick', [start, end])
-          }
-        }]
-      },
-      mapDataChina: [],
-      mapData: [],
-      pieCompanyTypeData: {
-        title: '企业类型分析',
-        cols: [
-          {
-            label: '注册',
-            prop: '00'
-          },
-          {
-            label: '纯托管',
-            prop: '01'
-          },
-          {
-            label: '纯挂牌',
-            prop: '02'
-          },
-          {
-            label: '挂牌托管',
-            prop: '03'
-          },
-          {
-            label: '托管注册',
-            prop: '04'
-          }
-        ],
-        data: {
-          '00': 0,
-          '01': 0,
-          '02': 0,
-          '03': 0,
-          '04': 0
-        }
-      },
-      pieQuotedTypeData: {
-        title: '挂牌板块分析',
-        cols: [
-          {
-            label: '主板',
-            prop: '00'
-          },
-          {
-            label: '科技版',
-            prop: '01'
-          },
-          {
-            label: '华侨版展示层',
-            prop: '02'
-          },
-          {
-            label: '华侨版交易层',
-            prop: '03'
-          }
-        ],
-        data: {
-          '00': 0,
-          '01': 0,
-          '02': 0,
-          '03': 0
-        }
-      },
-      histogramIndustryData: {
-        title: '企业行业分析',
-        select: `行业`,
-        grid: { // 控制图的大小，调整下面这些值就可以，
-          x: 50, // 左侧宽度
-          x2: 50, // 右侧宽度
-          y2: 170 // x轴标题高度
+      data: {
+        todaySalesDriver: 0,
+        thisMonthSalesDriver: 0,
+        thisYearSalesDriver: 0,
+        storeSalesThisMonthData: {
+          title: '本月各专卖店销量',
+          cols: [
+            {
+              label: '销量',
+              type: 'bar',
+              prop: 'all'
+            }
+          ],
+          data: []
         },
-        rotate: 75,
-        cols: [
-          {
-            label: '数量',
-            type: 'bar',
-            prop: 'quantity'
-          }
-        ],
-        classifyData: [
-          {
-            name: `行业`,
-            data: []
-          }
-        ]
-      },
-      histogramRegisterData: {
-        title: '注册企业',
-        select: `地域`,
-        cols: [
-          {
-            label: '数量',
-            type: 'bar',
-            prop: 'quantity'
-          }
-        ],
-        classifyData: [
-          {
-            name: `地域`,
-            data: [
-              {
-                name: `佛山市`,
-                quantity: 187891
-              },
-              {
-                name: `珠海市`,
-                quantity: 135747
-              },
-              {
-                name: `中山市`,
-                quantity: 84561
-              },
-              {
-                name: `江门市`,
-                quantity: 53274
-              }
-            ]
-          }
-        ]
-      },
-      pieOperatingCenterData: {
-        title: '运营中心',
-        cols: [
-          {
-            label: '佛山运营中心',
-            prop: 'fs'
-          },
-          {
-            label: '广州运营中心',
-            prop: 'gz'
-          }
-        ],
-        data: {
-          fs: 0,
-          gz: 0
-        }
-      },
-      histogramStoreData: {
-        title: '专卖店销量Top20',
-        select: `销量`,
-        grid: { // 控制图的大小，调整下面这些值就可以，
-          y2: 210 // x轴标题高度
+        storeSalesThisYearData: {
+          title: '今年各专卖店销量',
+          cols: [
+            {
+              label: '销量',
+              type: 'bar',
+              prop: 'all'
+            }
+          ],
+          data: []
         },
-        rotate: 15,
-        cols: [
-          {
-            label: '销量',
-            type: 'bar',
-            prop: 'quantity'
-          }
-        ],
-        classifyData: [
-          {
-            name: `销量`,
-            data: []
-          }
-        ]
+        salesEveryMonthData: {
+          title: '今年销量走势',
+          legend: [],
+          cols: [],
+          data: []
+        },
+        salesEveryDayData: {
+          title: '本月销量走势',
+          legend: [],
+          cols: [],
+          data: []
+        },
+        storeProductSalesThisMonthData: {
+          title: '本月专卖店产品销量',
+          cols: [],
+          data: {}
+        },
+        storeProductSalesThisYearData: {
+          title: '今年专卖店产品销量',
+          cols: [],
+          data: {}
+        }
       }
     }
   },
   methods: {
     initData () {
-      const end = new Date()
-      const start = new Date()
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-      this.timePeriod = []
-      this.timePeriod.push(start)
-      this.timePeriod.push(end)
+      this.todaySales()
+      this.thisMonthSales()
+      this.thisYearSales()
+      this.storeSalesThisMonth()
+      this.storeProductSalesThisMonth()
+      this.storeSalesThisYear()
+      this.storeProductSalesThisYear()
     },
-    formatterProvince (cellValue) {
-      return tableColumnFormatterTool(this.dictProvince, cellValue)
+    todaySales () {
+      this.$store.state.http.auto('statistic', 'todaySales', {}).then(res => {
+        this.data.todaySales = 0
+        for (var item in res.data) {
+          if (res.data[item].type === 'deliver') {
+            this.data.todaySales += res.data[item].quantity
+            this.data.todaySalesDelivery = res.data[item].quantity
+          } else if (res.data[item].type === 'driver') {
+            this.data.todaySales += res.data[item].quantity
+            this.data.todaySalesDriver = res.data[item].quantity
+          }
+        }
+      }).catch(error => {
+        this.$message.error(error.statusText)
+        this.dialog.loading = false
+        console.log(error)
+      })
     },
-    provinceAnalysis () {
+    thisMonthSales () {
+      this.$store.state.http.auto('statistic', 'thisMonthSales', {}).then(res => {
+        this.data.thisMonthSales = 0
+        for (var item in res.data) {
+          if (res.data[item].type === 'deliver') {
+            this.data.thisMonthSales += res.data[item].quantity
+            this.data.thisMonthSalesDelivery = res.data[item].quantity
+          } else if (res.data[item].type === 'driver') {
+            this.data.thisMonthSales += res.data[item].quantity
+            this.data.thisMonthSalesDriver = res.data[item].quantity
+          }
+        }
+      }).catch(error => {
+        this.$message.error(error.statusText)
+        this.dialog.loading = false
+        console.log(error)
+      })
+    },
+    thisYearSales () {
+      this.$store.state.http.auto('statistic', 'thisYearSales', {}).then(res => {
+        this.data.thisYearSales = 0
+        for (var item in res.data) {
+          if (res.data[item].type === 'deliver') {
+            this.data.thisYearSales += res.data[item].quantity
+            this.data.thisYearSalesDelivery = res.data[item].quantity
+          } else if (res.data[item].type === 'driver') {
+            this.data.thisYearSales += res.data[item].quantity
+            this.data.thisYearSalesDriver = res.data[item].quantity
+          }
+        }
+      }).catch(error => {
+        this.$message.error(error.statusText)
+        this.dialog.loading = false
+        console.log(error)
+      })
+    },
+    storeSalesThisMonth () {
       let vm = this
-      let dp = this.dictProvince
-      this.$store.state.http.auto('bossStatistic', 'provinceAnalysis', {}).then(res => {
+      this.$store.state.http.auto('statistic', 'storeSalesThisMonth', {}).then(res => {
+        var salesArray = []
+        var storeArray = []
+        for (var i = 0; i < res.data.length; i++) {
+          storeArray.push(res.data[i].store_name)
+          salesArray.push(res.data[i].quantity)
+        }
+        storeArray.reverse()
+        salesArray.reverse()
+        vm.data.storeSalesThisMonthData.data = []
+        vm.data.storeSalesThisMonthData.data.push({
+          name: '销量',
+          type: 'bar',
+          label: {
+            normal: {
+              show: true,
+              position: 'right'
+            }
+          },
+          data: salesArray
+        })
+        vm.data.storeSalesThisMonthData.legend = {
+          data: ['销量']
+        }
+        vm.data.storeSalesThisMonthData.cols = storeArray
+      }).catch(error => {
+        this.$message.error(error.statusText)
+        this.dialog.loading = false
+        console.log(error)
+      })
+    },
+    storeSalesThisYear () {
+      let vm = this
+      this.$store.state.http.auto('statistic', 'storeSalesThisYear', {}).then(res => {
+        var salesArray = []
+        var storeArray = []
+        for (var i = 0; i < res.data.length; i++) {
+          storeArray.push(res.data[i].store_name)
+          salesArray.push(res.data[i].quantity)
+        }
+        storeArray.reverse()
+        salesArray.reverse()
+        vm.data.storeSalesThisYearData.data = []
+        vm.data.storeSalesThisYearData.data.push({
+          name: '销量',
+          type: 'bar',
+          label: {
+            normal: {
+              show: true,
+              position: 'right'
+            }
+          },
+          data: salesArray
+        })
+        vm.data.storeSalesThisYearData.legend = {
+          data: ['销量']
+        }
+        vm.data.storeSalesThisYearData.cols = storeArray
+      }).catch(error => {
+        this.$message.error(error.statusText)
+        this.dialog.loading = false
+        console.log(error)
+      })
+    },
+    salesEveryMonth () {
+      let vm = this
+      this.$store.state.http.auto('statistic', 'salesEveryMonth', {}).then(res => {
+        var deliverSalesArray = []
+        var driverSalesArray = []
+        var totalSalesArray = []
+        var monthArray = []
+        for (var i = 0; i < res.data.length; i++) {
+          if (i % 2 === 0) {
+            monthArray.push(res.data[i].month)
+            deliverSalesArray.push(Number(res.data[i].quantity))
+            totalSalesArray.push(Number(res.data[i].quantity) + Number(res.data[i + 1].quantity))
+          } else {
+            driverSalesArray.push(Number(res.data[i].quantity))
+          }
+        }
+        vm.data.salesEveryMonthData.legend = ['外线', '专卖店', '总量']
+        vm.data.salesEveryMonthData.data = {}
+        vm.data.salesEveryMonthData.data['外线'] = deliverSalesArray
+        vm.data.salesEveryMonthData.data['专卖店'] = driverSalesArray
+        vm.data.salesEveryMonthData.data['总量'] = totalSalesArray
+        vm.data.salesEveryMonthData.cols = monthArray
+      }).catch(error => {
+        this.$message.error(error.statusText)
+        this.dialog.loading = false
+        console.log(error)
+      })
+    },
+    salesEveryDay () {
+      let vm = this
+      this.$store.state.http.auto('statistic', 'salesEveryDay', {}).then(res => {
+        var deliverSalesArray = []
+        var driverSalesArray = []
+        var totalSalesArray = []
+        var dayArray = []
+        for (var i = 0; i < res.data.length; i++) {
+          if (i % 2 === 0) {
+            dayArray.push(res.data[i].day)
+            deliverSalesArray.push(Number(res.data[i].quantity))
+            totalSalesArray.push(Number(res.data[i].quantity) + Number(res.data[i + 1].quantity))
+          } else {
+            driverSalesArray.push(Number(res.data[i].quantity))
+          }
+        }
+        vm.data.salesEveryDayData.legend = ['外线', '专卖店', '总量']
+        vm.data.salesEveryDayData.data = {}
+        vm.data.salesEveryDayData.data['外线'] = deliverSalesArray
+        vm.data.salesEveryDayData.data['专卖店'] = driverSalesArray
+        vm.data.salesEveryDayData.data['总量'] = totalSalesArray
+        vm.data.salesEveryDayData.cols = dayArray
+      }).catch(error => {
+        this.$message.error(error.statusText)
+        this.dialog.loading = false
+        console.log(error)
+      })
+    },
+    storeProductSalesThisMonth () {
+      let vm = this
+      this.$store.state.http.auto('statistic', 'storeProductSalesThisMonth', {}).then(res => {
         for (let item of res.data) {
-          vm.mapDataChina.push({
-            value: Number(item.count),
-            name: tableColumnFormatterTool(dp, item.province).split('省')[0]
+          vm.data.storeProductSalesThisMonthData.cols.push({
+            label: item.name,
+            prop: item.name
           })
+          vm.data.storeProductSalesThisMonthData.data[item.name] = Number(item.quantity)
         }
       }).catch(error => {
         vm.$message.error(error.statusText)
@@ -285,81 +316,15 @@ export default {
         console.log(error)
       })
     },
-    cityAnalysis () {
+    storeProductSalesThisYear () {
       let vm = this
-      this.$store.state.http.auto('bossStatistic', 'cityAnalysis', {}).then(res => {
+      this.$store.state.http.auto('statistic', 'storeProductSalesThisYear', {}).then(res => {
         for (let item of res.data) {
-          vm.mapData.push({
-            value: Number(item.count),
-            name: item.place
+          vm.data.storeProductSalesThisYearData.cols.push({
+            label: item.name,
+            prop: item.name
           })
-        }
-      }).catch(error => {
-        vm.$message.error(error.statusText)
-        vm.dialog.loading = false
-        console.log(error)
-      })
-    },
-    companyTypeAnalysis () {
-      let vm = this
-      this.$store.state.http.auto('bossStatistic', 'companyTypeAnalysis', {}).then(res => {
-        for (let item of res.data) {
-          vm.pieCompanyTypeData.data[item.company_type] = Number(item.count)
-        }
-      }).catch(error => {
-        vm.$message.error(error.statusText)
-        vm.dialog.loading = false
-        console.log(error)
-      })
-    },
-    quotedTypeAnalysis () {
-      let vm = this
-      this.$store.state.http.auto('bossStatistic', 'quotedTypeAnalysis', {}).then(res => {
-        for (let item of res.data) {
-          vm.pieQuotedTypeData.data[item.quoted_type] = Number(item.count)
-        }
-      }).catch(error => {
-        vm.$message.error(error.statusText)
-        vm.dialog.loading = false
-        console.log(error)
-      })
-    },
-    industryAnalysis () {
-      let vm = this
-      this.$store.state.http.auto('bossStatistic', 'industryAnalysis', {}).then(res => {
-        for (let item of res.data) {
-          vm.histogramIndustryData.classifyData[0].data.push({
-            quantity: Number(item.count),
-            name: item.industry
-          })
-        }
-      }).catch(error => {
-        vm.$message.error(error.statusText)
-        vm.dialog.loading = false
-        console.log(error)
-      })
-    },
-    operatingCenterAnalysis () {
-      let vm = this
-      this.$store.state.http.auto('bossStatistic', 'operatingCenterAnalysis', {}).then(res => {
-        for (let item of res.data) {
-          vm.pieOperatingCenterData.data[item.operating_center] = Number(item.count)
-        }
-      }).catch(error => {
-        vm.$message.error(error.statusText)
-        vm.dialog.loading = false
-        console.log(error)
-      })
-    },
-    storeSales () {
-      let vm = this
-      this.$store.state.http.auto('statistic', 'storeSales', { params: { startTime: vm.timePeriod[0], endTime: vm.timePeriod[1] } }).then(res => {
-        vm.histogramStoreData.classifyData[0].data = []
-        for (let item of res.data) {
-          vm.histogramStoreData.classifyData[0].data.push({
-            quantity: Number(item.quantity),
-            name: item.store_name
-          })
+          vm.data.storeProductSalesThisYearData.data[item.name] = Number(item.quantity)
         }
       }).catch(error => {
         vm.$message.error(error.statusText)
@@ -373,12 +338,30 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-.manage-scale-row {
-  padding-bottom: 30px;
+.stats-province-overview {
+  width: 100%;
+  padding: 20px 50px;
+  box-sizing: border-box;
+  .planar {
+    width: 100%;
+    box-sizing: border-box;
+    .planar-box {
+      float: left;
+      width: 260px;
+      margin: 0 30px 10px;
+      border-bottom: 1px solid #e4e7ed;
+      .planar-box-title {
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+      .planar-box-content {
+        margin-bottom: 10px;
+        color: #9c9ea2;
+      }
+    }
+  }
 }
-</style>
 
-<style lang="scss">
 .manage-scale {
   padding-top: 15px;
   width: 100%;
@@ -396,4 +379,7 @@ export default {
     }
   }
 }
+</style>
+
+<style lang="scss">
 </style>

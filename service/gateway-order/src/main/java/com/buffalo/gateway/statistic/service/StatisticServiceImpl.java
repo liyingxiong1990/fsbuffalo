@@ -95,4 +95,9 @@ public class StatisticServiceImpl implements StatisticService {
 	public List<Map> storeProductSalesThisYear() throws Exception {
 		return statisticMapper.storeProductSalesThisYear();
 	}
+
+	@Override
+	public List<Map> storeLineSalesThisYear() throws Exception {
+		return statisticMapper.storeLineSalesThisYear();
+	}
 }

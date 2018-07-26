@@ -296,6 +296,24 @@ public class StatisticController {
 		}
 	}
 
+	/**
+	 * 今年专卖店路线分析
+	 * @param <T>
+	 * @return
+	 */
+	@RequestMapping(value="/storeLineSalesThisYear", method = RequestMethod.GET)
+	public <T> Map<String, T> storeLineSalesThisYear() {
+		try {
+			List<Map> list = statisticService.storeLineSalesThisYear();
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.OK, "查询今年专卖店路线分析成功", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return  (Map<String, T>) ResponseUtil.result(HttpStatus.INTERNAL_SERVER_ERROR, "查询今年专卖店路线分析失败. " + e.getMessage());
+		}
+	}
+
+
 
 
 }

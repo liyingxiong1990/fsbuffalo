@@ -42,4 +42,6 @@ public interface StatisticMapper {
     public List<Map> storeSalesThisYear() throws Exception;
 
     public List<Map> storeProductSalesThisYear() throws Exception;
+
+    public List<Map> storeLineSalesThisYear() throws Exception;
 }

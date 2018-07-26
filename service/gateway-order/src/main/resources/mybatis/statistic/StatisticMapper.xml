@@ -235,4 +235,20 @@
 		order by  tt.quantity desc
 	</select>
 
+	<select id="storeLineSalesThisYear"  resultType="java.util.Map">
+		select line.remarks, tt.line_id, tt.quantity from
+		(
+		select sum(delivererOrderItem.quantity) quantity, line_id
+		from ord_deliverer_order delivererOrder,
+		ord_deliverer_order_item  delivererOrderItem
+		where delivererOrder.id = delivererOrderItem.deliverer_order_id
+		and delivererOrder.sys_status = 1 and delivererOrderItem.sys_status = 1
+		and delivererOrderItem.quantity > 0
+		and delivererOrder.order_date BETWEEN concat(substr(CURRENT_DATE,1,4),'-01-01') and CURRENT_DATE
+		group by line_id
+		) tt, ent_line line
+		where line.id = tt.line_id
+		order by  tt.quantity desc
+	</select>
+
 </mapper>
